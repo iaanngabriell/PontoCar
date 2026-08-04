@@ -1,0 +1,41 @@
+# ==========================
+# Ambiente Virtual
+# ==========================
+.venv/
+venv/
+
+# ==========================
+# Variáveis de ambiente
+# ==========================
+.env
+
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==========================
+# Django
+# ==========================
+db.sqlite3
+media/
+
+# Arquivos de log
+*.log
+
+# Arquivos estáticos coletados
+staticfiles/
+
+# ==========================
+# IDEs
+# ==========================
+.vscode/
+.idea/
+
+# ==========================
+# Sistema Operacional
+# ==========================
+Thumbs.db
+.DS_Store
