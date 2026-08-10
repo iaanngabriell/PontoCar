@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     # Terceiros
     'apps.usuarios',
+    'apps.empresas',
+    'apps.veiculos',
+
     # App Locais
 
 ]
