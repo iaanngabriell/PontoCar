@@ -1,8 +1,18 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class Usuario(AbstractUser):
-    
+
+    # PK trocada de BigAutoField (padrão do AbstractUser) para UUID.
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
     # As opções do Select
     class TipoUsuario(models.TextChoices):
         COMPRADOR = "COMPRADOR", "Comprador"
@@ -23,12 +33,12 @@ class Usuario(AbstractUser):
 
     telefone = models.CharField(
         max_length=20,
-        blank=True # Ótima adição! Torna o telefone opcional nos formulários.
+        blank=True  # Ótima adição! Torna o telefone opcional nos formulários.
     )
 
     tipo_usuario = models.CharField(
         max_length=20,
-        choices=TipoUsuario.choices, # É isso aqui que gera o <select> no HTML!
+        choices=TipoUsuario.choices,  # É isso aqui que gera o <select> no HTML!
         default=TipoUsuario.COMPRADOR
     )
 
