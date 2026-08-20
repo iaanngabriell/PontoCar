@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'apps.empresas',
     'apps.veiculos',
     'apps.vendas',
-    'apps.core'
+    'apps.core',
+    'apps.leads'
 
     # App Locais
 
