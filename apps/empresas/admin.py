@@ -3,8 +3,8 @@ from .models import Empresa, Localizacao
 
 @admin.register(Empresa)
 class EmpresaAdmin(admin.ModelAdmin):
-    list_display = ('nome_fantasia', 'tipo_empresa', 'cnpj', 'representante')
-    list_filter = ('tipo_empresa',)
+    list_display = ('nome_fantasia', 'tipo_empresa', 'cnpj', 'representante', 'ativa')
+    list_filter = ('tipo_empresa', 'ativa')
     search_fields = ('nome_fantasia', 'cnpj')
 
 @admin.register(Localizacao)

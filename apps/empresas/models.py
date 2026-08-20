@@ -32,6 +32,11 @@ class Empresa(BaseModel):
         default=TipoEmpresa.REVENDA
     )
 
+    # RN04 (servicos) precisa disso para saber quais empresas podem oferecer
+    # serviços; RN05 (seguros) usa tipo_empresa acima para restringir a
+    # SEGURADORA/CORRETORA. Sem esse campo, RN04 não tinha como ser aplicada.
+    ativa = models.BooleanField(default=True)
+
     data_cadastro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
