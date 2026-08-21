@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo de veículos · AutoPalmas</title>
+<meta name="description" content="Busque veículos por marca, modelo, ano, preço e mais em Palmas-TO.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="navbar">
+    <div class="container">
+      <a href="index.html" class="brand">
+      <svg viewBox="0 0 48 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l2.4-7A3 3 0 0 1 7.2 7h17a3 3 0 0 1 2.9 1.8L29 16"/><path d="M2 16h27v5.5a1.5 1.5 0 0 1-1.5 1.5h-1.7a1.5 1.5 0 0 1-1.5-1.5V20H6.7v1.5A1.5 1.5 0 0 1 5.2 23H3.5A1.5 1.5 0 0 1 2 21.5z"/><circle cx="9.5" cy="20.3" r="2"/><circle cx="21" cy="20.3" r="2"/></svg>
+      <span>
+        <span class="brand-word">Auto<span>Palmas</span></span>
+        <span class="brand-tag">Conectando você ao melhor negócio.</span>
+      </span>
+    </a>
+      <nav class="nav-links">
+      <a href="catalogo.html" class="active">Comprar</a>
+      <a href="vendedor-veiculo-form.html" class="">Vender</a>
+      <a href="servicos.html" class="">Serviços</a>
+      <a href="index.html#como-funciona" class="">Como funciona</a>
+      <a href="sobre.html" class="">Sobre nós</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="comprador-interesses.html" class="icon-btn" title="Favoritos" aria-label="Favoritos"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+        <a href="login.html" class="nav-link-plain">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary btn-sm">Cadastrar</a>
+        <button class="nav-burger" aria-label="Abrir menu"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01" stroke-width="2.6"/></svg></button>
+      </div>
+    </div>
+  </header><div class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">Início</a> <span style="opacity:.4">/</span> <span>Comprar</span></div>
+      <h1>Catálogo de veículos</h1>
+      <p>9.482 anúncios disponíveis em Palmas-TO e região</p>
+    </div>
+  </div><div class="container" style="padding:36px 0 80px"><div class="catalog-layout">
+    <aside class="filter-box">
+      <div class="flex items-center justify-between" style="margin-bottom:6px">
+        <h4><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M17 6h3M4 12h3M9 12h11M4 18h13M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg> Filtros</h4>
+        <a href="catalogo.html" class="small">Limpar</a>
+      </div>
+      <div class="filter-group">
+        <div class="filter-title">Marca</div>
+        <select class="form-control"><option>Todas as marcas</option><option>Toyota</option><option>Hyundai</option><option>Chevrolet</option><option>Jeep</option><option>Volkswagen</option></select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-title">Modelo</div>
+        <select class="form-control"><option>Todos os modelos</option></select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-title">Ano</div>
+        <div class="form-row cols-2" style="margin-bottom:0">
+          <select class="form-control"><option>De</option></select>
+          <select class="form-control"><option>Até</option></select>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-title" id="preco-max-label">Preço · até R$ 200.000</div>
+        <input type="range" id="preco-max" min="20000" max="400000" step="1000" value="200000" style="width:100%">
+      </div>
+      <div class="filter-group">
+        <div class="filter-title">Câmbio</div>
+        <div class="check-list">
+          <label><input type="checkbox" checked> Automático</label>
+          <label><input type="checkbox"> Manual</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-title">Combustível</div>
+        <div class="check-list">
+          <label><input type="checkbox"> Flex</label>
+          <label><input type="checkbox"> Diesel</label>
+          <label><input type="checkbox"> Híbrido/Elétrico</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-title">Vendedor</div>
+        <div class="check-list">
+          <label><input type="checkbox"> Lojas com selo de confiança</label>
+          <label><input type="checkbox"> Anúncios de particulares</label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block">Aplicar filtros</button>
+    </aside>
+    <div>
+      <div class="results-bar">
+        <p><strong>9.482</strong> veículos encontrados</p>
+        <select class="form-control" style="width:auto">
+          <option>Mais relevantes</option>
+          <option>Menor preço</option>
+          <option>Maior preço</option>
+          <option>Mais recentes</option>
+          <option>Menor quilometragem</option>
+        </select>
+      </div>
+      <div class="vehicle-grid">
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2ea043"/>
+      <stop offset="1" stop-color="#155c2a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc4)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc4)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 128.900</div>
+            <h4>Toyota Corolla XEi 2.0</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2023/2023</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>34.000 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Automático</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Flex</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8d0da"/>
+      <stop offset="1" stop-color="#8b95a3"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc3)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc3)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 132.500</div>
+            <h4>Hyundai Creta Platinum</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2022/2023</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>28.500 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Automático</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Flex</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#aab3c2"/>
+      <stop offset="1" stop-color="#6c7688"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc0)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc0)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 78.900</div>
+            <h4>Chevrolet Onix LTZ</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2021/2022</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>41.200 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Manual</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Flex</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a3a5c"/>
+      <stop offset="1" stop-color="#0d1e33"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc5)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc5)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-amber" style="position:absolute;top:12px;left:12px">Reservado</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 152.400</div>
+            <h4>Jeep Compass Longitude</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2022/2022</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>38.700 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Automático</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Diesel</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c4453"/>
+      <stop offset="1" stop-color="#20242e"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc1)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc1)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 98.700</div>
+            <h4>Volkswagen Polo TSI</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2023/2024</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>12.300 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Automático</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Flex</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7c8797"/>
+      <stop offset="1" stop-color="#454e5c"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc2)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc2)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 118.900</div>
+            <h4>Fiat Toro Freedom</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2021/2021</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>52.900 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Automático</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Diesel</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2ea043"/>
+      <stop offset="1" stop-color="#155c2a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc4)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc4)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 104.500</div>
+            <h4>Honda HR-V EXL</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2020/2021</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>61.400 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Automático</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Flex</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#aab3c2"/>
+      <stop offset="1" stop-color="#6c7688"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc0)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc0)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 58.900</div>
+            <h4>Renault Kwid Zen</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2022/2023</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>19.800 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Manual</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Flex</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+        <div class="card vehicle-card">
+          <div class="vehicle-photo"><svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de veículo à venda">
+  <defs>
+    <linearGradient id="bgcc3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f8fb"/>
+      <stop offset="1" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="bodycc3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8d0da"/>
+      <stop offset="1" stop-color="#8b95a3"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgcc3)"/>
+  <ellipse cx="200" cy="235" rx="150" ry="14" fill="#0a1626" opacity=".08"/>
+  <g transform="translate(58,95)">
+    <path d="M0 90 C 6 62, 26 52, 56 50 L 80 30 C 90 20, 104 15, 124 15 L 250 15 C 274 15, 294 24, 308 42 L 328 66 C 348 70, 362 78, 368 90 L 368 108 L 0 108 Z" fill="url(#bodycc3)"/>
+    <path d="M92 50 L 114 32 C 122 26, 132 22, 146 22 L 232 22 C 248 22, 262 28, 272 40 L 288 50 Z" fill="#0d1e33" opacity=".85"/>
+    <path d="M132 50 L 148 34 L 190 34 L 190 50 Z" fill="#173a5e"/>
+    <path d="M198 50 L 198 34 L 230 34 L 246 50 Z" fill="#173a5e"/>
+    <rect x="0" y="90" width="368" height="7" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="78" cy="110" r="13" fill="#4a5364"/>
+    <circle cx="298" cy="110" r="27" fill="#0a1626"/>
+    <circle cx="298" cy="110" r="13" fill="#4a5364"/>
+    <rect x="150" y="90" width="70" height="16" rx="3" fill="#fff"/>
+  </g>
+</svg><a href="#" class="fav"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/></svg></a>
+            <span class="badge badge-green" style="position:absolute;top:12px;left:12px">Disponível</span>
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ 96.300</div>
+            <h4>Nissan Kicks SV</h4>
+            <div class="vehicle-meta">
+              <span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>2021/2022</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/></svg>45.100 km</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/></svg>Automático</span><span><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/></svg>Flex</span>
+            </div>
+            <div class="vehicle-footer">
+              <span class="seller"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/></svg>Palmas-TO</span>
+              <a href="veiculo-detalhes.html" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+            </div>
+          </div>
+        </div></div>
+      <div class="pagination">
+        <a href="#">&larr;</a>
+        <a href="#" class="active">1</a><a href="#">2</a><a href="#">3</a><span>…</span><a href="#">42</a>
+        <a href="#">&rarr;</a>
+      </div>
+    </div></div></div><footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="index.html" class="brand">
+      <svg viewBox="0 0 48 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l2.4-7A3 3 0 0 1 7.2 7h17a3 3 0 0 1 2.9 1.8L29 16"/><path d="M2 16h27v5.5a1.5 1.5 0 0 1-1.5 1.5h-1.7a1.5 1.5 0 0 1-1.5-1.5V20H6.7v1.5A1.5 1.5 0 0 1 5.2 23H3.5A1.5 1.5 0 0 1 2 21.5z"/><circle cx="9.5" cy="20.3" r="2"/><circle cx="21" cy="20.3" r="2"/></svg>
+      <span>
+        <span class="brand-word">Auto<span>Palmas</span></span>
+        <span class="brand-tag">Conectando você ao melhor negócio.</span>
+      </span>
+    </a>
+          <p>A plataforma automotiva completa de Palmas-TO e região. Mais confiança, mais serviços, melhores negócios.</p>
+          <div class="social-row">
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><path d="M17 7h.01" stroke-width="2.8"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 21v-7.5H17l.5-3.3h-3V8.1c0-1 .3-1.6 1.7-1.6H17.5V3.5c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v2.3H8v3.3h2.5V21z" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18l-1.3 3.5L7.3 20A8.5 8.5 0 1 0 4 12.5 8.4 8.4 0 0 0 6 18z"/><path d="M8.7 9.8c.2-.6.5-.6.8-.6h.5c.2 0 .4 0 .6.5s.7 1.7.8 1.8c.1.2.1.3 0 .5-.1.2-.2.3-.4.5s-.4.4-.2.7c.2.4.9 1.3 1.9 2.1 1.3 1 2.1 1.3 2.4 1.4.3.1.4.1.6-.1s.7-.8.9-1c.2-.2.4-.2.6-.1l1.7.8c.2.1.4.2.4.4 0 .2 0 1.1-.4 1.6-.4.5-1.7 1-2.5 1-2.1 0-4.4-1.2-6-2.7-1.6-1.6-2.6-3.6-2.7-3.8-.1-.2-.9-1.4-.9-2.7 0-1.3.7-1.9.9-2.2z"/></svg></a>
+            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="3"/><path d="M11 9.5l4.5 2.5-4.5 2.5z" fill="currentColor" stroke="none"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h5>Navegação</h5>
+          <ul>
+            <li><a href="catalogo.html">Comprar</a></li>
+            <li><a href="vendedor-veiculo-form.html">Vender</a></li>
+            <li><a href="servicos.html">Serviços</a></li>
+            <li><a href="index.html#como-funciona">Como funciona</a></li>
+            <li><a href="sobre.html">Sobre nós</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Serviços</h5>
+          <ul>
+            <li><a href="seguros.html">Cotar seguro</a></li>
+            <li><a href="servicos.html">Financiamento</a></li>
+            <li><a href="servicos.html">Despachante</a></li>
+            <li><a href="servicos.html">Oficinas parceiras</a></li>
+            <li><a href="servicos.html">Avaliação de veículos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Institucional</h5>
+          <ul>
+            <li><a href="sobre.html">Quem somos</a></li>
+            <li><a href="#">Termos de uso</a></li>
+            <li><a href="#">Política de privacidade</a></li>
+            <li><a href="#">Perguntas frequentes</a></li>
+            <li><a href="#">Fale conosco</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Baixe nosso app</h5>
+          <p style="font-size:13px;color:rgba(255,255,255,.55)">Tenha a melhor experiência na palma da sua mão.</p>
+          <div class="store-badges">
+            <span class="store-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3.5v17a1 1 0 0 0 1.5.87L20 12 4.5 2.6A1 1 0 0 0 3 3.5z"/></svg> Disponível no Google Play</span>
+            <span class="store-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 2c.1 1.1-.3 2.1-1 2.9-.7.8-1.8 1.4-2.8 1.3-.1-1 .4-2.1 1-2.8.8-.9 2-1.4 2.8-1.4zm3.8 16.8c-.5 1.1-.8 1.6-1.4 2.5-.9 1.4-2.2 3.1-3.8 3.1-1.4 0-1.8-.9-3.7-.9s-2.4.9-3.7.9c-1.6 0-2.8-1.5-3.7-2.9C1.7 18.6.9 14.9 2 12.3c.6-1.4 1.7-2.9 3.4-2.9 1.4 0 2.3.9 3.5.9 1.1 0 1.8-.9 3.7-.9 1.5 0 3 .8 4 2.1-3.6 2-3 7.1.6 8.3z"/></svg> Disponível na App Store</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 AutoPalmas. Todos os direitos reservados.</span>
+        <span>Palmas · Tocantins</span>
+      </div>
+    </div>
+  </footer>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

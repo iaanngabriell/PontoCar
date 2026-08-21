@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+# Biblioteca de ícones SVG (line icons, stroke=currentColor) — AutoPalmas
+
+def _svg(inner, vb="0 0 24 24"):
+    # width/height="1em" é o valor padrão (ajusta ao texto); qualquer regra CSS
+    # mais específica (ex.: .btn svg, .trust-item svg) tem prioridade sobre o atributo.
+    return '<svg viewBox="{}" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{}</svg>'.format(vb, inner)
+
+ICONS = {
+    "car": _svg('<path d="M3 13l1.6-4.8A2 2 0 0 1 6.5 7h11a2 2 0 0 1 1.9 1.2L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/>'),
+    "search": _svg('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'),
+    "shield-check": _svg('<path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/>'),
+    "headset": _svg('<path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.3"/><rect x="17" y="13" width="4" height="6" rx="1.3"/><path d="M19 19v.5A2.5 2.5 0 0 1 16.5 22H13"/>'),
+    "doc-check": _svg('<path d="M8 3h6l4 4v13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4"/><path d="M9.5 14l1.7 1.7L14.5 12"/>'),
+    "lock": _svg('<rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>'),
+    "award": _svg('<circle cx="12" cy="8.5" r="5.2"/><path d="M8.5 13 7 21l5-2.4L17 21l-1.5-8"/>'),
+    "users": _svg('<circle cx="9" cy="8" r="3.2"/><path d="M2.7 20a6.3 6.3 0 0 1 12.6 0"/><path d="M16 5a3.2 3.2 0 0 1 0 6.3"/><path d="M18 14a6.3 6.3 0 0 1 3.7 6"/>'),
+    "filter": _svg('<path d="M4 6h16"/><path d="M7 12h10"/><path d="M10 18h4"/>'),
+    "heart": _svg('<path d="M12 20.5s-7.6-4.6-9.9-9A5.2 5.2 0 0 1 12 5.5 5.2 5.2 0 0 1 21.9 11.5c-2.3 4.4-9.9 9-9.9 9z"/>'),
+    "user": _svg('<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>'),
+    "chevron-down": _svg('<path d="M6 9l6 6 6-6"/>'),
+    "chevron-right": _svg('<path d="M9 6l6 6-6 6"/>'),
+    "pin": _svg('<path d="M12 21.5s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.6"/>'),
+    "fuel": _svg('<path d="M4 21V6a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 13 6v15"/><path d="M4 12h9"/><path d="M13 8.5l3 2.2v6.3a1.5 1.5 0 0 0 3 0v-4.3l-2-2"/>'),
+    "gauge": _svg('<circle cx="12" cy="13" r="8"/><path d="M12 13l3.5-3.5"/><path d="M8 6.2 6.5 4.7M16 6.2l1.5-1.5M5 13H3M21 13h-2"/>'),
+    "calendar": _svg('<rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/>'),
+    "gearbox": _svg('<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 7l2.6 1.5M17.2 15.5l2.6 1.5M4.2 17l2.6-1.5M17.2 8.5l2.6-1.5"/>'),
+    "camera": _svg('<path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="14" r="3.6"/>'),
+    "upload": _svg('<path d="M12 15V4M8 8l4-4 4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>'),
+    "check-circle": _svg('<circle cx="12" cy="12" r="9"/><path d="M8.2 12.3l2.5 2.5 5-5.2"/>'),
+    "x-circle": _svg('<circle cx="12" cy="12" r="9"/><path d="M9.3 9.3l5.4 5.4M14.7 9.3l-5.4 5.4"/>'),
+    "clock": _svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>'),
+    "edit": _svg('<path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17z"/><path d="M13.5 8l3 3"/>'),
+    "trash": _svg('<path d="M5 7h14"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M7 7l1 13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l1-13"/>'),
+    "eye": _svg('<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>'),
+    "plus": _svg('<path d="M12 5v14M5 12h14"/>'),
+    "bell": _svg('<path d="M6 9a6 6 0 0 1 12 0v5l1.8 3H4.2L6 14z"/><path d="M10 20a2 2 0 0 0 4 0"/>'),
+    "logout": _svg('<path d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/>'),
+    "grid": _svg('<rect x="3.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.3"/>'),
+    "list": _svg('<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01" stroke-width="2.6"/>'),
+    "building": _svg('<rect x="4" y="3" width="12" height="18" rx="1"/><path d="M16 9h4v12h-4"/><path d="M7.5 7h1M11.5 7h1M7.5 11h1M11.5 11h1M7.5 15h1M11.5 15h1"/>'),
+    "wrench": _svg('<path d="M14.7 6.3a4 4 0 0 0-5.4 4.9L4 16.5V20h3.5l5.3-5.3a4 4 0 0 0 4.9-5.4l-2.8 2.8-2-2z"/>'),
+    "umbrella": _svg('<path d="M4 12a8 8 0 0 1 16 0z"/><path d="M12 12v7a2 2 0 0 1-4 0"/><path d="M12 4v1"/>'),
+    "mail": _svg('<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 6.5l8 6 8-6"/>'),
+    "phone": _svg('<path d="M6.5 4h3l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 6.2 2 2 0 0 1 6.5 4z"/>'),
+    "star": _svg('<path d="M12 3.5l2.5 5.4 5.9.7-4.3 4.1 1.1 5.8L12 16.7l-5.2 2.8 1.1-5.8-4.3-4.1 5.9-.7z"/>'),
+    "sliders": _svg('<path d="M4 6h9M17 6h3M4 12h3M9 12h11M4 18h13M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>'),
+    "arrow-right": _svg('<path d="M5 12h14M13 6l6 6-6 6"/>'),
+    "warning": _svg('<path d="M12 3.5 21.5 20h-19z"/><path d="M12 9.5v5"/><path d="M12 17.3h.01" stroke-width="2.6"/>'),
+    "download": _svg('<path d="M12 4v11M8 11l4 4 4-4"/><path d="M4 19h16"/>'),
+    "money": _svg('<rect x="2.5" y="6.5" width="19" height="11" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9v.01M18 15v.01" stroke-width="2.6"/>'),
+    "handshake": _svg('<path d="M2.5 12.5 6 9l3 2 3-2.5L15.5 11 21.5 5"/><path d="M9 11l4 4-1.8 1.8a2 2 0 0 1-2.8 0L4 12.5"/><path d="M13 15l2 2-1.6 1.6a2 2 0 0 1-2.8 0"/>'),
+    "instagram": _svg('<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><path d="M17 7h.01" stroke-width="2.8"/>'),
+    "facebook": _svg('<path d="M14.5 21v-7.5H17l.5-3.3h-3V8.1c0-1 .3-1.6 1.7-1.6H17.5V3.5c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v2.3H8v3.3h2.5V21z" fill="currentColor" stroke="none"/>'),
+    "whatsapp": _svg('<path d="M6 18l-1.3 3.5L7.3 20A8.5 8.5 0 1 0 4 12.5 8.4 8.4 0 0 0 6 18z"/><path d="M8.7 9.8c.2-.6.5-.6.8-.6h.5c.2 0 .4 0 .6.5s.7 1.7.8 1.8c.1.2.1.3 0 .5-.1.2-.2.3-.4.5s-.4.4-.2.7c.2.4.9 1.3 1.9 2.1 1.3 1 2.1 1.3 2.4 1.4.3.1.4.1.6-.1s.7-.8.9-1c.2-.2.4-.2.6-.1l1.7.8c.2.1.4.2.4.4 0 .2 0 1.1-.4 1.6-.4.5-1.7 1-2.5 1-2.1 0-4.4-1.2-6-2.7-1.6-1.6-2.6-3.6-2.7-3.8-.1-.2-.9-1.4-.9-2.7 0-1.3.7-1.9.9-2.2z"/>'),
+    "youtube": _svg('<rect x="2.5" y="6" width="19" height="12" rx="3"/><path d="M11 9.5l4.5 2.5-4.5 2.5z" fill="currentColor" stroke="none"/>'),
+    "cog": _svg('<circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.5-2.3.9a7 7 0 0 0-2-1.2L14 3h-4l-.6 2.5a7 7 0 0 0-2 1.2l-2.3-.9-2 3.5 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.5 2.3-.9c.6.5 1.3.9 2 1.2L10 21h4l.6-2.5c.7-.3 1.4-.7 2-1.2l2.3.9 2-3.5-2-1.5c.1-.4.1-.8.1-1.2z"/>'),
+}

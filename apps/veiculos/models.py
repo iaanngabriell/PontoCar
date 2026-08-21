@@ -10,6 +10,15 @@ class Veiculo(BaseModel):
         PENDENTE = "PENDENTE", "Pendente"  # Em negociação
         VENDIDO = "VENDIDO", "Vendido / Inativo"  # Quando é vendido ou o anúncio é retirado
 
+    class Cambio(models.TextChoices):
+        AUTOMATICO = "AUTOMATICO", "Automático"
+        MANUAL = "MANUAL", "Manual"
+
+    class Combustivel(models.TextChoices):
+        FLEX = "FLEX", "Flex"
+        DIESEL = "DIESEL", "Diesel"
+        HIBRIDO_ELETRICO = "HIBRIDO_ELETRICO", "Híbrido/Elétrico"
+
     # MUDANÇA: O dono atual pode ser nulo (blank=True, null=True) se o carro for vendido fora do site!
     # Além disso, usamos SET_NULL. Se o dono apagar a conta, o carro não é apagado da base de dados.
     proprietario_atual = models.ForeignKey(
@@ -22,6 +31,10 @@ class Veiculo(BaseModel):
 
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=100)
+
+    # Ex.: "XEi 2.0 Flex" — texto livre, igual à Seção 10.3 da doc técnica.
+    versao = models.CharField(max_length=120, blank=True, default='')
+
     ano_fabricacao = models.IntegerField()
     ano_modelo = models.IntegerField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
@@ -31,6 +44,22 @@ class Veiculo(BaseModel):
     placa = models.CharField(max_length=7, unique=True)
 
     cor = models.CharField(max_length=30)
+
+    # Opções fixas, seguindo exatamente o que já está no front-end
+    # (filtros do catálogo e formulário de cadastro de veículo).
+    cambio = models.CharField(
+        max_length=20,
+        choices=Cambio.choices,
+        null=True,
+        blank=True
+    )
+    combustivel = models.CharField(
+        max_length=20,
+        choices=Combustivel.choices,
+        null=True,
+        blank=True
+    )
+
     descricao = models.TextField(blank=True)
 
     status = models.CharField(

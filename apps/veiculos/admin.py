@@ -4,8 +4,8 @@ from .models import Veiculo, HistoricoVeiculo
 @admin.register(Veiculo)
 class VeiculoAdmin(admin.ModelAdmin):
     # Trocámos 'vendedor' por 'proprietario_atual' e adicionei a 'placa' para ficar mais fácil de gerir
-    list_display = ('placa', 'marca', 'modelo', 'preco', 'status', 'proprietario_atual', 'quantidade_proprietarios')
-    list_filter = ('status', 'marca')
+    list_display = ('placa', 'marca', 'modelo', 'versao', 'cambio', 'combustivel', 'preco', 'status', 'proprietario_atual', 'quantidade_proprietarios')
+    list_filter = ('status', 'marca', 'cambio', 'combustivel')
     search_fields = ('marca', 'modelo', 'placa')
 
 @admin.register(HistoricoVeiculo)
