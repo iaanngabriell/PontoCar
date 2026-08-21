@@ -7,20 +7,9 @@ from apps.core.models import BaseModel
 class Veiculo(BaseModel):
     class StatusVeiculo(models.TextChoices):
         DISPONIVEL = "DISPONIVEL", "Disponível"
-        PENDENTE = "PENDENTE", "Pendente"  # Em negociação
-        VENDIDO = "VENDIDO", "Vendido / Inativo"  # Quando é vendido ou o anúncio é retirado
+        PENDENTE = "PENDENTE", "Pendente"
+        VENDIDO = "VENDIDO", "Vendido / Inativo"
 
-    class Cambio(models.TextChoices):
-        AUTOMATICO = "AUTOMATICO", "Automático"
-        MANUAL = "MANUAL", "Manual"
-
-    class Combustivel(models.TextChoices):
-        FLEX = "FLEX", "Flex"
-        DIESEL = "DIESEL", "Diesel"
-        HIBRIDO_ELETRICO = "HIBRIDO_ELETRICO", "Híbrido/Elétrico"
-
-    # MUDANÇA: O dono atual pode ser nulo (blank=True, null=True) se o carro for vendido fora do site!
-    # Além disso, usamos SET_NULL. Se o dono apagar a conta, o carro não é apagado da base de dados.
     proprietario_atual = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -31,33 +20,38 @@ class Veiculo(BaseModel):
 
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=100)
-
-    # Ex.: "XEi 2.0 Flex" — texto livre, igual à Seção 10.3 da doc técnica.
-    versao = models.CharField(max_length=120, blank=True, default='')
-
+    versao = models.CharField(max_length=120, blank=True, null=True)
     ano_fabricacao = models.IntegerField()
     ano_modelo = models.IntegerField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     quilometragem = models.IntegerField(default=0)
-
-    # A Placa/Matrícula é o ID UNIVERSAL do carro no sistema
     placa = models.CharField(max_length=7, unique=True)
-
     cor = models.CharField(max_length=30)
 
-    # Opções fixas, seguindo exatamente o que já está no front-end
-    # (filtros do catálogo e formulário de cadastro de veículo).
-    cambio = models.CharField(
-        max_length=20,
-        choices=Cambio.choices,
-        null=True,
-        blank=True
-    )
+    class CombustivelVeiculo(models.TextChoices):
+        FLEX = "FLEX", "Flex"
+        GASOLINA = "GASOLINA", "Gasolina"
+        DIESEL = "DIESEL", "Diesel"
+        ELETRICO = "ELETRICO", "Elétrico"
+        HIBRIDO = "HIBRIDO", "Híbrido"
+
     combustivel = models.CharField(
         max_length=20,
-        choices=Combustivel.choices,
+        choices=CombustivelVeiculo.choices,
         null=True,
-        blank=True
+        blank=True,
+    )
+
+    class CambioVeiculo(models.TextChoices):
+        MANUAL = "MANUAL", "Manual"
+        AUTOMATICO = "AUTOMATICO", "Automático"
+        CVT = "CVT", "CVT"
+
+    cambio = models.CharField(
+        max_length=20,
+        choices=CambioVeiculo.choices,
+        null=True,
+        blank=True,
     )
 
     descricao = models.TextField(blank=True)
@@ -68,7 +62,6 @@ class Veiculo(BaseModel):
         default=StatusVeiculo.DISPONIVEL
     )
 
-    # MUDANÇA: Contagem automática de proprietários
     quantidade_proprietarios = models.IntegerField(default=1)
     data_cadastro = models.DateTimeField(auto_now_add=True)
 
@@ -77,7 +70,6 @@ class Veiculo(BaseModel):
 
 
 class HistoricoVeiculo(BaseModel):
-    # Opções exatas retiradas da sua documentação!
     class MotivoEvento(models.TextChoices):
         VENDA_SITE = "VENDA_SITE", "Site PontoCar"
         VENDA_LOJA = "VENDA_LOJA", "Venda em loja"
@@ -88,15 +80,42 @@ class HistoricoVeiculo(BaseModel):
         CADASTRO = "CADASTRO", "Veículo Cadastrado no Sistema"
 
     veiculo = models.ForeignKey(Veiculo, on_delete=models.CASCADE, related_name="historico")
-
-    # Registos de quem passou o carro para quem
     dono_anterior = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="historico_vendas")
     novo_dono = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="historico_compras")
-
     motivo = models.CharField(max_length=20, choices=MotivoEvento.choices)
-    mensagem_automatica = models.TextField(blank=True)  # Ex: "Veículo vendido externamente."
-
+    mensagem_automatica = models.TextField(blank=True)
     data_evento = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Histórico: {self.veiculo.placa} - {self.get_motivo_display()}"
+
+
+def foto_veiculo_upload_path(instance, filename):
+    """Salva em media/veiculos/<placa>/<filename>"""
+    return f"veiculos/{instance.veiculo.placa}/{filename}"
+
+
+class FotoVeiculo(BaseModel):
+    veiculo = models.ForeignKey(
+        Veiculo,
+        on_delete=models.CASCADE,
+        related_name="fotos",
+    )
+    imagem = models.ImageField(upload_to=foto_veiculo_upload_path)
+    principal = models.BooleanField(default=False)
+    ordem = models.PositiveSmallIntegerField(default=0)
+    texto_alternativo = models.CharField(max_length=150, blank=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["ordem", "criado_em"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["veiculo"],
+                condition=models.Q(principal=True),
+                name="uq_foto_principal_por_veiculo",
+            )
+        ]
+
+    def __str__(self):
+        return f"Foto {'principal' if self.principal else self.ordem} — {self.veiculo.placa}"

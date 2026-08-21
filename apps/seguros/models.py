@@ -1,78 +1,80 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 from apps.core.models import BaseModel
-from apps.empresas.models import Empresa
-from apps.veiculos.models import Veiculo
 
 
 class Seguro(BaseModel):
     """
-    Plano de seguro oferecido por uma seguradora/corretora (Seção 9 da
-    documentação técnica: Empresa 1─N Seguro). É um item de catálogo — o
-    valor aqui é uma referência; o valor real de cada negociação fica em
-    CotacaoSeguro, abaixo.
+    Plano de seguro oferecido por uma seguradora/corretora.
+    É um item de catálogo — o valor aqui é referência;
+    o valor real de cada apólice fica em ApoliceSeguro.
     """
 
     empresa = models.ForeignKey(
-        Empresa,
+        "empresas.Empresa",
         on_delete=models.CASCADE,
-        related_name="seguros"
+        related_name="seguros",
     )
-
-    nome = models.CharField(max_length=150)  # Ex.: "Seguro Total", "Seguro Terceiros"
+    nome = models.CharField(max_length=150)
     descricao = models.TextField(blank=True)
     valor_referencia = models.DecimalField(max_digits=10, decimal_places=2)
-
+    ativo = models.BooleanField(default=True)
     data_cadastro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.nome} - {self.empresa.nome_fantasia}"
+        return f"{self.nome} — {self.empresa.nome_fantasia}"
 
 
-class CotacaoSeguro(BaseModel):
+class ApoliceSeguro(BaseModel):
     """
-    Pedido de cotação de um comprador para um plano de seguro, aplicado a um
-    veículo específico (Seção 9: Veiculo 1─N CotacaoSeguro). Os campos
-    exatos não estão detalhados na documentação — modelados aqui seguindo o
-    mesmo padrão do fluxo de Lead (Seção 10.5): pedido registrado, depois
-    acompanhado por status até ser respondido.
+    Apólice ativa criada pela seguradora para um veículo/contratante.
+    O valor mensal real pode diferir do valor_referencia do plano.
     """
 
-    class Status(models.TextChoices):
-        PENDENTE = "PENDENTE", "Pendente"
-        RESPONDIDA = "RESPONDIDA", "Respondida"
-        RECUSADA = "RECUSADA", "Recusada"
-
-    # POST /api/cotacoes/ na Seção 14.2 exige perfil "Comprador" (autenticado),
-    # diferente do Lead — por isso aqui o comprador NÃO é opcional.
-    comprador = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="cotacoes_seguro"
-    )
-
-    veiculo = models.ForeignKey(
-        Veiculo,
-        on_delete=models.PROTECT,
-        related_name="cotacoes_seguro"
-    )
+    class StatusApolice(models.TextChoices):
+        ATIVA = "ATIVA", "Ativa"
+        EXPIRADA = "EXPIRADA", "Expirada"
+        CANCELADA = "CANCELADA", "Cancelada"
 
     seguro = models.ForeignKey(
         Seguro,
         on_delete=models.PROTECT,
-        related_name="cotacoes"
+        related_name="apolices",
     )
-
-    mensagem = models.TextField(blank=True)
-
+    veiculo = models.ForeignKey(
+        "veiculos.Veiculo",
+        on_delete=models.PROTECT,
+        related_name="apolices",
+    )
+    contratante = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="apolices",
+    )
+    valor_mensal = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Valor real contratado. Pode diferir do valor_referencia do plano.",
+    )
+    inicio_vigencia = models.DateField()
+    fim_vigencia = models.DateField()
     status = models.CharField(
-        max_length=20,
-        choices=Status.choices,
-        default=Status.PENDENTE
+        max_length=10,
+        choices=StatusApolice.choices,
+        default=StatusApolice.ATIVA,
     )
 
-    data_solicitacao = models.DateTimeField(auto_now_add=True)
+    def esta_ativa(self):
+        hoje = timezone.now().date()
+        return (
+            self.status == self.StatusApolice.ATIVA
+            and self.inicio_vigencia <= hoje <= self.fim_vigencia
+        )
 
     def __str__(self):
-        return f"Cotação de {self.comprador.email} - {self.seguro.nome}"
+        return (
+            f"Apólice {self.veiculo.placa} — "
+            f"{self.seguro.nome} ({self.get_status_display()})"
+        )

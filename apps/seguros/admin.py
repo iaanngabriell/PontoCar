@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from apps.empresas.models import Empresa
 
-from .models import CotacaoSeguro, Seguro
+from .models import ApoliceSeguro, Seguro
 
 
 class SeguroAdminForm(forms.ModelForm):
@@ -32,13 +32,21 @@ class SeguroAdminForm(forms.ModelForm):
 @admin.register(Seguro)
 class SeguroAdmin(admin.ModelAdmin):
     form = SeguroAdminForm
-    list_display = ('nome', 'empresa', 'valor_referencia')
-    list_filter = ('empresa',)
+    list_display = ('nome', 'empresa', 'valor_referencia', 'ativo')
+    list_filter = ('ativo', 'empresa')
     search_fields = ('nome', 'empresa__nome_fantasia')
 
 
-@admin.register(CotacaoSeguro)
-class CotacaoSeguroAdmin(admin.ModelAdmin):
-    list_display = ('comprador', 'veiculo', 'seguro', 'status', 'data_solicitacao')
+@admin.register(ApoliceSeguro)
+class ApoliceSeguroAdmin(admin.ModelAdmin):
+    # Não precisa de form customizado para a RN05: o seguro já só pode ter
+    # sido criado com uma empresa seguradora/corretora (validado no
+    # SeguroAdminForm acima), então qualquer ApoliceSeguro que referencia
+    # um Seguro válido já respeita a regra por transitividade.
+    list_display = (
+        'veiculo', 'contratante', 'seguro',
+        'valor_mensal', 'inicio_vigencia', 'fim_vigencia', 'status',
+    )
     list_filter = ('status',)
-    search_fields = ('comprador__email', 'veiculo__placa', 'seguro__nome')
+    search_fields = ('veiculo__placa', 'contratante__email', 'seguro__nome')
+    readonly_fields = ('esta_ativa',)
