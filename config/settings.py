@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.leads',
     'apps.servicos',
     'apps.seguros',
+    'apps.favoritos',
 
     # App Locais
 
