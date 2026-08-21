@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
+from apps.veiculos import services as veiculos_services
 from apps.veiculos.models import HistoricoVeiculo, Veiculo
 
 from .models import Venda
@@ -8,14 +9,16 @@ from .models import Venda
 @transaction.atomic
 def criar_proposta(*, comprador, veiculo, valor_proposta):
     """
-    Registra uma nova proposta de compra e reserva o veículo (status PENDENTE).
-
-    Substitui a criação direta de Venda.objects.create(...) quando a intenção
-    é abrir uma negociação de verdade (garante RN11: comprador e proprietário
-    atual não podem ser a mesma pessoa).
+    Registra uma nova proposta de compra e reserva o veículo, se ele
+    ainda estiver disponível (RN11 + RN13).
     """
     if veiculo.proprietario_atual is not None and comprador == veiculo.proprietario_atual:
         raise ValidationError("O comprador não pode ser o proprietário atual do veículo.")
+
+    if veiculo.status not in (Veiculo.StatusVeiculo.DISPONIVEL, Veiculo.StatusVeiculo.RESERVADO):
+        raise ValidationError(
+            "Só é possível propor a compra de um veículo disponível ou já reservado."
+        )
 
     venda = Venda.objects.create(
         comprador=comprador,
@@ -24,9 +27,8 @@ def criar_proposta(*, comprador, veiculo, valor_proposta):
         status=Venda.StatusVenda.PENDENTE,
     )
 
-    if veiculo.status != Veiculo.StatusVeiculo.PENDENTE:
-        veiculo.status = Veiculo.StatusVeiculo.PENDENTE
-        veiculo.save(update_fields=["status"])
+    if veiculo.status == Veiculo.StatusVeiculo.DISPONIVEL:
+        veiculos_services.reservar_veiculo(veiculo=veiculo)
 
     return venda
 
@@ -42,8 +44,9 @@ def iniciar_negociacao(*, venda):
 @transaction.atomic
 def concluir_venda(*, venda):
     """
-    Conclui a venda: registra o histórico, transfere a propriedade do veículo
-    e o deixa disponível novamente (na garagem do novo dono).
+    Conclui a venda: registra o histórico, transfere a propriedade do
+    veículo e o marca como VENDIDO (o novo dono reativa manualmente se
+    quiser revender — ação 'reativar' no admin).
     """
     veiculo = venda.veiculo
     comprador = venda.comprador
@@ -61,8 +64,9 @@ def concluir_venda(*, venda):
 
     veiculo.proprietario_atual = comprador
     veiculo.quantidade_proprietarios += 1
-    veiculo.status = Veiculo.StatusVeiculo.DISPONIVEL
-    veiculo.save(update_fields=["proprietario_atual", "quantidade_proprietarios", "status"])
+    veiculo.save(update_fields=["proprietario_atual", "quantidade_proprietarios"])
+
+    veiculos_services.marcar_vendido(veiculo=veiculo)
 
     venda.status = Venda.StatusVenda.CONCLUIDA
     venda.save(update_fields=["status"])
@@ -75,9 +79,8 @@ def cancelar_venda(*, venda):
     """Cancela a proposta e libera o veículo, se ele estava reservado por ela."""
     veiculo = venda.veiculo
 
-    if veiculo.status == Veiculo.StatusVeiculo.PENDENTE:
-        veiculo.status = Veiculo.StatusVeiculo.DISPONIVEL
-        veiculo.save(update_fields=["status"])
+    if veiculo.status == Veiculo.StatusVeiculo.RESERVADO:
+        veiculos_services.liberar_veiculo(veiculo=veiculo)
 
     venda.status = Venda.StatusVenda.CANCELADA
     venda.save(update_fields=["status"])

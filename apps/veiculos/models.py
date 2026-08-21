@@ -3,12 +3,16 @@ from django.db import models
 
 from apps.core.models import BaseModel
 
-
 class Veiculo(BaseModel):
     class StatusVeiculo(models.TextChoices):
+        RASCUNHO = "RASCUNHO", "Rascunho"
+        EM_ANALISE = "EM_ANALISE", "Em Análise"
         DISPONIVEL = "DISPONIVEL", "Disponível"
-        PENDENTE = "PENDENTE", "Pendente"
-        VENDIDO = "VENDIDO", "Vendido / Inativo"
+        RESERVADO = "RESERVADO", "Reservado"
+        VENDIDO = "VENDIDO", "Vendido"
+        REJEITADO = "REJEITADO", "Rejeitado"
+        PAUSADO = "PAUSADO", "Pausado"
+        ARQUIVADO = "ARQUIVADO", "Arquivado"
 
     proprietario_atual = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -36,10 +40,7 @@ class Veiculo(BaseModel):
         HIBRIDO = "HIBRIDO", "Híbrido"
 
     combustivel = models.CharField(
-        max_length=20,
-        choices=CombustivelVeiculo.choices,
-        null=True,
-        blank=True,
+        max_length=20, choices=CombustivelVeiculo.choices, null=True, blank=True,
     )
 
     class CambioVeiculo(models.TextChoices):
@@ -48,10 +49,7 @@ class Veiculo(BaseModel):
         CVT = "CVT", "CVT"
 
     cambio = models.CharField(
-        max_length=20,
-        choices=CambioVeiculo.choices,
-        null=True,
-        blank=True,
+        max_length=20, choices=CambioVeiculo.choices, null=True, blank=True,
     )
 
     descricao = models.TextField(blank=True)
@@ -65,9 +63,13 @@ class Veiculo(BaseModel):
     quantidade_proprietarios = models.IntegerField(default=1)
     data_cadastro = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        permissions = [
+            ("pode_moderar_veiculo", "Pode aprovar ou rejeitar anúncios de veículo"),
+        ]
+
     def __str__(self):
         return f"{self.placa} - {self.marca} {self.modelo}"
-
 
 class HistoricoVeiculo(BaseModel):
     class MotivoEvento(models.TextChoices):
