@@ -39,6 +39,16 @@ class Empresa(BaseModel):
 
     data_cadastro = models.DateTimeField(auto_now_add=True)
 
+    def possui_selo_ativo(self):
+        """
+        RN16: o selo de confiança depende de verificação aprovada e não
+        suspensa. Usado em empresa-verificacao.html e admin-empresas.html
+        ("Selo de confiança ativo").
+        """
+        if self.verificacoes.filter(status=VerificacaoEmpresa.Status.SUSPENSA).exists():
+            return False
+        return self.verificacoes.filter(status=VerificacaoEmpresa.Status.APROVADA).exists()
+
     def __str__(self):
         return f"{self.nome_fantasia} - {self.get_tipo_empresa_display()}"
 
@@ -61,3 +71,54 @@ class Localizacao(BaseModel):
 
     def __str__(self):
         return f"{self.cidade}/{self.estado} - {self.empresa.nome_fantasia}"
+
+
+class VerificacaoEmpresa(BaseModel):
+    """
+    Um registro por documento enviado (Seção 10.7 da doc técnica —
+    'caminho_documento' é singular, não uma lista). Bate com
+    empresa-verificacao.html, onde cada linha da tabela de "Documentos
+    enviados" é um documento com seu próprio status.
+
+    'nome_documento' não está na Seção 10.7, mas é necessário para a tabela
+    saber o que exibir em cada linha (ex.: "Cartão CNPJ", "RG do
+    responsável legal").
+    """
+
+    class Status(models.TextChoices):
+        PENDENTE = "PENDENTE", "Pendente"
+        APROVADA = "APROVADA", "Aprovada"
+        REJEITADA = "REJEITADA", "Rejeitada"
+        SUSPENSA = "SUSPENSA", "Suspensa"
+
+    empresa = models.ForeignKey(
+        Empresa,
+        on_delete=models.CASCADE,
+        related_name="verificacoes"
+    )
+
+    nome_documento = models.CharField(max_length=150)
+    caminho_documento = models.CharField(max_length=500)
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDENTE
+    )
+
+    observacao_solicitante = models.TextField(blank=True)
+    observacao_administrador = models.TextField(blank=True)
+
+    analisada_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="verificacoes_analisadas"
+    )
+
+    data_envio = models.DateTimeField(auto_now_add=True)
+    analisada_em = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.nome_documento} - {self.empresa.nome_fantasia} ({self.get_status_display()})"
