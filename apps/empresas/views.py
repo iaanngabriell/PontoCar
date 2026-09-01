@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from apps.leads.models import Lead
+from apps.usuarios.models import Usuario
 from apps.veiculos.models import HistoricoVeiculo, Veiculo
 
 from .forms import EmpresaForm, LocalizacaoForm, VerificacaoEmpresaUploadForm
@@ -47,6 +48,18 @@ def cadastro_empresa(request):
             empresa_form=empresa_form,
             localizacao_form=localizacao_form,
         )
+
+        # A empresa usa as credenciais do representante. Ao concluir o cadastro
+        # empresarial, mantemos o perfil principal do usuário coerente com o
+        # fluxo de navegação, sem criar senha ou autenticação na entidade Empresa.
+        if (
+            not request.user.is_staff
+            and not request.user.is_superuser
+            and request.user.tipo_usuario != Usuario.TipoUsuario.EMPRESA
+        ):
+            request.user.tipo_usuario = Usuario.TipoUsuario.EMPRESA
+            request.user.save(update_fields=["tipo_usuario"])
+
         messages.success(request, "Dados da empresa salvos com sucesso.")
         return redirect("empresas:dashboard")
 

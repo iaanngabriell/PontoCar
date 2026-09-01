@@ -97,3 +97,5 @@ MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_URL = "usuarios:login"
 LOGIN_REDIRECT_URL = "core:index"
 LOGOUT_REDIRECT_URL = "core:index"
+
+ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']

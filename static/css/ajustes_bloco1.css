@@ -1,0 +1,356 @@
+/* PontoCar — ajustes do bloco 1: navegação, autenticação e empresa */
+
+/* Navbar autenticada */
+.nav-logout-form { margin: 0; }
+.nav-logout-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.nav-logout-button:hover { color: #fff; }
+
+/* Mantém a navbar pública também nas telas que usam base_dashboard.html. */
+.dash-shell-with-navbar { min-height: calc(100vh - 76px); }
+.dash-shell-with-navbar .dash-sidebar {
+  top: 76px;
+  height: calc(100vh - 76px);
+}
+.dash-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--green-500);
+  color: #06210c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* Autenticação — os templates agora usam as mesmas classes do design system. */
+.auth-shell {
+  min-height: 100vh;
+  padding: 36px 20px;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(62,189,82,.08), transparent 28%),
+    var(--gray-50);
+}
+.auth-wrap {
+  max-width: 980px;
+  min-height: 610px;
+  background: #fff;
+}
+.auth-wrap-wide {
+  max-width: 1120px;
+  grid-template-columns: .82fr 1.18fr;
+}
+.auth-visual {
+  min-height: 100%;
+  gap: 36px;
+}
+.auth-visual .brand { align-self: flex-start; }
+.auth-copy h1 {
+  color: #fff;
+  font-size: 32px;
+  margin-top: 12px;
+  margin-bottom: 14px;
+}
+.auth-copy p { color: rgba(255,255,255,.72); }
+.auth-benefits {
+  margin-top: 24px;
+  display: grid;
+  gap: 10px;
+}
+.auth-benefits li {
+  position: relative;
+  padding-left: 22px;
+  color: rgba(255,255,255,.78);
+  font-size: 13.5px;
+}
+.auth-benefits li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green-400);
+  font-weight: 800;
+}
+.auth-note {
+  margin-top: 24px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.auth-note strong,
+.auth-note span { display: block; }
+.auth-note strong { color: #fff; font-size: 13px; margin-bottom: 4px; }
+.auth-note span { color: rgba(255,255,255,.68); font-size: 12.5px; }
+.auth-form-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 46px 48px;
+}
+.auth-form-header { margin-bottom: 26px; }
+.auth-form-header h2 { font-size: 27px; margin: 7px 0 8px; }
+.auth-form-header p { margin: 0; font-size: 14px; }
+.auth-form { display: grid; gap: 18px; }
+.auth-form .form-group { margin: 0; }
+.auth-grid { gap: 16px; }
+.auth-remember,
+.auth-terms { margin: 0; }
+.auth-terms-error { margin-top: -12px; }
+.auth-switch { margin: 22px 0 0; }
+.auth-switch a { color: var(--green-600); font-weight: 700; }
+
+.role-choice {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+.role-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 10px;
+  background: var(--gray-25);
+  color: var(--gray-700);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.role-card:hover { border-color: var(--green-500); }
+.role-card.is-selected {
+  border-color: var(--green-500);
+  background: var(--green-50);
+  color: var(--navy-900);
+}
+.role-card input { accent-color: var(--green-600); }
+
+/* Cadastro/edição de empresa */
+.company-form-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.company-account-card {
+  position: sticky;
+  top: 96px;
+}
+.company-account-card h3 { font-size: 18px; margin-top: 10px; margin-bottom: 3px; }
+.company-account-card > p { font-size: 13px; word-break: break-word; }
+.company-account-note {
+  margin: 22px 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--blue-50);
+  border: 1px solid #cbdced;
+}
+.company-account-note strong { display: block; font-size: 13px; color: var(--navy-900); margin-bottom: 5px; }
+.company-account-note p { margin: 0; font-size: 12.5px; color: var(--gray-600); }
+.company-steps { display: grid; gap: 14px; }
+.company-step { display: flex; gap: 11px; align-items: flex-start; opacity: .62; }
+.company-step > span {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.company-step strong,
+.company-step small { display: block; }
+.company-step strong { font-size: 13px; color: var(--navy-900); }
+.company-step small { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; }
+.company-step.is-done,
+.company-step.is-current { opacity: 1; }
+.company-step.is-done > span,
+.company-step.is-current > span { background: var(--green-500); color: #06210c; }
+.company-form-card { padding: 34px; }
+.company-form-section h2 { font-size: 21px; margin: 6px 0 22px; }
+.company-address-row { grid-template-columns: 150px minmax(0,1fr) 130px !important; }
+.company-city-state { grid-template-columns: minmax(0,1fr) 120px !important; }
+.company-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--gray-100);
+}
+
+@media (max-width: 980px) {
+  .company-form-layout { grid-template-columns: 1fr; }
+  .company-account-card { position: static; }
+  .auth-wrap-wide { grid-template-columns: 1fr; }
+  .auth-wrap-wide .auth-visual { display: none; }
+}
+
+@media (max-width: 760px) {
+  .auth-shell { padding: 0; background: #fff; }
+  .auth-wrap { min-height: 100vh; border-radius: 0; box-shadow: none; }
+  .auth-form-side { padding: 34px 22px; }
+  .role-choice { grid-template-columns: 1fr; }
+  .company-form-card { padding: 24px 18px; }
+  .company-address-row,
+  .company-city-state { grid-template-columns: 1fr !important; }
+  .company-form-actions { flex-direction: column-reverse; }
+  .company-form-actions .btn { width: 100%; }
+}
+
+/* =========================================================
+   Bloco 2 — footer no fim da página + gestão de serviços
+   ========================================================= */
+html { min-height: 100%; }
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+body > .footer { margin-top: auto; }
+
+.services-public-section {
+  flex: 1 0 auto;
+  padding: 36px 0 80px;
+}
+.services-page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.services-page-heading h1 { margin-bottom: 4px; }
+.services-search-form { margin-bottom: 28px; }
+.services-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+.services-grid { align-items: stretch; }
+.service-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.service-card h3 { margin: 4px 0 8px; }
+.service-description { flex: 1; }
+.service-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--gray-100);
+}
+.service-price {
+  display: block;
+  color: var(--navy-900);
+  font-size: 15px;
+}
+.service-company {
+  text-align: right;
+  max-width: 48%;
+}
+.service-company strong,
+.service-company span { display: block; }
+.service-company strong { color: var(--gray-700); }
+.services-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 46px 24px;
+}
+.services-empty-state p { max-width: 520px; margin: 0 auto 20px; }
+
+.services-management-body { padding-top: 20px; }
+.services-management-list { display: grid; gap: 14px; }
+.service-management-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px;
+  border: 1px solid var(--gray-100);
+  border-radius: 12px;
+  background: var(--gray-25);
+}
+.service-management-main { min-width: 0; flex: 1; }
+.service-management-main h3 { margin: 3px 0 6px; font-size: 17px; }
+.service-management-main p { margin: 0 0 10px; font-size: 13.5px; }
+.service-management-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12.5px;
+  color: var(--gray-500);
+}
+.service-management-meta strong { color: var(--navy-900); }
+.service-management-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.service-management-actions form { margin: 0; }
+
+.service-form-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(260px, .65fr);
+  gap: 28px;
+  align-items: start;
+}
+.service-form-card { padding: 34px; }
+.service-form-intro { margin-bottom: 26px; }
+.service-form-intro h2 { font-size: 22px; margin: 7px 0 8px; }
+.service-form-intro p { margin: 0; }
+.service-form-card form { display: grid; gap: 20px; }
+.service-form-grid { gap: 18px; }
+.service-form-help {
+  position: sticky;
+  top: 96px;
+}
+.service-form-help h3 { margin: 8px 0 10px; font-size: 18px; }
+.stat-card-link {
+  display: block;
+  color: inherit;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.stat-card-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--green-500);
+  box-shadow: 0 14px 24px -18px rgba(16,24,40,.35);
+}
+.stat-card-action { margin-top: 8px; color: var(--green-600); font-weight: 700; }
+
+@media (max-width: 900px) {
+  .service-form-layout { grid-template-columns: 1fr; }
+  .service-form-help { position: static; }
+}
+
+@media (max-width: 760px) {
+  .services-page-heading { align-items: flex-start; flex-direction: column; }
+  .services-search-row { grid-template-columns: 1fr; }
+  .services-search-row .btn { width: 100%; }
+  .service-card-footer { align-items: flex-start; flex-direction: column; }
+  .service-company { max-width: none; text-align: left; }
+  .service-management-item { align-items: flex-start; flex-direction: column; }
+  .service-management-actions { width: 100%; }
+  .service-management-actions .btn { flex: 1; }
+  .service-management-actions form { flex: 1; }
+  .service-management-actions form .btn { width: 100%; }
+  .service-form-card { padding: 24px 18px; }
+}

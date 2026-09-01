@@ -1,32 +1,147 @@
-{% extends "base_dashboard.html" %}
-{% block title %}Dados da empresa · PontoCar{% endblock %}
-{% block dashboard_title %}Dados da empresa{% endblock %}
-{% block dashboard_subtitle %}Cadastre ou atualize os dados comerciais e o endereço principal{% endblock %}
-{% block dashboard_content %}
-<form method="post" novalidate>{% csrf_token %}
-  {% if empresa_form.non_field_errors or localizacao_form.non_field_errors %}<div class="alert alert-error">{{ empresa_form.non_field_errors }}{{ localizacao_form.non_field_errors }}</div>{% endif %}
-  <div class="panel"><div class="panel-header"><h3>Informações gerais</h3></div><div class="panel-body">
-    <div class="grid-2">
-      <div class="form-group"><label>{{ empresa_form.razao_social.label }}</label>{{ empresa_form.razao_social }}{% for e in empresa_form.razao_social.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
-      <div class="form-group"><label>{{ empresa_form.nome_fantasia.label }}</label>{{ empresa_form.nome_fantasia }}{% for e in empresa_form.nome_fantasia.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
-      <div class="form-group"><label>{{ empresa_form.cnpj.label }}</label>{{ empresa_form.cnpj }}{% for e in empresa_form.cnpj.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
-      <div class="form-group"><label>{{ empresa_form.tipo_empresa.label }}</label>{{ empresa_form.tipo_empresa }}{% for e in empresa_form.tipo_empresa.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
-      <div class="form-group"><label>{{ empresa_form.telefone.label }}</label>{{ empresa_form.telefone }}{% for e in empresa_form.telefone.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
-      <div class="form-group"><label>{{ empresa_form.email.label }}</label>{{ empresa_form.email }}{% for e in empresa_form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
-    </div>
-  </div></div>
-  <div class="panel" style="margin-top:20px"><div class="panel-header"><h3>Endereço</h3></div><div class="panel-body">
-    <div class="grid-3">
-      <div class="form-group"><label>{{ localizacao_form.cep.label }}</label>{{ localizacao_form.cep }}</div>
-      <div class="form-group" style="grid-column:span 2"><label>{{ localizacao_form.logradouro.label }}</label>{{ localizacao_form.logradouro }}</div>
-      <div class="form-group"><label>{{ localizacao_form.numero.label }}</label>{{ localizacao_form.numero }}</div>
-      <div class="form-group"><label>{{ localizacao_form.complemento.label }}</label>{{ localizacao_form.complemento }}</div>
-      <div class="form-group"><label>{{ localizacao_form.bairro.label }}</label>{{ localizacao_form.bairro }}</div>
-      <div class="form-group"><label>{{ localizacao_form.cidade.label }}</label>{{ localizacao_form.cidade }}</div>
-      <div class="form-group"><label>{{ localizacao_form.estado.label }}</label>{{ localizacao_form.estado }}</div>
-    </div>
-    {% for field in localizacao_form %}{% for e in field.errors %}<span class="field-error">{{ field.label }}: {{ e }}</span>{% endfor %}{% endfor %}
-    <div class="flex justify-end" style="margin-top:20px"><button type="submit" class="btn btn-primary">Salvar dados</button></div>
-  </div></div>
-</form>
+{% extends "base.html" %}
+{% block title %}{% if empresa %}Dados da empresa{% else %}Cadastrar empresa{% endif %} · PontoCar{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'core:index' %}">Início</a> <span>/</span> Empresa</div>
+    <h1>{% if empresa %}Dados da empresa{% else %}Cadastrar empresa{% endif %}</h1>
+    <p>{% if empresa %}Atualize as informações comerciais e de localização.{% else %}Complete o cadastro para liberar o painel da empresa.{% endif %}</p>
+  </div>
+</div>
+
+<section class="section-tight">
+  <div class="container company-form-layout">
+    <aside class="company-account-card card card-pad">
+      <span class="eyebrow">Conta representante</span>
+      <h3>{{ request.user.get_full_name|default:request.user.email }}</h3>
+      <p>{{ request.user.email }}</p>
+      <div class="company-account-note">
+        <strong>Como funciona o acesso?</strong>
+        <p>A empresa não possui uma senha própria. O acesso é feito pela conta do representante acima, usando o e-mail e a senha criados no cadastro do PontoCar.</p>
+      </div>
+      <div class="company-steps">
+        <div class="company-step is-done"><span>1</span><div><strong>Conta criada</strong><small>Usuário e senha do representante</small></div></div>
+        <div class="company-step is-current"><span>2</span><div><strong>Dados da empresa</strong><small>Informações comerciais e endereço</small></div></div>
+        <div class="company-step"><span>3</span><div><strong>Verificação</strong><small>Documentos para o selo de confiança</small></div></div>
+      </div>
+    </aside>
+
+    <form method="post" novalidate class="form-card company-form-card">
+      {% csrf_token %}
+
+      <div class="company-form-section">
+        <div class="company-form-heading">
+          <div>
+            <span class="eyebrow">Informações comerciais</span>
+            <h2>{% if empresa %}Atualizar empresa{% else %}Identificação da empresa{% endif %}</h2>
+          </div>
+        </div>
+
+        {% include "components/_form_errors.html" with form=empresa_form %}
+
+        <div class="form-row cols-2">
+          <div class="form-group">
+            <label for="{{ empresa_form.razao_social.id_for_label }}">{{ empresa_form.razao_social.label }}</label>
+            {{ empresa_form.razao_social }}
+            {% for error in empresa_form.razao_social.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ empresa_form.nome_fantasia.id_for_label }}">{{ empresa_form.nome_fantasia.label }}</label>
+            {{ empresa_form.nome_fantasia }}
+            {% for error in empresa_form.nome_fantasia.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-row cols-2">
+          <div class="form-group">
+            <label for="{{ empresa_form.cnpj.id_for_label }}">{{ empresa_form.cnpj.label }}</label>
+            {{ empresa_form.cnpj }}
+            <span class="hint">Use um CNPJ válido com 14 dígitos.</span>
+            {% for error in empresa_form.cnpj.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ empresa_form.tipo_empresa.id_for_label }}">{{ empresa_form.tipo_empresa.label }}</label>
+            {{ empresa_form.tipo_empresa }}
+            {% for error in empresa_form.tipo_empresa.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-row cols-2">
+          <div class="form-group">
+            <label for="{{ empresa_form.telefone.id_for_label }}">{{ empresa_form.telefone.label }}</label>
+            {{ empresa_form.telefone }}
+            {% for error in empresa_form.telefone.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ empresa_form.email.id_for_label }}">{{ empresa_form.email.label }}</label>
+            {{ empresa_form.email }}
+            {% for error in empresa_form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="company-form-section">
+        <div class="company-form-heading">
+          <div>
+            <span class="eyebrow">Localização</span>
+            <h2>Endereço principal</h2>
+          </div>
+        </div>
+
+        {% include "components/_form_errors.html" with form=localizacao_form %}
+
+        <div class="form-row cols-3 company-address-row">
+          <div class="form-group">
+            <label for="{{ localizacao_form.cep.id_for_label }}">{{ localizacao_form.cep.label }}</label>
+            {{ localizacao_form.cep }}
+            {% for error in localizacao_form.cep.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group company-address-street">
+            <label for="{{ localizacao_form.logradouro.id_for_label }}">{{ localizacao_form.logradouro.label }}</label>
+            {{ localizacao_form.logradouro }}
+            {% for error in localizacao_form.logradouro.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ localizacao_form.numero.id_for_label }}">{{ localizacao_form.numero.label }}</label>
+            {{ localizacao_form.numero }}
+            {% for error in localizacao_form.numero.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-row cols-2">
+          <div class="form-group">
+            <label for="{{ localizacao_form.complemento.id_for_label }}">{{ localizacao_form.complemento.label }}</label>
+            {{ localizacao_form.complemento }}
+            {% for error in localizacao_form.complemento.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ localizacao_form.bairro.id_for_label }}">{{ localizacao_form.bairro.label }}</label>
+            {{ localizacao_form.bairro }}
+            {% for error in localizacao_form.bairro.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-row cols-2 company-city-state">
+          <div class="form-group">
+            <label for="{{ localizacao_form.cidade.id_for_label }}">{{ localizacao_form.cidade.label }}</label>
+            {{ localizacao_form.cidade }}
+            {% for error in localizacao_form.cidade.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ localizacao_form.estado.id_for_label }}">{{ localizacao_form.estado.label }}</label>
+            {{ localizacao_form.estado }}
+            {% for error in localizacao_form.estado.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="company-form-actions">
+        <a href="{% url 'core:index' %}" class="btn btn-outline-dark">Cancelar</a>
+        <button type="submit" class="btn btn-primary">{% if empresa %}Salvar alterações{% else %}Cadastrar empresa e abrir painel{% endif %}</button>
+      </div>
+    </form>
+  </div>
+</section>
 {% endblock %}

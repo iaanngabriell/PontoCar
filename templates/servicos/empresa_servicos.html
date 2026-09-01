@@ -1,0 +1,55 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Meus serviços · PontoCar{% endblock %}
+{% block dashboard_title %}Meus serviços{% endblock %}
+{% block dashboard_subtitle %}Gerencie os serviços oferecidos pela {{ empresa.nome_fantasia }}{% endblock %}
+{% block dashboard_actions %}
+  <a href="{% url 'servicos:lista' %}" class="btn btn-outline-dark btn-sm">Ver catálogo público</a>
+  <a href="{% url 'servicos:empresa_novo' %}" class="btn btn-primary btn-sm">Novo serviço</a>
+{% endblock %}
+{% block dashboard_content %}
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <h3>Serviços cadastrados</h3>
+      <p class="small" style="margin:4px 0 0">{{ servicos|length }} serviço{{ servicos|length|pluralize }} cadastrado{{ servicos|length|pluralize }}.</p>
+    </div>
+  </div>
+  <div class="panel-body services-management-body">
+    {% if servicos %}
+      <div class="services-management-list">
+        {% for servico in servicos %}
+          <article class="service-management-item">
+            <div class="service-management-main">
+              <span class="eyebrow">Serviço</span>
+              <h3>{{ servico.nome }}</h3>
+              <p>{{ servico.descricao|default:"Sem descrição cadastrada." }}</p>
+              <div class="service-management-meta">
+                <span><strong>R$ {{ servico.preco|floatformat:2 }}</strong></span>
+                <span>~{{ servico.duracao_estimada }} min</span>
+              </div>
+            </div>
+            <div class="service-management-actions">
+              <a href="{% url 'servicos:empresa_editar' servico.id %}" class="btn btn-outline-dark btn-sm">Editar</a>
+              <form
+                method="post"
+                action="{% url 'servicos:empresa_excluir' servico.id %}"
+                onsubmit="return confirm('Remover este serviço do catálogo?');"
+              >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-ghost-danger btn-sm">Excluir</button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="icon">+</div>
+        <h4>Você ainda não cadastrou serviços</h4>
+        <p>Cadastre os serviços oferecidos pela sua empresa para que eles apareçam no catálogo público.</p>
+        <a href="{% url 'servicos:empresa_novo' %}" class="btn btn-primary btn-sm">Cadastrar primeiro serviço</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

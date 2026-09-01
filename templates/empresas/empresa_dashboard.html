@@ -2,11 +2,14 @@
 {% block title %}Painel da empresa · PontoCar{% endblock %}
 {% block dashboard_title %}Painel da {{ empresa.nome_fantasia }}{% endblock %}
 {% block dashboard_subtitle %}Visão geral da sua empresa na PontoCar{% endblock %}
-{% block dashboard_actions %}<a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-primary btn-sm">Novo veículo</a>{% endblock %}
+{% block dashboard_actions %}
+  <a href="{% url 'servicos:empresa_novo' %}" class="btn btn-outline-dark btn-sm">Novo serviço</a>
+  <a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-primary btn-sm">Novo veículo</a>
+{% endblock %}
 {% block dashboard_content %}
 <div class="stat-cards">
   <div class="stat-card"><div class="value">{{ veiculos_ativos }}</div><div class="label">Veículos ativos</div></div>
-  <div class="stat-card"><div class="value">{{ servicos_total }}</div><div class="label">Serviços cadastrados</div></div>
+  <a href="{% url 'servicos:empresa_lista' %}" class="stat-card stat-card-link"><div class="value">{{ servicos_total }}</div><div class="label">Serviços cadastrados</div><div class="small stat-card-action">Gerenciar serviços →</div></a>
   <div class="stat-card"><div class="value">{{ leads_total }}</div><div class="label">Leads recebidos</div></div>
   <div class="stat-card"><div class="value">{{ vendas_pontocar }}</div><div class="label">Vendas pelo PontoCar</div></div>
 </div>

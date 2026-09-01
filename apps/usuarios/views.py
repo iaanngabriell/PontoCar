@@ -55,6 +55,14 @@ def cadastro(request):
     if request.method == "POST" and form.is_valid():
         usuario = form.save()
         auth_login(request, usuario)
+
+        if usuario.tipo_usuario == Usuario.TipoUsuario.EMPRESA:
+            messages.success(
+                request,
+                "Conta criada com sucesso. Agora complete os dados da sua empresa.",
+            )
+            return redirect("empresas:cadastro")
+
         messages.success(request, "Conta criada com sucesso. Bem-vindo à PontoCar!")
         return redirect("core:index")
 

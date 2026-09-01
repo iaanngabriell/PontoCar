@@ -1,0 +1,69 @@
+{% extends "base_dashboard.html" %}
+{% block title %}{% if servico %}Editar serviço{% else %}Novo serviço{% endif %} · PontoCar{% endblock %}
+{% block dashboard_title %}{% if servico %}Editar serviço{% else %}Cadastrar serviço{% endif %}{% endblock %}
+{% block dashboard_subtitle %}{{ empresa.nome_fantasia }}{% endblock %}
+{% block dashboard_actions %}
+  <a href="{% url 'servicos:empresa_lista' %}" class="btn btn-outline-dark btn-sm">Voltar para meus serviços</a>
+{% endblock %}
+{% block dashboard_content %}
+<div class="service-form-layout">
+  <div class="form-card service-form-card">
+    <div class="service-form-intro">
+      <span class="eyebrow">Catálogo de serviços</span>
+      <h2>{% if servico %}Atualize as informações{% else %}Preencha os dados do serviço{% endif %}</h2>
+      <p>As informações salvas aqui serão exibidas na página pública de serviços do PontoCar.</p>
+    </div>
+
+    {% include "components/_form_errors.html" with form=form %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.nome.id_for_label }}">{{ form.nome.label }}</label>
+        {{ form.nome }}
+        {% for error in form.nome.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.descricao.id_for_label }}">{{ form.descricao.label }}</label>
+        {{ form.descricao }}
+        {% if form.descricao.help_text %}<div class="hint">{{ form.descricao.help_text }}</div>{% endif %}
+        {% for error in form.descricao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+      </div>
+
+      <div class="grid-2 service-form-grid">
+        <div class="form-group">
+          <label for="{{ form.preco.id_for_label }}">{{ form.preco.label }}</label>
+          {{ form.preco }}
+          {% if form.preco.help_text %}<div class="hint">{{ form.preco.help_text }}</div>{% endif %}
+          {% for error in form.preco.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.duracao_estimada.id_for_label }}">{{ form.duracao_estimada.label }}</label>
+          {{ form.duracao_estimada }}
+          {% if form.duracao_estimada.help_text %}<div class="hint">{{ form.duracao_estimada.help_text }}</div>{% endif %}
+          {% for error in form.duracao_estimada.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
+      </div>
+
+      <div class="company-form-actions">
+        <a href="{% url 'servicos:empresa_lista' %}" class="btn btn-outline-dark">Cancelar</a>
+        <button class="btn btn-primary" type="submit">
+          {% if servico %}Salvar alterações{% else %}Cadastrar serviço{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <aside class="card card-pad service-form-help">
+    <span class="eyebrow">Como aparece no PontoCar</span>
+    <h3>Informações claras geram mais interesse</h3>
+    <p>Use um nome objetivo, descreva o que está incluído e informe um preço de referência e uma duração aproximada.</p>
+    <div class="company-account-note">
+      <strong>Sem agendamento no MVP</strong>
+      <p>A duração é apenas informativa. O cadastro de serviço não cria agenda nem reserva de horário.</p>
+    </div>
+  </aside>
+</div>
+{% endblock %}

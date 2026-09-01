@@ -7,22 +7,31 @@ from .models import Usuario
 class FormControlMixin:
     def aplicar_classes(self):
         for field in self.fields.values():
-            css = "form-control"
-            if isinstance(field.widget, (forms.CheckboxInput, forms.RadioSelect)):
-                css = ""
-            if css:
-                field.widget.attrs["class"] = css
+            if isinstance(field.widget, forms.RadioSelect):
+                continue
+            if isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs["class"] = "form-checkbox"
+                continue
+            field.widget.attrs["class"] = "form-control"
 
 
 class LoginForm(FormControlMixin, AuthenticationForm):
     username = forms.EmailField(
         label="E-mail",
-        widget=forms.EmailInput(attrs={"placeholder": "voce@email.com", "autofocus": True}),
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "voce@email.com",
+                "autofocus": True,
+                "autocomplete": "email",
+            }
+        ),
     )
     password = forms.CharField(
         label="Senha",
         strip=False,
-        widget=forms.PasswordInput(attrs={"placeholder": "••••••••"}),
+        widget=forms.PasswordInput(
+            attrs={"placeholder": "••••••••", "autocomplete": "current-password"}
+        ),
     )
     lembrar = forms.BooleanField(label="Lembrar de mim", required=False)
 
@@ -41,11 +50,46 @@ class UsuarioCadastroForm(FormControlMixin, UserCreationForm):
         ),
         widget=forms.RadioSelect,
     )
-    first_name = forms.CharField(label="Nome", max_length=150)
-    last_name = forms.CharField(label="Sobrenome", max_length=150)
-    cpf = forms.CharField(label="CPF", max_length=14, required=False)
-    telefone = forms.CharField(label="Telefone / WhatsApp", max_length=20, required=False)
-    email = forms.EmailField(label="E-mail")
+    first_name = forms.CharField(
+        label="Nome",
+        max_length=150,
+        widget=forms.TextInput(attrs={"placeholder": "Seu nome", "autocomplete": "given-name"}),
+    )
+    last_name = forms.CharField(
+        label="Sobrenome",
+        max_length=150,
+        widget=forms.TextInput(attrs={"placeholder": "Seu sobrenome", "autocomplete": "family-name"}),
+    )
+    cpf = forms.CharField(
+        label="CPF",
+        max_length=14,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "000.000.000-00",
+                "inputmode": "numeric",
+                "autocomplete": "off",
+                "data-mask": "cpf",
+            }
+        ),
+    )
+    telefone = forms.CharField(
+        label="Telefone / WhatsApp",
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "(63) 99999-9999",
+                "inputmode": "tel",
+                "autocomplete": "tel",
+                "data-mask": "telefone",
+            }
+        ),
+    )
+    email = forms.EmailField(
+        label="E-mail",
+        widget=forms.EmailInput(attrs={"placeholder": "voce@email.com", "autocomplete": "email"}),
+    )
     termos = forms.BooleanField(
         label="Li e aceito os termos de uso e a política de privacidade",
         required=True,
@@ -68,14 +112,20 @@ class UsuarioCadastroForm(FormControlMixin, UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields["password1"].label = "Senha"
         self.fields["password2"].label = "Confirmar senha"
-        self.fields["password1"].widget.attrs["placeholder"] = "Mínimo 8 caracteres"
-        self.fields["password2"].widget.attrs["placeholder"] = "Repita a senha"
+        self.fields["password1"].widget.attrs.update(
+            {"placeholder": "Mínimo 8 caracteres", "autocomplete": "new-password"}
+        )
+        self.fields["password2"].widget.attrs.update(
+            {"placeholder": "Repita a senha", "autocomplete": "new-password"}
+        )
         self.aplicar_classes()
 
     def clean_cpf(self):
         cpf = "".join(ch for ch in self.cleaned_data.get("cpf", "") if ch.isdigit())
         if cpf and len(cpf) != 11:
             raise forms.ValidationError("Informe um CPF com 11 dígitos.")
+        if cpf and Usuario.objects.filter(cpf=cpf).exists():
+            raise forms.ValidationError("Já existe uma conta cadastrada com este CPF.")
         return cpf or None
 
     def clean_email(self):

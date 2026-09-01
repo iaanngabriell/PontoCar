@@ -1,45 +1,51 @@
 <aside class="dash-sidebar">
   {% include "components/_brand.html" %}
+
   <div class="dash-nav-group">
     <div class="dash-nav-label">Menu</div>
     <div class="dash-nav">
-      {% if request.user.is_staff or request.user.is_superuser or request.user.tipo_usuario == 'ADMINISTRADOR' %}
-        <a href="#"><span>Painel</span></a>
-        <a href="{% url 'veiculos:admin_moderacao' %}"><span>Moderação de anúncios</span></a>
-        <a href="#"><span>Verificação de empresas</span></a>
-        <a href="{% url 'usuarios:admin_usuarios' %}"><span>Usuários</span></a>
-        <a href="{% url 'vendas:admin_vendas' %}"><span>Vendas</span></a>
-      {% elif request.user.tipo_usuario == 'EMPRESA' %}
+      {% if request.user.is_staff or request.user.is_superuser or request.user.tipo_usuario == "ADMINISTRADOR" %}
+        <a href="/gestao/usuarios/"><span>Painel</span></a>
+        <a href="/gestao/moderacao/"><span>Moderação de anúncios</span></a>
+        <a href="/gestao/usuarios/"><span>Usuários</span></a>
+        <a href="/gestao/vendas/"><span>Vendas</span></a>
+      {% elif request.user.tipo_usuario == "EMPRESA" %}
         <a href="{% url 'empresas:dashboard' %}"><span>Painel</span></a>
         <a href="{% url 'empresas:cadastro' %}"><span>Dados da empresa</span></a>
-        <a href="{% url 'veiculos:vendedor_lista' %}"><span>Veículos</span></a>
-        <a href="{% url 'servicos:lista' %}"><span>Serviços</span></a>
-        <a href="{% url 'leads:vendedor_leads' %}"><span>Leads recebidos</span></a>
+        <a href="/vendedor/veiculos/"><span>Veículos</span></a>
+        <a href="{% url 'servicos:empresa_lista' %}"><span>Meus serviços</span></a>
+        <a href="/vendedor/leads/"><span>Leads recebidos</span></a>
         <a href="{% url 'empresas:verificacao' %}"><span>Verificação / Selo</span></a>
-      {% elif request.user.tipo_usuario == 'VENDEDOR' %}
-        <a href="#"><span>Painel</span></a>
-        <a href="{% url 'veiculos:vendedor_lista' %}"><span>Meus veículos</span></a>
-        <a href="{% url 'veiculos:vendedor_novo' %}"><span>Novo anúncio</span></a>
-        <a href="{% url 'leads:vendedor_leads' %}"><span>Leads recebidos</span></a>
+      {% elif request.user.tipo_usuario == "VENDEDOR" %}
+        <a href="/vendedor/veiculos/"><span>Painel</span></a>
+        <a href="/vendedor/veiculos/"><span>Meus veículos</span></a>
+        <a href="/vendedor/veiculos/novo/"><span>Novo anúncio</span></a>
+        <a href="/vendedor/leads/"><span>Leads recebidos</span></a>
         <a href="{% url 'usuarios:perfil' %}"><span>Meu perfil</span></a>
       {% else %}
-        <a href="{% url 'favoritos:comprador_interesses' %}"><span>Meus interesses</span></a>
-        <a href="{% url 'seguros:comprador_cotacoes' %}"><span>Minhas cotações</span></a>
-        <a href="{% url 'vendas:comprador_compras' %}"><span>Minhas compras</span></a>
+        <a href="/comprador/interesses/"><span>Painel</span></a>
+        <a href="/comprador/interesses/"><span>Meus interesses</span></a>
+        <a href="/comprador/cotacoes/"><span>Minhas cotações</span></a>
+        <a href="/comprador/compras/"><span>Minhas compras</span></a>
         <a href="{% url 'usuarios:perfil' %}"><span>Meu perfil</span></a>
       {% endif %}
     </div>
   </div>
+
   <div class="dash-nav-group">
     <div class="dash-nav-label">Conta</div>
     <div class="dash-nav">
       <a href="{% url 'core:index' %}"><span>Ver site público</span></a>
-      <form method="post" action="{% url 'usuarios:logout' %}" class="dash-logout-form">{% csrf_token %}<button type="submit"><span>Sair</span></button></form>
+      <form method="post" action="{% url 'usuarios:logout' %}" class="dash-logout-form">
+        {% csrf_token %}
+        <button type="submit"><span>Sair</span></button>
+      </form>
     </div>
   </div>
+
   <div class="dash-user">
-    <div style="width:36px;height:36px;border-radius:50%;background:var(--green-500);color:#06210c;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">
-      {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+    <div class="dash-avatar" aria-hidden="true">
+      {{ request.user.first_name|default:request.user.email|slice:":1"|upper }}
     </div>
     <div>
       <strong>{{ request.user.get_full_name|default:request.user.email }}</strong>

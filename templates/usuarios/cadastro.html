@@ -2,7 +2,101 @@
 {% block title %}Criar conta · PontoCar{% endblock %}
 {% block body %}
 <div class="auth-shell">
-  <div class="auth-side"><div class="auth-side-inner">{% include "components/_brand.html" %}<div><span class="eyebrow">Comece agora</span><h2 style="color:#fff;font-size:24px">Crie sua conta</h2><p>Tenha acesso aos recursos de compra, venda e empresas do PontoCar.</p></div><a href="{% url 'core:index' %}" class="btn btn-outline-light btn-sm">Voltar ao início</a></div></div>
-  <main class="auth-main"><div class="auth-box" style="max-width:620px"><h2>Criar conta grátis</h2><form method="post" novalidate>{% csrf_token %}{% include "components/_form_errors.html" with form=form %}<div class="form-group"><label>{{ form.tipo_usuario.label }}</label><div class="grid-3 role-choice">{% for radio in form.tipo_usuario %}<label class="card card-pad text-center" style="padding:12px;cursor:pointer">{{ radio.tag }}<div class="small" style="margin-top:4px;font-weight:700;color:var(--navy-900)">{{ radio.choice_label }}</div></label>{% endfor %}</div></div><div class="grid-2"><div class="form-group"><label>{{ form.first_name.label }}</label>{{ form.first_name }}</div><div class="form-group"><label>{{ form.last_name.label }}</label>{{ form.last_name }}</div></div><div class="grid-2"><div class="form-group"><label>{{ form.cpf.label }}</label>{{ form.cpf }}</div><div class="form-group"><label>{{ form.telefone.label }}</label>{{ form.telefone }}</div></div><div class="form-group"><label>{{ form.email.label }}</label>{{ form.email }}</div><div class="grid-2"><div class="form-group"><label>{{ form.password1.label }}</label>{{ form.password1 }}</div><div class="form-group"><label>{{ form.password2.label }}</label>{{ form.password2 }}</div></div><label class="checkbox-row" style="margin-bottom:20px">{{ form.termos }} {{ form.termos.label }}</label><button class="btn btn-primary" style="width:100%" type="submit">Criar minha conta</button></form><p class="small text-center" style="margin-top:20px">Já tem conta? <a href="{% url 'usuarios:login' %}">Entrar</a></p></div></main>
+  <div class="auth-wrap auth-wrap-wide">
+    <aside class="auth-visual">
+      <div>{% include "components/_brand.html" %}</div>
+      <div class="auth-copy">
+        <span class="eyebrow">Comece agora</span>
+        <h1>Crie sua conta PontoCar</h1>
+        <p>Escolha como deseja usar a plataforma. Se você selecionar <strong>Sou empresa</strong>, depois da criação da conta será direcionado para preencher os dados da empresa.</p>
+        <div class="auth-note">
+          <strong>Importante</strong>
+          <span>A senha pertence à sua conta de usuário/representante. A empresa não possui uma senha separada.</span>
+        </div>
+      </div>
+      <a href="{% url 'core:index' %}" class="btn btn-outline-light btn-sm">Voltar ao início</a>
+    </aside>
+
+    <main class="auth-form-side">
+      <div class="auth-form-header">
+        <span class="eyebrow">Cadastro</span>
+        <h2>Criar conta grátis</h2>
+        <p>Preencha seus dados de acesso e perfil.</p>
+      </div>
+
+      {% include "components/_messages.html" %}
+
+      <form method="post" novalidate class="auth-form">
+        {% csrf_token %}
+        {% include "components/_form_errors.html" with form=form %}
+
+        <div class="form-group">
+          <label>{{ form.tipo_usuario.label }}</label>
+          <div class="role-choice">
+            {% for radio in form.tipo_usuario %}
+              <label class="role-card">
+                {{ radio.tag }}
+                <span>{{ radio.choice_label }}</span>
+              </label>
+            {% endfor %}
+          </div>
+          {% for error in form.tipo_usuario.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="grid-2 auth-grid">
+          <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+            {% for error in form.first_name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+            {% for error in form.last_name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <div class="grid-2 auth-grid">
+          <div class="form-group">
+            <label for="{{ form.cpf.id_for_label }}">{{ form.cpf.label }}</label>
+            {{ form.cpf }}
+            {% for error in form.cpf.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.telefone.id_for_label }}">{{ form.telefone.label }}</label>
+            {{ form.telefone }}
+            {% for error in form.telefone.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+          {{ form.email }}
+          {% for error in form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="grid-2 auth-grid">
+          <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+            {{ form.password1 }}
+            <span class="hint">Use pelo menos 8 caracteres e evite senhas muito comuns.</span>
+            {% for error in form.password1.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+            {{ form.password2 }}
+            {% for error in form.password2.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <label class="checkbox-row auth-terms">{{ form.termos }} <span>{{ form.termos.label }}</span></label>
+        {% for error in form.termos.errors %}<span class="field-error auth-terms-error">{{ error }}</span>{% endfor %}
+
+        <button class="btn btn-primary btn-block" type="submit">Criar minha conta</button>
+      </form>
+
+      <p class="small text-center auth-switch">Já possui conta? <a href="{% url 'usuarios:login' %}">Entrar</a></p>
+    </main>
+  </div>
 </div>
 {% endblock %}
