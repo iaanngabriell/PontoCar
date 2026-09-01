@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Empresas parceiras · PontoCar{% endblock %}
+{% block content %}
+<div class="page-header"><div class="container"><div class="breadcrumb"><a href="{% url 'core:index' %}">Início</a> <span style="opacity:.4">/</span> <span>Empresas</span></div><h1>Empresas parceiras</h1><p>Revendas, concessionárias, oficinas, seguradoras e corretoras de Palmas-TO.</p></div></div>
+<div class="container" style="padding:36px 0 80px">
+  <div class="tabs" style="margin-bottom:28px">
+    <a href="{% url 'empresas:lista' %}" class="{% if not categoria %}active{% endif %}">Todas</a>
+    {% for valor, rotulo in categorias %}<a href="?categoria={{ valor }}" class="{% if categoria == valor %}active{% endif %}">{{ rotulo }}</a>{% endfor %}
+  </div>
+  <div class="grid-2">
+    {% for empresa in empresas %}
+      <article class="card company-card">
+        <div class="company-logo">{{ empresa.nome_fantasia|slice:':2'|upper }}</div>
+        <div style="flex:1">
+          <h4>{{ empresa.nome_fantasia }}{% if empresa.possui_selo_ativo %}<span class="badge badge-green" style="margin-left:8px">Selo</span>{% endif %}</h4>
+          <div class="cat">{{ empresa.get_tipo_empresa_display }} · {% if empresa.localizacao %}{{ empresa.localizacao.cidade }}-{{ empresa.localizacao.estado }}{% else %}Palmas-TO{% endif %}</div>
+          <div class="small">{{ empresa.telefone|default:empresa.email }}</div>
+        </div>
+      </article>
+    {% empty %}
+      <div class="card card-pad"><p style="margin:0">Nenhuma empresa encontrada para este filtro.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

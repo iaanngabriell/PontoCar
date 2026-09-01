@@ -1,0 +1,28 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Verificação da empresa · PontoCar{% endblock %}
+{% block dashboard_title %}Verificação / Selo{% endblock %}
+{% block dashboard_subtitle %}Documentos e status do selo de confiança{% endblock %}
+{% block dashboard_content %}
+<div class="grid-2" style="align-items:start;">
+  <div>
+    <div class="panel">
+      <div class="panel-header"><h3>Status da verificação</h3></div>
+      <div class="panel-body">
+        {% if selo_ativo %}<div class="alert alert-success"><strong>Selo de confiança ativo</strong><br>Sua empresa possui pelo menos uma verificação aprovada e nenhuma suspensão ativa.</div>{% else %}<div class="alert alert-info"><strong>Selo ainda não está ativo.</strong><br>Envie os documentos e acompanhe a análise abaixo.</div>{% endif %}
+        <div class="spec-grid"><div class="spec-item"><span>Empresa</span><strong>{{ empresa.nome_fantasia }}</strong></div><div class="spec-item"><span>CNPJ</span><strong>{{ empresa.cnpj }}</strong></div><div class="spec-item"><span>Situação</span><strong>{% if empresa.ativa %}Ativa{% else %}Inativa{% endif %}</strong></div></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+      <div class="panel-header"><h3>Documentos enviados</h3></div>
+      {% if verificacoes %}<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Documento</th><th>Enviado em</th><th>Status</th><th>Observação</th></tr></thead><tbody>{% for item in verificacoes %}<tr><td><strong>{{ item.nome_documento }}</strong></td><td>{{ item.data_envio|date:"d/m/Y H:i" }}</td><td><span class="badge {% if item.status == 'APROVADA' %}badge-green{% elif item.status == 'PENDENTE' %}badge-amber{% elif item.status == 'REJEITADA' %}badge-red{% else %}badge-gray{% endif %}">{{ item.get_status_display }}</span></td><td>{{ item.observacao_administrador|default:item.observacao_solicitante|default:"—" }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><p>Nenhum documento enviado ainda.</p></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3>Enviar novo documento</h3>
+    <p class="small">PDF, JPG ou PNG, até 8 MB. Os documentos não são exibidos publicamente nesta tela.</p>
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}{% include "components/_form_errors.html" with form=form %}{% for field in form %}<div class="form-group"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}</div>{% endfor %}<button class="btn btn-primary btn-block" type="submit">Enviar para análise</button></form>
+  </div>
+</div>
+{% endblock %}

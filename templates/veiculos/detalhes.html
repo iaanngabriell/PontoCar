@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ veiculo.marca }} {{ veiculo.modelo }} · PontoCar{% endblock %}
+{% block content %}
+<section class="section-tight">
+  <div class="container">
+    <div class="page-header">
+      <div><span class="eyebrow">Comprar</span><h1>{{ veiculo.marca }} {{ veiculo.modelo }}{% if veiculo.versao %} {{ veiculo.versao }}{% endif %}</h1><p>Anúncio publicado em {{ veiculo.data_cadastro|date:"d/m/Y" }}</p></div>
+      {% if request.user.is_authenticated %}
+      <form method="post" action="{% url 'favoritos:alternar' veiculo.id %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn btn-outline-dark btn-sm" type="submit">{% if favorito %}Remover dos favoritos{% else %}Salvar nos favoritos{% endif %}</button></form>
+      {% endif %}
+    </div>
+
+    <div class="grid-2" style="align-items:start;">
+      <div>
+        <div class="gallery-main">
+          {% if foto_principal %}<img src="{{ foto_principal.imagem.url }}" alt="{{ foto_principal.texto_alternativo|default:veiculo.modelo }}">{% else %}{% include "components/_vehicle_placeholder.html" %}{% endif %}
+        </div>
+        {% if fotos|length > 1 %}<div class="gallery-thumbs">{% for foto in fotos %}<img src="{{ foto.imagem.url }}" alt="{{ foto.texto_alternativo|default:veiculo.modelo }}" {% if foto == foto_principal %}class="active"{% endif %}>{% endfor %}</div>{% endif %}
+
+        <div class="panel mt-0" style="margin-top:24px;">
+          <div class="panel-header"><h2>Especificações</h2></div>
+          <div class="panel-body"><div class="spec-grid">
+            <div class="spec-item"><span>Marca / Modelo</span><strong>{{ veiculo.marca }} {{ veiculo.modelo }}</strong></div>
+            <div class="spec-item"><span>Versão</span><strong>{{ veiculo.versao|default:"—" }}</strong></div>
+            <div class="spec-item"><span>Ano fab./modelo</span><strong>{{ veiculo.ano_fabricacao }} / {{ veiculo.ano_modelo }}</strong></div>
+            <div class="spec-item"><span>Quilometragem</span><strong>{{ veiculo.quilometragem }} km</strong></div>
+            <div class="spec-item"><span>Câmbio</span><strong>{{ veiculo.get_cambio_display|default:"—" }}</strong></div>
+            <div class="spec-item"><span>Combustível</span><strong>{{ veiculo.get_combustivel_display|default:"—" }}</strong></div>
+            <div class="spec-item"><span>Cor</span><strong>{{ veiculo.cor }}</strong></div>
+            <div class="spec-item"><span>Placa</span><strong>final {{ veiculo.placa|slice:"-1:" }}</strong></div>
+            <div class="spec-item"><span>Status</span><strong>{{ veiculo.get_status_display }}</strong></div>
+          </div></div>
+        </div>
+
+        <div class="panel" style="margin-top:24px;"><div class="panel-header"><h2>Descrição e opcionais</h2></div><div class="panel-body"><p>{{ veiculo.descricao|default:"O anunciante não informou uma descrição adicional."|linebreaksbr }}</p></div></div>
+      </div>
+
+      <aside>
+        <div class="price-box"><span>Valor anunciado</span><strong>R$ {{ veiculo.preco|floatformat:2 }}</strong></div>
+
+        {% if empresa %}
+          <div class="seller-card">
+            <div class="company-logo">{{ empresa.nome_fantasia|slice:":2"|upper }}</div>
+            <div><strong>{{ empresa.nome_fantasia }}</strong><p>{{ empresa.get_tipo_empresa_display }}</p>{% if selo_ativo %}<span class="badge badge-green">Selo de confiança</span>{% endif %}</div>
+          </div>
+        {% elif veiculo.proprietario_atual %}
+          <div class="seller-card"><div class="company-logo">{{ veiculo.proprietario_atual.first_name|first|upper }}{{ veiculo.proprietario_atual.last_name|first|upper }}</div><div><strong>{{ veiculo.proprietario_atual.get_full_name|default:"Vendedor particular" }}</strong><p>Vendedor particular</p></div></div>
+        {% endif %}
+
+        <div class="form-card" style="margin-top:20px;">
+          <h3>Tenho interesse nesse veículo</h3>
+          <form method="post">{% csrf_token %}{% include "components/_form_errors.html" with form=form %}
+            {% for field in form %}<div class="form-group"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}</div>{% endfor %}
+            <button class="btn btn-primary btn-block" type="submit">Enviar interesse</button>
+          </form>
+          <p class="small" style="margin-top:10px;">Seus dados são enviados ao anunciante. O contato direto do vendedor não é exibido publicamente.</p>
+        </div>
+      </aside>
+    </div>
+
+    {% if semelhantes %}<div class="section-title" style="margin-top:48px;"><div><span class="eyebrow">Veja também</span><h2>Veículos semelhantes</h2></div></div><div class="vehicle-grid">{% for veiculo in semelhantes %}{% include "components/_vehicle_card.html" with hide_favorite=True %}{% endfor %}</div>{% endif %}
+  </div>
+</section>
+{% endblock %}

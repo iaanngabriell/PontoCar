@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Seguros · PontoCar{% endblock %}
+{% block content %}
+<section class="section-tight"><div class="container">
+  <div class="page-header"><div><span class="eyebrow">Seguros</span><h1>Compare planos de seguro auto</h1><p>Consulte os planos cadastrados por seguradoras e corretoras parceiras.</p></div>{% if request.user.is_authenticated %}<a href="{% url 'seguros:comprador_cotacoes' %}" class="btn btn-outline-dark">Minhas cotações</a>{% endif %}</div>
+
+  <div class="search-card"><form method="get" class="search-grid"><div class="form-group"><label>Seguradora / corretora</label><select name="empresa" class="form-control"><option value="">Todas</option>{% for empresa in empresas %}<option value="{{ empresa.id }}" {% if empresa_atual == empresa.id|stringformat:'s' %}selected{% endif %}>{{ empresa.nome_fantasia }}</option>{% endfor %}</select></div><div class="search-actions"><button class="btn btn-primary" type="submit">Filtrar planos</button><a href="{% url 'seguros:lista' %}" class="btn btn-outline-dark">Limpar</a></div></form></div>
+
+  {% if seguros %}<div class="grid-3">{% for seguro in seguros %}<article class="card card-pad"><span class="badge badge-green">{{ seguro.empresa.get_tipo_empresa_display }}</span><h3 style="margin-top:14px;">{{ seguro.nome }}</h3><p class="small">{{ seguro.empresa.nome_fantasia }}</p><div class="price" style="margin:18px 0;">R$ {{ seguro.valor_referencia|floatformat:2 }} <span class="small">referência</span></div><p>{{ seguro.descricao|default:"Consulte a empresa para conhecer coberturas, condições e valor final da apólice." }}</p><div class="form-actions"><a href="mailto:{{ seguro.empresa.email }}?subject=Interesse%20no%20plano%20{{ seguro.nome|urlencode }}" class="btn btn-primary btn-block">Solicitar contato</a></div></article>{% endfor %}</div>{% else %}<div class="empty-state"><h3>Nenhum plano ativo encontrado</h3><p>Os planos cadastrados por seguradoras e corretoras ativas aparecerão aqui.</p></div>{% endif %}
+
+  <div class="alert alert-info" style="margin-top:28px;">O MVP atual mantém <strong>Seguro</strong> como catálogo de planos e <strong>ApoliceSeguro</strong> como contrato efetivo. Esta tela não cria uma cotação persistida nem calcula prêmio automaticamente.</div>
+</div></section>
+{% endblock %}

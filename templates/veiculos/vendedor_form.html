@@ -1,0 +1,37 @@
+{% extends "base_dashboard.html" %}
+{% block title %}{% if veiculo %}Editar anúncio{% else %}Novo anúncio{% endif %} · PontoCar{% endblock %}
+{% block dashboard_title %}{% if veiculo %}Editar anúncio{% else %}Novo anúncio{% endif %}{% endblock %}
+{% block dashboard_subtitle %}{% if veiculo %}Atualize os dados do seu veículo{% else %}Preencha os dados do veículo que deseja anunciar{% endif %}{% endblock %}
+{% block dashboard_content %}
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+  {% include "components/_form_errors.html" with form=form %}
+  <div class="form-card">
+    <h3>Dados do veículo</h3>
+    <div class="form-row"><div class="form-group"><label>{{ form.marca.label }}</label>{{ form.marca }}{{ form.marca.errors }}</div><div class="form-group"><label>{{ form.modelo.label }}</label>{{ form.modelo }}{{ form.modelo.errors }}</div></div>
+    <div class="form-group"><label>{{ form.versao.label }}</label>{{ form.versao }}{{ form.versao.errors }}</div>
+    <div class="form-row"><div class="form-group"><label>{{ form.ano_fabricacao.label }}</label>{{ form.ano_fabricacao }}{{ form.ano_fabricacao.errors }}</div><div class="form-group"><label>{{ form.ano_modelo.label }}</label>{{ form.ano_modelo }}{{ form.ano_modelo.errors }}</div></div>
+    <div class="form-row"><div class="form-group"><label>{{ form.quilometragem.label }}</label>{{ form.quilometragem }}{{ form.quilometragem.errors }}</div><div class="form-group"><label>{{ form.preco.label }}</label>{{ form.preco }}{{ form.preco.errors }}</div></div>
+    <div class="form-row"><div class="form-group"><label>{{ form.cambio.label }}</label>{{ form.cambio }}{{ form.cambio.errors }}</div><div class="form-group"><label>{{ form.combustivel.label }}</label>{{ form.combustivel }}{{ form.combustivel.errors }}</div></div>
+    <div class="form-row"><div class="form-group"><label>{{ form.cor.label }}</label>{{ form.cor }}{{ form.cor.errors }}</div><div class="form-group"><label>{{ form.placa.label }}</label>{{ form.placa }}{{ form.placa.errors }}</div></div>
+    <div class="form-group"><label>{{ form.descricao.label }}</label>{{ form.descricao }}{{ form.descricao.errors }}</div>
+  </div>
+
+  <div class="form-card" style="margin-top:20px;">
+    <h3>Fotos do veículo</h3>
+    <label class="upload-box" for="foto-upload"><strong>Clique para enviar fotos</strong><span>PNG ou JPG, até 8 fotos, 8 MB cada</span></label>
+    <input id="foto-upload" name="fotos" type="file" accept="image/*" multiple hidden>
+    <div id="photo-grid" class="photo-grid"></div>
+  </div>
+
+  <div class="form-card" style="margin-top:20px;">
+    <h3>Status do anúncio</h3>
+    {% if veiculo %}
+      <p class="small">A edição altera os dados do anúncio, mas não muda o status atual <strong>{{ veiculo.get_status_display }}</strong>.</p>
+      <div class="form-actions"><button class="btn btn-primary" type="submit">Salvar alterações</button><a class="btn btn-outline-dark" href="{% url 'veiculos:vendedor_lista' %}">Cancelar</a></div>
+    {% else %}
+      <p class="small">Ao publicar agora, o anúncio entra como <strong>Disponível</strong>, conforme o fluxo atual do MVP. Você também pode salvá-lo como rascunho.</p>
+      <div class="form-actions"><button class="btn btn-primary" type="submit" name="acao" value="publicar">Publicar anúncio</button><button class="btn btn-outline-dark" type="submit" name="acao" value="rascunho">Salvar como rascunho</button></div>
+    {% endif %}
+  </div>
+</form>
+{% endblock %}

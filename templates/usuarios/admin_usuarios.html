@@ -1,0 +1,7 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Usuários · PontoCar{% endblock %}
+{% block dashboard_title %}Usuários{% endblock %}
+{% block dashboard_subtitle %}Consulta de contas cadastradas na plataforma{% endblock %}
+{% block dashboard_content %}
+<div class="panel"><div class="panel-header"><h3>Todos os usuários</h3><form method="get"><input class="form-control" name="q" value="{{ busca }}" placeholder="Buscar por nome, e-mail ou CPF" style="width:280px"></form></div><div class="panel-body"><table class="data-table"><thead><tr><th>Usuário</th><th>Perfil</th><th>CPF</th><th>Cadastro</th><th>Situação</th></tr></thead><tbody>{% for usuario in usuarios %}<tr><td><div class="cell-title">{{ usuario.get_full_name|default:'Sem nome' }}</div><div class="cell-sub">{{ usuario.email }}</div></td><td>{{ usuario.get_tipo_usuario_display }}</td><td>{{ usuario.cpf|default:'—' }}</td><td>{{ usuario.date_joined|date:'d/m/Y' }}</td><td>{% if usuario.is_active %}<span class="badge badge-green">Ativo</span>{% else %}<span class="badge badge-red">Inativo</span>{% endif %}</td></tr>{% empty %}<tr><td colspan="5">Nenhum usuário encontrado.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

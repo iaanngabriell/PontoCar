@@ -1,0 +1,7 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Minhas compras · PontoCar{% endblock %}
+{% block dashboard_title %}Minhas compras{% endblock %}
+{% block dashboard_subtitle %}Histórico de compras concluídas na plataforma{% endblock %}
+{% block dashboard_content %}
+<div class="panel"><div class="panel-body"><table class="data-table"><thead><tr><th>Veículo</th><th>Valor</th><th>Data</th><th>Status</th></tr></thead><tbody>{% for venda in compras %}<tr><td><div class="cell-title">{{ venda.veiculo.marca }} {{ venda.veiculo.modelo }}</div><div class="cell-sub">{{ venda.veiculo.placa }}</div></td><td>R$ {{ venda.valor_proposta|floatformat:2 }}</td><td>{{ venda.data_proposta|date:'d/m/Y' }}</td><td><span class="badge badge-green">{{ venda.get_status_display }}</span></td></tr>{% empty %}<tr><td colspan="4">Você ainda não possui compras concluídas.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

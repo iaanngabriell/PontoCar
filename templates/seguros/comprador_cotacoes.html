@@ -1,0 +1,9 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Minhas cotações · PontoCar{% endblock %}
+{% block dashboard_title %}Minhas cotações{% endblock %}
+{% block dashboard_subtitle %}Acompanhe as apólices vinculadas à sua conta{% endblock %}
+{% block dashboard_actions %}<a href="{% url 'seguros:lista' %}" class="btn btn-primary">Consultar planos</a>{% endblock %}
+{% block dashboard_content %}
+<div class="tabs"><a href="{% url 'seguros:comprador_cotacoes' %}" class="{% if not status_atual %}active{% endif %}">Todas</a>{% for valor,rotulo in status_choices %}<a href="?status={{ valor }}" class="{% if status_atual == valor %}active{% endif %}">{{ rotulo }}</a>{% endfor %}</div>
+<div class="panel">{% if apolices %}<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Seguradora</th><th>Veículo</th><th>Plano</th><th>Valor</th><th>Vigência</th><th>Status</th></tr></thead><tbody>{% for apolice in apolices %}<tr><td><strong>{{ apolice.seguro.empresa.nome_fantasia }}</strong></td><td>{{ apolice.veiculo.marca }} {{ apolice.veiculo.modelo }}</td><td>{{ apolice.seguro.nome }}</td><td>R$ {{ apolice.valor_mensal|floatformat:2 }}/mês</td><td>{{ apolice.inicio_vigencia|date:"d/m/Y" }} a {{ apolice.fim_vigencia|date:"d/m/Y" }}</td><td><span class="badge {% if apolice.status == 'ATIVA' and apolice.esta_ativa %}badge-green{% elif apolice.status == 'EXPIRADA' %}badge-gray{% else %}badge-red{% endif %}">{{ apolice.get_status_display }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><h3>Nenhuma apólice encontrada</h3><p>Os planos contratados e cadastrados pela seguradora aparecerão aqui.</p><a href="{% url 'seguros:lista' %}" class="btn btn-primary">Consultar planos</a></div>{% endif %}</div>
+{% endblock %}

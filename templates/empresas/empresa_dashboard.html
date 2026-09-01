@@ -1,0 +1,15 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Painel da empresa · PontoCar{% endblock %}
+{% block dashboard_title %}Painel da {{ empresa.nome_fantasia }}{% endblock %}
+{% block dashboard_subtitle %}Visão geral da sua empresa na PontoCar{% endblock %}
+{% block dashboard_actions %}<a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-primary btn-sm">Novo veículo</a>{% endblock %}
+{% block dashboard_content %}
+<div class="stat-cards">
+  <div class="stat-card"><div class="value">{{ veiculos_ativos }}</div><div class="label">Veículos ativos</div></div>
+  <div class="stat-card"><div class="value">{{ servicos_total }}</div><div class="label">Serviços cadastrados</div></div>
+  <div class="stat-card"><div class="value">{{ leads_total }}</div><div class="label">Leads recebidos</div></div>
+  <div class="stat-card"><div class="value">{{ vendas_pontocar }}</div><div class="label">Vendas pelo PontoCar</div></div>
+</div>
+<div class="panel"><div class="panel-header"><h3>Veículos em destaque</h3><a href="{% url 'veiculos:vendedor_lista' %}" class="small" style="font-weight:600">Ver todos</a></div><div class="panel-body"><table class="data-table"><thead><tr><th>Veículo</th><th>Preço</th><th>Status</th></tr></thead><tbody>{% for veiculo in veiculos_destaque %}<tr><td><div class="cell-main"><div style="width:42px;height:42px;border-radius:8px;overflow:hidden">{% with foto=veiculo.fotos.all|first %}{% if foto %}<img src="{{ foto.imagem.url }}" alt="{{ veiculo.modelo }}" style="width:100%;height:100%;object-fit:cover">{% else %}{% include "components/_vehicle_placeholder.html" %}{% endif %}{% endwith %}</div><div class="cell-title">{{ veiculo.marca }} {{ veiculo.modelo }}</div></div></td><td>R$ {{ veiculo.preco|floatformat:2 }}</td><td><span class="badge {% if veiculo.status == 'DISPONIVEL' %}badge-green{% else %}badge-amber{% endif %}">{{ veiculo.get_status_display }}</span></td></tr>{% empty %}<tr><td colspan="3">Nenhum veículo ativo.</td></tr>{% endfor %}</tbody></table></div></div>
+<div class="panel" style="margin-top:20px"><div class="panel-header"><h3>Selo de confiança</h3></div><div class="panel-body flex items-center gap-12"><div style="flex:1">{% if selo_ativo %}<span class="badge badge-green">Verificada</span><p class="small" style="margin:6px 0 0">Sua empresa está com o selo de confiança ativo.</p>{% else %}<span class="badge badge-amber">Sem selo ativo</span><p class="small" style="margin:6px 0 0">Envie e acompanhe os documentos de verificação.</p>{% endif %}</div><a href="{% url 'empresas:verificacao' %}" class="btn btn-outline-dark btn-sm">Ver detalhes</a></div></div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Compre e venda veículos em Palmas-TO · PontoCar{% endblock %}
+{% block meta_description %}Compre e venda veículos, encontre empresas e serviços automotivos em Palmas-TO.{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Palmas · Tocantins</span>
+        <h1>Seu próximo carro<span class="accent">está aqui.</span></h1>
+        <p class="lead">As melhores ofertas de Palmas-TO e região. Compre com segurança, venda com facilidade e conte com serviços que fazem a diferença.</p>
+        <div class="hero-cta">
+          <a href="{% url 'veiculos:catalogo' %}" class="btn btn-primary">Buscar veículos</a>
+          <a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-outline-light">Quero vender meu carro</a>
+        </div>
+      </div>
+      <div class="hero-photo">{% include "components/_vehicle_placeholder.html" %}</div>
+    </div>
+  </div>
+</section>
+
+<section class="search-strip">
+  <div class="container">
+    <form action="/catalogo/" method="get" class="search-box">
+      <h3>Encontre o carro <span class="accent">ideal</span> para você</h3>
+      <div class="search-fields">
+        <div class="field"><label>Marca</label><input class="form-control" name="marca" placeholder="Ex.: Toyota"></div>
+        <div class="field"><label>Modelo</label><input class="form-control" name="modelo" placeholder="Ex.: Corolla"></div>
+        <div class="field"><label>Ano de</label><input class="form-control" type="number" name="ano_min" placeholder="Ano mínimo"></div>
+        <div class="field"><label>Ano até</label><input class="form-control" type="number" name="ano_max" placeholder="Ano máximo"></div>
+        <div class="field"><label>Preço máximo</label><input class="form-control" type="number" name="preco_max" placeholder="R$"></div>
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><h2>Por que escolher a <span class="accent">PontoCar</span>?</h2></div>
+    <div class="grid-3">
+      <div class="card card-pad"><h3>Negócios locais</h3><p>Uma plataforma pensada para Palmas-TO e região.</p></div>
+      <div class="card card-pad"><h3>Mais confiança</h3><p>Empresas podem conquistar selo de confiança por verificação documental.</p></div>
+      <div class="card card-pad"><h3>Ecossistema completo</h3><p>Veículos, empresas, serviços e seguros em uma experiência integrada.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-muted" id="como-funciona">
+  <div class="container">
+    <div class="section-title"><h2><span class="accent">Como</span> funciona</h2></div>
+    <div class="grid-3">
+      <div class="card card-pad"><span class="eyebrow">01</span><h3>Encontre</h3><p>Pesquise anúncios disponíveis em Palmas.</p></div>
+      <div class="card card-pad"><span class="eyebrow">02</span><h3>Demonstre interesse</h3><p>Entre em contato com o anunciante e acompanhe a negociação.</p></div>
+      <div class="card card-pad"><span class="eyebrow">03</span><h3>Feche negócio</h3><p>A venda é registrada e o histórico do veículo é atualizado.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="flex justify-between items-center" style="margin-bottom:24px">
+      <div><h2 style="margin-bottom:2px;font-size:26px">Veículos em destaque</h2><p class="small">Anúncios disponíveis mais recentes</p></div>
+      <a href="{% url 'veiculos:catalogo' %}" class="btn btn-outline-dark btn-sm">Ver catálogo</a>
+    </div>
+    <div class="vehicle-grid">
+      {% for veiculo in veiculos_destaque %}
+        <article class="card vehicle-card">
+          <div class="vehicle-photo">
+            {% with foto=veiculo.fotos.all|first %}
+              {% if foto %}<img src="{{ foto.imagem.url }}" alt="{{ foto.texto_alternativo|default:veiculo.modelo }}">{% else %}{% include "components/_vehicle_placeholder.html" %}{% endif %}
+            {% endwith %}
+          </div>
+          <div class="vehicle-body">
+            <div class="price">R$ {{ veiculo.preco|floatformat:2 }}</div>
+            <h4>{{ veiculo.marca }} {{ veiculo.modelo }}{% if veiculo.versao %} {{ veiculo.versao }}{% endif %}</h4>
+            <div class="vehicle-meta"><span>{{ veiculo.ano_modelo }}</span><span>{{ veiculo.quilometragem }} km</span></div>
+            <div class="vehicle-footer"><span class="seller">Palmas-TO</span><a href="{% url 'veiculos:detalhes' veiculo.id %}" class="btn btn-outline-dark btn-sm">Ver detalhes</a></div>
+          </div>
+        </article>
+      {% empty %}
+        <div class="card card-pad"><p class="small" style="margin:0">Nenhum veículo disponível no momento.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-muted">
+  <div class="container">
+    <div class="flex justify-between items-center" style="margin-bottom:24px">
+      <div><h2 style="font-size:26px;margin-bottom:2px">Empresas parceiras</h2><p class="small">Prestadores e empresas ativas na plataforma</p></div>
+      <a href="{% url 'empresas:lista' %}" class="btn btn-outline-dark btn-sm">Ver empresas</a>
+    </div>
+    <div class="grid-2">
+      {% for empresa in empresas_destaque %}
+        <div class="card company-card">
+          <div class="company-logo">{{ empresa.nome_fantasia|slice:':2'|upper }}</div>
+          <div><h4>{{ empresa.nome_fantasia }}{% if empresa.possui_selo_ativo %}<span class="badge badge-green" style="margin-left:8px">Selo</span>{% endif %}</h4><div class="cat">{{ empresa.get_tipo_empresa_display }} · {% if empresa.localizacao %}{{ empresa.localizacao.cidade }}-{{ empresa.localizacao.estado }}{% else %}Palmas-TO{% endif %}</div></div>
+        </div>
+      {% empty %}
+        <div class="card card-pad"><p class="small" style="margin:0">Nenhuma empresa ativa cadastrada.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <div><h3>Anuncie seu veículo e<span class="accent">venda mais rápido!</span></h3><p>Cadastre seu anúncio e alcance compradores da região.</p></div>
+    <div class="cta-actions"><a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-primary">Anunciar meu carro</a><a href="{% url 'core:sobre' %}" class="btn btn-outline-light">Saiba mais</a></div>
+  </div>
+</section>
+{% endblock %}

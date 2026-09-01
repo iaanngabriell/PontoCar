@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="dash-shell">
+  {% include "components/_dashboard_sidebar.html" %}
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <div>
+        <h1>{% block dashboard_title %}{% endblock %}</h1>
+        <p>{% block dashboard_subtitle %}{% endblock %}</p>
+      </div>
+      <div class="flex gap-12 items-center">{% block dashboard_actions %}{% endblock %}</div>
+    </div>
+    {% include "components/_messages.html" %}
+    <div class="dash-content">
+      {% block dashboard_content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}

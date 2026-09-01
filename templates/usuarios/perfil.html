@@ -1,0 +1,10 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Meu perfil · PontoCar{% endblock %}
+{% block dashboard_title %}Meu perfil{% endblock %}
+{% block dashboard_subtitle %}Atualize seus dados pessoais e informações de contato{% endblock %}
+{% block dashboard_content %}
+<form method="post" novalidate>{% csrf_token %}
+  <div class="panel"><div class="panel-header"><h3>Dados pessoais</h3></div><div class="panel-body">{% include "components/_form_errors.html" with form=form %}<div class="grid-2"><div class="form-group"><label>{{ form.first_name.label }}</label>{{ form.first_name }}</div><div class="form-group"><label>{{ form.last_name.label }}</label>{{ form.last_name }}</div><div class="form-group"><label>CPF</label><input class="form-control" value="{{ request.user.cpf|default:'Não informado' }}" disabled></div><div class="form-group"><label>{{ form.telefone.label }}</label>{{ form.telefone }}</div></div><div class="form-group"><label>{{ form.email.label }}</label>{{ form.email }}</div><div class="flex justify-end" style="margin-top:20px"><button class="btn btn-primary" type="submit">Salvar alterações</button></div></div></div>
+</form>
+<div class="panel" style="margin-top:20px"><div class="panel-header"><h3>Segurança</h3></div><div class="panel-body flex justify-between items-center"><div><strong>Senha da conta</strong><p class="small" style="margin:4px 0 0">Altere sua senha de acesso quando necessário.</p></div><a href="{% url 'usuarios:alterar_senha' %}" class="btn btn-outline-dark btn-sm">Alterar senha</a></div></div>
+{% endblock %}

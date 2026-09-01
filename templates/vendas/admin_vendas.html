@@ -1,0 +1,7 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Vendas · PontoCar{% endblock %}
+{% block dashboard_title %}Vendas{% endblock %}
+{% block dashboard_subtitle %}Histórico de propostas e vendas registradas na plataforma{% endblock %}
+{% block dashboard_content %}
+<div class="panel"><div class="panel-header"><h3>Negociações</h3><form method="get"><input class="form-control" name="q" value="{{ busca }}" placeholder="Buscar veículo, placa ou comprador" style="width:300px"></form></div><div class="panel-body"><table class="data-table"><thead><tr><th>Veículo</th><th>Comprador</th><th>Valor</th><th>Status</th><th>Data</th></tr></thead><tbody>{% for venda in vendas %}<tr><td><div class="cell-title">{{ venda.veiculo.marca }} {{ venda.veiculo.modelo }}</div><div class="cell-sub">{{ venda.veiculo.placa }}</div></td><td>{{ venda.comprador.get_full_name|default:venda.comprador.email }}<div class="cell-sub">{{ venda.comprador.email }}</div></td><td>R$ {{ venda.valor_proposta|floatformat:2 }}</td><td><span class="badge {% if venda.status == 'CONCLUIDA' %}badge-green{% elif venda.status == 'CANCELADA' %}badge-red{% elif venda.status == 'PENDENTE' %}badge-amber{% else %}badge-blue{% endif %}">{{ venda.get_status_display }}</span></td><td>{{ venda.data_proposta|date:'d/m/Y H:i' }}</td></tr>{% empty %}<tr><td colspan="5">Nenhuma negociação encontrada.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

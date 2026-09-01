@@ -1,0 +1,35 @@
+<article class="vehicle-card">
+  <div class="vehicle-photo">
+    {% if veiculo.foto_exibicao %}
+      <img src="{{ veiculo.foto_exibicao.imagem.url }}" alt="{{ veiculo.foto_exibicao.texto_alternativo|default:veiculo.modelo }}">
+    {% else %}
+      {% include "components/_vehicle_placeholder.html" %}
+    {% endif %}
+    <span class="badge {% if veiculo.status == 'DISPONIVEL' %}badge-green{% elif veiculo.status == 'RESERVADO' %}badge-amber{% else %}badge-gray{% endif %}">{{ veiculo.get_status_display }}</span>
+    {% if request.user.is_authenticated and not hide_favorite %}
+      <form method="post" action="{% url 'favoritos:alternar' veiculo.id %}" style="position:absolute;right:12px;top:12px;">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <button type="submit" class="icon-btn" title="{% if favoritos_ids and veiculo.id in favoritos_ids %}Remover dos favoritos{% else %}Adicionar aos favoritos{% endif %}" aria-label="Favoritar">
+          <svg viewBox="0 0 24 24" width="1em" height="1em" {% if favoritos_ids and veiculo.id in favoritos_ids %}fill="currentColor"{% else %}fill="none"{% endif %} stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+        </button>
+      </form>
+    {% endif %}
+  </div>
+  <div class="vehicle-body">
+    <div class="price">R$ {{ veiculo.preco|floatformat:2 }}</div>
+    <h4>{{ veiculo.marca }} {{ veiculo.modelo }}{% if veiculo.versao %} {{ veiculo.versao }}{% endif %}</h4>
+    <div class="vehicle-meta">
+      <span>{{ veiculo.ano_fabricacao }}/{{ veiculo.ano_modelo }}</span>
+      <span>{{ veiculo.quilometragem }} km</span>
+      {% if veiculo.cambio %}<span>{{ veiculo.get_cambio_display }}</span>{% endif %}
+      {% if veiculo.combustivel %}<span>{{ veiculo.get_combustivel_display }}</span>{% endif %}
+    </div>
+    <div class="vehicle-footer">
+      <span class="seller">
+        {% if veiculo.empresa_anunciante %}{{ veiculo.empresa_anunciante.nome_fantasia }}{% else %}Particular{% endif %}
+      </span>
+      <a href="{% url 'veiculos:detalhes' veiculo.id %}" class="btn btn-outline-dark btn-sm">Ver detalhes</a>
+    </div>
+  </div>
+</article>

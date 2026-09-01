@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Serviços · PontoCar{% endblock %}
+{% block content %}
+<div class="page-header"><div class="container"><div class="breadcrumb"><a href="{% url 'core:index' %}">Início</a> <span style="opacity:.4">/</span> <span>Serviços</span></div><h1>Serviços integrados</h1><p>Encontre serviços automotivos oferecidos por empresas ativas em Palmas-TO.</p></div></div>
+<div class="container" style="padding:36px 0 80px">
+  <form method="get" class="card card-pad" style="margin-bottom:28px"><div class="flex gap-12 items-center"><input class="form-control" name="q" value="{{ busca }}" placeholder="Buscar serviço ou empresa"><button class="btn btn-primary" type="submit">Buscar</button></div></form>
+  <div class="grid-3">
+    {% for servico in servicos %}
+      <article class="card card-pad"><span class="eyebrow">{{ servico.empresa.get_tipo_empresa_display }}</span><h3>{{ servico.nome }}</h3><p>{{ servico.descricao|default:'Serviço automotivo disponível na plataforma.' }}</p><div class="flex justify-between items-center"><div><strong>R$ {{ servico.preco|floatformat:2 }}</strong><div class="small">~{{ servico.duracao_estimada }} min</div></div><div class="small text-right">{{ servico.empresa.nome_fantasia }}<br>{% if servico.empresa.localizacao %}{{ servico.empresa.localizacao.cidade }}-{{ servico.empresa.localizacao.estado }}{% endif %}</div></div></article>
+    {% empty %}
+      <div class="card card-pad"><p style="margin:0">Nenhum serviço encontrado.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        {% include "components/_brand.html" %}
+        <p>A plataforma automotiva completa de Palmas-TO e região. Mais confiança, mais serviços, melhores negócios.</p>
+      </div>
+      <div>
+        <h5>Navegação</h5>
+        <ul>
+          <li><a href="{% url 'veiculos:catalogo' %}">Comprar</a></li>
+          <li><a href="{% url 'veiculos:vendedor_novo' %}">Vender</a></li>
+          <li><a href="{% url 'servicos:lista' %}">Serviços</a></li>
+          <li><a href="{% url 'core:index' %}#como-funciona">Como funciona</a></li>
+          <li><a href="{% url 'core:sobre' %}">Sobre nós</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Serviços</h5>
+        <ul>
+          <li><a href="{% url 'seguros:lista' %}">Seguros</a></li>
+          <li><a href="{% url 'servicos:lista' %}">Oficinas parceiras</a></li>
+          <li><a href="{% url 'empresas:lista' %}">Empresas parceiras</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Institucional</h5>
+        <ul>
+          <li><a href="{% url 'core:sobre' %}">Quem somos</a></li>
+          <li><a href="#">Termos de uso</a></li>
+          <li><a href="#">Política de privacidade</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 PontoCar. Todos os direitos reservados.</span>
+      <span>Palmas · Tocantins</span>
+    </div>
+  </div>
+</footer>

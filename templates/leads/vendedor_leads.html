@@ -1,0 +1,8 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Leads recebidos · PontoCar{% endblock %}
+{% block dashboard_title %}Leads recebidos{% endblock %}
+{% block dashboard_subtitle %}Acompanhe pessoas interessadas nos seus veículos{% endblock %}
+{% block dashboard_content %}
+<div class="tabs" style="margin-bottom:20px"><a href="{% url 'leads:vendedor_leads' %}" class="{% if not status_atual %}active{% endif %}">Todos</a>{% for valor, rotulo in status_choices %}<a href="?status={{ valor }}" class="{% if status_atual == valor %}active{% endif %}">{{ rotulo }}</a>{% endfor %}</div>
+<div class="panel"><div class="panel-body"><table class="data-table"><thead><tr><th>Interessado</th><th>Veículo</th><th>Contato</th><th>Status</th><th>Recebido</th></tr></thead><tbody>{% for lead in leads %}<tr><td><div class="cell-title">{{ lead.nome }}</div><div class="cell-sub">{{ lead.mensagem|truncatechars:70 }}</div></td><td>{{ lead.veiculo.marca }} {{ lead.veiculo.modelo }}<div class="cell-sub">{{ lead.veiculo.placa }}</div></td><td>{{ lead.email }}<div class="cell-sub">{{ lead.telefone }}</div></td><td><span class="badge {% if lead.status == 'NOVO' %}badge-blue{% elif lead.status == 'CONVERTIDO' %}badge-green{% elif lead.status == 'PERDIDO' %}badge-red{% else %}badge-amber{% endif %}">{{ lead.get_status_display }}</span></td><td>{{ lead.data_criacao|date:'d/m/Y H:i' }}</td></tr>{% empty %}<tr><td colspan="5">Nenhum lead recebido.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

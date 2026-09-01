@@ -1,0 +1,32 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Dados da empresa · PontoCar{% endblock %}
+{% block dashboard_title %}Dados da empresa{% endblock %}
+{% block dashboard_subtitle %}Cadastre ou atualize os dados comerciais e o endereço principal{% endblock %}
+{% block dashboard_content %}
+<form method="post" novalidate>{% csrf_token %}
+  {% if empresa_form.non_field_errors or localizacao_form.non_field_errors %}<div class="alert alert-error">{{ empresa_form.non_field_errors }}{{ localizacao_form.non_field_errors }}</div>{% endif %}
+  <div class="panel"><div class="panel-header"><h3>Informações gerais</h3></div><div class="panel-body">
+    <div class="grid-2">
+      <div class="form-group"><label>{{ empresa_form.razao_social.label }}</label>{{ empresa_form.razao_social }}{% for e in empresa_form.razao_social.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
+      <div class="form-group"><label>{{ empresa_form.nome_fantasia.label }}</label>{{ empresa_form.nome_fantasia }}{% for e in empresa_form.nome_fantasia.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
+      <div class="form-group"><label>{{ empresa_form.cnpj.label }}</label>{{ empresa_form.cnpj }}{% for e in empresa_form.cnpj.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
+      <div class="form-group"><label>{{ empresa_form.tipo_empresa.label }}</label>{{ empresa_form.tipo_empresa }}{% for e in empresa_form.tipo_empresa.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
+      <div class="form-group"><label>{{ empresa_form.telefone.label }}</label>{{ empresa_form.telefone }}{% for e in empresa_form.telefone.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
+      <div class="form-group"><label>{{ empresa_form.email.label }}</label>{{ empresa_form.email }}{% for e in empresa_form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}</div>
+    </div>
+  </div></div>
+  <div class="panel" style="margin-top:20px"><div class="panel-header"><h3>Endereço</h3></div><div class="panel-body">
+    <div class="grid-3">
+      <div class="form-group"><label>{{ localizacao_form.cep.label }}</label>{{ localizacao_form.cep }}</div>
+      <div class="form-group" style="grid-column:span 2"><label>{{ localizacao_form.logradouro.label }}</label>{{ localizacao_form.logradouro }}</div>
+      <div class="form-group"><label>{{ localizacao_form.numero.label }}</label>{{ localizacao_form.numero }}</div>
+      <div class="form-group"><label>{{ localizacao_form.complemento.label }}</label>{{ localizacao_form.complemento }}</div>
+      <div class="form-group"><label>{{ localizacao_form.bairro.label }}</label>{{ localizacao_form.bairro }}</div>
+      <div class="form-group"><label>{{ localizacao_form.cidade.label }}</label>{{ localizacao_form.cidade }}</div>
+      <div class="form-group"><label>{{ localizacao_form.estado.label }}</label>{{ localizacao_form.estado }}</div>
+    </div>
+    {% for field in localizacao_form %}{% for e in field.errors %}<span class="field-error">{{ field.label }}: {{ e }}</span>{% endfor %}{% endfor %}
+    <div class="flex justify-end" style="margin-top:20px"><button type="submit" class="btn btn-primary">Salvar dados</button></div>
+  </div></div>
+</form>
+{% endblock %}
