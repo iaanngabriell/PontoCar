@@ -1,0 +1,119 @@
+/* PontoCar — refinamentos do formulário de anúncio de veículo */
+.vehicle-form-layout {
+  display: grid;
+  gap: 22px;
+}
+
+.vehicle-form-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.vehicle-form-section {
+  padding: 28px 30px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.vehicle-form-section:last-child {
+  border-bottom: 0;
+}
+
+.vehicle-form-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.vehicle-form-section-header h3 {
+  margin-bottom: 5px;
+}
+
+.vehicle-form-section-header p {
+  margin: 0;
+  max-width: 680px;
+  font-size: 13px;
+}
+
+.vehicle-form-required-note {
+  color: var(--gray-500);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.vehicle-description-block textarea {
+  min-height: 180px;
+  line-height: 1.6;
+}
+
+.description-counter {
+  margin-top: 6px;
+  text-align: right;
+  color: var(--gray-500);
+  font-size: 11.5px;
+}
+
+.vehicle-field-help {
+  margin-top: 6px;
+  color: var(--gray-500);
+  font-size: 12px;
+}
+
+.vehicle-plate-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  background: var(--gray-50);
+  color: var(--gray-600);
+  font-size: 12px;
+}
+
+.vehicle-photo-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 12px;
+  color: var(--gray-500);
+  font-size: 12px;
+}
+
+.vehicle-form-actions-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.vehicle-form-actions-card .form-actions {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 760px) {
+  .vehicle-form-section {
+    padding: 22px 20px;
+  }
+
+  .vehicle-form-section-header,
+  .vehicle-form-actions-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vehicle-form-required-note {
+    white-space: normal;
+  }
+
+  .vehicle-form-actions-card .form-actions {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .vehicle-form-actions-card .btn {
+    width: 100%;
+  }
+}

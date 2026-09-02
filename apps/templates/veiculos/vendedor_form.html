@@ -139,79 +139,24 @@
       </section>
     </div>
 
-    <div class="form-card vehicle-photos-card">
+    <div class="form-card">
       <div class="vehicle-form-section-header">
         <div>
           <span class="eyebrow">6. Fotos</span>
           <h3>Fotos do veículo</h3>
-          <p>Organize as imagens na ordem em que deverão aparecer no anúncio. A foto nº 1 é a capa.</p>
+          <p>A primeira foto enviada será usada como capa quando ainda não existir uma foto principal.</p>
         </div>
       </div>
-
-      {% if veiculo and veiculo.fotos.all %}
-        <div class="vehicle-existing-photos-block">
-          <div class="vehicle-photo-block-title">
-            <div>
-              <strong>Fotos cadastradas</strong>
-              <span>Arraste para ordenar ou use as setas. A nova ordem é salva automaticamente.</span>
-            </div>
-            <span id="existing-photo-order-status" class="vehicle-photo-save-status" aria-live="polite"></span>
-          </div>
-
-          <div
-            id="existing-photo-grid"
-            class="vehicle-photo-grid"
-            data-reorder-url="{% url 'veiculos:vendedor_fotos_ordenar' veiculo.id %}"
-          >
-            {% for foto in veiculo.fotos.all %}
-              <article
-                class="vehicle-photo-tile"
-                draggable="true"
-                data-existing-photo-id="{{ foto.id }}"
-              >
-                <img src="{{ foto.imagem.url }}" alt="{{ foto.texto_alternativo|default:veiculo.modelo }}">
-                <div class="vehicle-photo-topbar">
-                  <span class="vehicle-photo-cover-label">{% if forloop.first %}Capa{% else %}Foto{% endif %}</span>
-                  <span class="vehicle-photo-drag-label" title="Arraste para reordenar">⋮⋮</span>
-                </div>
-                <div class="vehicle-photo-bottombar">
-                  <span class="vehicle-photo-order-number">{{ forloop.counter }}</span>
-                  <div class="vehicle-photo-order-actions">
-                    <button type="button" class="vehicle-photo-move" data-direction="-1" aria-label="Mover foto para a esquerda">←</button>
-                    <button type="button" class="vehicle-photo-move" data-direction="1" aria-label="Mover foto para a direita">→</button>
-                  </div>
-                </div>
-              </article>
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
-
-      <div class="vehicle-new-photos-block">
-        {% if veiculo %}
-          <div class="vehicle-photo-block-title">
-            <div>
-              <strong>Adicionar novas fotos</strong>
-              <span>As novas imagens entram depois das fotos já cadastradas.</span>
-            </div>
-          </div>
-        {% endif %}
-
-        <label class="vehicle-photo-upload" for="vehicle-foto-upload">
-          <span class="vehicle-photo-upload-icon" aria-hidden="true">＋</span>
-          <strong>Clique para escolher fotos</strong>
-          <span>JPEG, PNG ou WebP · máximo de 8 MB por imagem</span>
-        </label>
-        <input id="vehicle-foto-upload" name="fotos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
-
-        <div class="vehicle-photo-info">
-          <span>Máximo: 8 fotos por veículo.</span>
-          <span>Você pode arrastar as novas fotos antes de salvar.</span>
-        </div>
-
-        <div id="vehicle-new-photo-feedback" class="vehicle-photo-feedback" aria-live="polite"></div>
-        <div id="vehicle-new-photo-grid" class="vehicle-photo-grid"></div>
+      <label class="upload-box" for="foto-upload">
+        <strong>Clique para enviar fotos</strong>
+        <span>JPEG, PNG ou WebP · até 8 fotos · máximo de 8 MB cada</span>
+      </label>
+      <input id="foto-upload" name="fotos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+      <div class="vehicle-photo-info">
+        <span>Máximo: 8 fotos por veículo</span>
+        {% if veiculo %}<span>Novas fotos serão adicionadas às já cadastradas.</span>{% endif %}
       </div>
+      <div id="photo-grid" class="photo-grid"></div>
     </div>
 
     <div class="form-card vehicle-form-actions-card">
@@ -239,5 +184,3 @@
   </div>
 </form>
 {% endblock %}
-
-{% block extra_js %}<script src="{% static 'js/ajustes_fotos.js' %}"></script>{% endblock %}
