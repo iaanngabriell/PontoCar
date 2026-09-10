@@ -1,10 +1,60 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Meu perfil · PontoCar{% endblock %}
 {% block dashboard_title %}Meu perfil{% endblock %}
-{% block dashboard_subtitle %}Atualize seus dados pessoais e informações de contato{% endblock %}
+{% block dashboard_subtitle %}Atualize sua foto, seus dados pessoais e informações de contato{% endblock %}
 {% block dashboard_content %}
-<form method="post" novalidate>{% csrf_token %}
-  <div class="panel"><div class="panel-header"><h3>Dados pessoais</h3></div><div class="panel-body">{% include "components/_form_errors.html" with form=form %}<div class="grid-2"><div class="form-group"><label>{{ form.first_name.label }}</label>{{ form.first_name }}</div><div class="form-group"><label>{{ form.last_name.label }}</label>{{ form.last_name }}</div><div class="form-group"><label>CPF</label><input class="form-control" value="{{ request.user.cpf|default:'Não informado' }}" disabled></div><div class="form-group"><label>{{ form.telefone.label }}</label>{{ form.telefone }}</div></div><div class="form-group"><label>{{ form.email.label }}</label>{{ form.email }}</div><div class="flex justify-end" style="margin-top:20px"><button class="btn btn-primary" type="submit">Salvar alterações</button></div></div></div>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  <div class="profile-layout">
+    <aside class="panel profile-photo-panel">
+      <div class="panel-body profile-photo-body">
+        <div class="profile-photo-preview" id="profile-photo-preview">
+          {% if request.user.foto_perfil %}
+            <img src="{{ request.user.foto_perfil.url }}" alt="Foto de {{ request.user.get_full_name|default:request.user.email }}">
+          {% else %}
+            <span>{{ request.user.first_name|default:request.user.email|slice:":1"|upper }}</span>
+          {% endif %}
+        </div>
+        <div class="profile-photo-copy">
+          <span class="eyebrow">Foto de perfil</span>
+          <h3>{{ request.user.get_full_name|default:request.user.email }}</h3>
+          <p>{{ request.user.get_tipo_usuario_display }}</p>
+        </div>
+        <div class="form-group profile-upload-field">
+          <label for="{{ form.foto_perfil.id_for_label }}">Escolher nova foto</label>
+          {{ form.foto_perfil }}
+          <span class="hint">JPG, PNG ou WebP · máximo de 5 MB.</span>
+          {% for error in form.foto_perfil.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
+        {% if request.user.foto_perfil %}
+          <label class="profile-remove-option">{{ form.remover_foto }} <span>{{ form.remover_foto.label }}</span></label>
+        {% endif %}
+      </div>
+    </aside>
+
+    <div>
+      <div class="panel">
+        <div class="panel-header"><h3>Dados pessoais</h3></div>
+        <div class="panel-body">
+          {% include "components/_form_errors.html" with form=form %}
+          <div class="grid-2">
+            <div class="form-group"><label>{{ form.first_name.label }}</label>{{ form.first_name }}{% for error in form.first_name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+            <div class="form-group"><label>{{ form.last_name.label }}</label>{{ form.last_name }}{% for error in form.last_name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+            <div class="form-group"><label>CPF</label><input class="form-control" value="{{ request.user.cpf|default:'Não informado' }}" disabled></div>
+            <div class="form-group"><label>{{ form.telefone.label }}</label>{{ form.telefone }}{% for error in form.telefone.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+          </div>
+          <div class="form-group"><label>{{ form.email.label }}</label>{{ form.email }}{% for error in form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+          <div class="flex justify-end profile-save-actions"><button class="btn btn-primary" type="submit">Salvar alterações</button></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:20px">
+        <div class="panel-header"><h3>Segurança</h3></div>
+        <div class="panel-body flex justify-between items-center profile-security-row">
+          <div><strong>Senha da conta</strong><p class="small" style="margin:4px 0 0">Altere sua senha de acesso quando necessário.</p></div>
+          <a href="{% url 'usuarios:alterar_senha' %}" class="btn btn-outline-dark btn-sm">Alterar senha</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>
-<div class="panel" style="margin-top:20px"><div class="panel-header"><h3>Segurança</h3></div><div class="panel-body flex justify-between items-center"><div><strong>Senha da conta</strong><p class="small" style="margin:4px 0 0">Altere sua senha de acesso quando necessário.</p></div><a href="{% url 'usuarios:alterar_senha' %}" class="btn btn-outline-dark btn-sm">Alterar senha</a></div></div>
 {% endblock %}

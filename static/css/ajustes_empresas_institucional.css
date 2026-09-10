@@ -1,0 +1,259 @@
+/* PontoCar — empresas, navegação institucional e ajustes de interface */
+
+.how-it-works .section-title {
+  justify-content: center;
+  text-align: center;
+}
+
+.how-it-works .grid-3 > .card {
+  text-align: center;
+}
+
+.companies-list-section {
+  padding: 36px 0 80px;
+}
+
+.companies-tabs {
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.company-card-link {
+  color: inherit;
+  text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.company-card-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(6, 21, 38, .10);
+  border-color: rgba(62, 189, 82, .45);
+}
+
+.company-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.company-card-action,
+.service-company-action {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--green-600, #2f9f45);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.service-company-link {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.service-company-link:hover strong,
+.service-company-link:hover .service-company-action {
+  text-decoration: underline;
+}
+
+.company-detail-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 14px;
+}
+
+.company-detail-identity {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.company-detail-identity h1 {
+  margin: 4px 0 4px;
+}
+
+.company-detail-identity p {
+  margin: 0;
+}
+
+.company-detail-logo {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 18px;
+  font-size: 22px;
+}
+
+.company-trust-badge {
+  white-space: nowrap;
+}
+
+.company-detail-section {
+  padding-bottom: 80px;
+}
+
+.company-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 28px;
+  align-items: start;
+}
+
+.company-services-title {
+  margin-bottom: 20px;
+}
+
+.company-services-title p {
+  margin-top: 6px;
+}
+
+.company-services-grid {
+  align-items: stretch;
+}
+
+.company-service-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 190px;
+}
+
+.company-service-card p {
+  flex: 1;
+}
+
+.company-service-meta {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border, #e4e9ef);
+}
+
+.company-info-card h3 {
+  margin-top: 7px;
+}
+
+.company-info-list {
+  margin: 18px 0 0;
+}
+
+.company-info-list > div {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border, #e4e9ef);
+}
+
+.company-info-list dt {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted, #6b7788);
+}
+
+.company-info-list dd {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.company-contact-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.company-detail-note {
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+.institutional-page {
+  padding-bottom: 80px;
+}
+
+.institutional-layout {
+  max-width: 900px;
+}
+
+.institutional-content {
+  padding: 34px;
+}
+
+.institutional-content h2 {
+  font-size: 19px;
+  margin: 30px 0 10px;
+}
+
+.institutional-content h2:first-of-type {
+  margin-top: 26px;
+}
+
+.institutional-content p {
+  line-height: 1.75;
+}
+
+.institutional-content a {
+  color: var(--green-600, #2f9f45);
+  font-weight: 600;
+}
+
+.institutional-notice {
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: #f1f8f2;
+  border: 1px solid #cfe8d4;
+}
+
+.institutional-notice p {
+  margin: 5px 0 0;
+}
+
+.institutional-cross-link {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border, #e4e9ef);
+}
+
+@media (max-width: 980px) {
+  .company-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .company-detail-aside {
+    max-width: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .company-detail-heading,
+  .company-detail-identity,
+  .company-service-meta {
+    align-items: flex-start;
+  }
+
+  .company-detail-heading {
+    flex-direction: column;
+  }
+
+  .company-detail-identity {
+    width: 100%;
+  }
+
+  .company-service-meta {
+    flex-direction: column;
+  }
+
+  .institutional-content {
+    padding: 22px;
+  }
+
+  .service-company-link {
+    align-items: flex-start;
+    margin-top: 12px;
+  }
+}

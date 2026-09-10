@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "apps.servicos",
     "apps.seguros",
     "apps.favoritos",
+    "apps.notificacoes",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.notificacoes.context_processors.notificacoes_contexto",
             ],
         },
     },

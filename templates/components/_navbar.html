@@ -3,30 +3,81 @@
     {% include "components/_brand.html" %}
 
     <nav class="nav-links" aria-label="Navegação principal">
-      <a href="/catalogo/">Comprar</a>
-      <a href="/vendedor/veiculos/novo/">Vender</a>
-      <a href="/servicos/">Serviços</a>
+      <a href="{% url 'veiculos:catalogo' %}">Comprar</a>
+      <a href="{% url 'veiculos:vendedor_novo' %}">Vender</a>
+      <a href="{% url 'empresas:lista' %}">Empresas</a>
+      <a href="{% url 'servicos:lista' %}">Serviços</a>
       <a href="{% url 'core:index' %}#como-funciona">Como funciona</a>
-      <a href="/sobre/">Sobre nós</a>
+      <a href="{% url 'core:sobre' %}">Sobre nós</a>
     </nav>
 
     <div class="nav-actions">
       {% if request.user.is_authenticated %}
         {% if request.user.is_staff or request.user.is_superuser or request.user.tipo_usuario == "ADMINISTRADOR" %}
-          <a href="/gestao/usuarios/" class="nav-link-plain">Painel</a>
+          <a href="{% url 'usuarios:admin_usuarios' %}" class="nav-link-plain">Painel</a>
         {% elif request.user.tipo_usuario == "EMPRESA" %}
           <a href="{% url 'empresas:dashboard' %}" class="nav-link-plain">Painel</a>
         {% elif request.user.tipo_usuario == "VENDEDOR" %}
-          <a href="/vendedor/veiculos/" class="nav-link-plain">Painel</a>
+          <a href="{% url 'veiculos:vendedor_lista' %}" class="nav-link-plain">Painel</a>
         {% else %}
-          <a href="/comprador/compras/" class="nav-link-plain">Painel</a>
+          <a href="{% url 'vendas:comprador_compras' %}" class="nav-link-plain">Painel</a>
         {% endif %}
 
-        <a href="{% url 'usuarios:perfil' %}" class="icon-btn" title="Meu perfil" aria-label="Meu perfil">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="8" r="3.6"/>
-            <path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>
-          </svg>
+        <details class="notification-menu">
+          <summary class="notification-bell" title="Notificações" aria-label="Abrir notificações">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+              <path d="M10 21h4"/>
+            </svg>
+            {% if notificacoes_nao_lidas %}
+              <span class="notification-count">{% if notificacoes_nao_lidas > 99 %}99+{% else %}{{ notificacoes_nao_lidas }}{% endif %}</span>
+            {% endif %}
+          </summary>
+          <div class="notification-dropdown">
+            <div class="notification-dropdown-header">
+              <strong>Notificações</strong>
+              <span>{{ notificacoes_nao_lidas }} não lida{{ notificacoes_nao_lidas|pluralize }}</span>
+            </div>
+            <div class="notification-dropdown-list">
+              {% for notificacao in notificacoes_recentes %}
+                <form method="post" action="{% url 'notificacoes:abrir' notificacao.id %}" class="notification-item-form {% if not notificacao.lida %}is-unread{% endif %}">
+                  {% csrf_token %}
+                  <button type="submit" class="notification-item-button">
+                    <span class="notification-item-icon" aria-hidden="true">{% if notificacao.tipo == 'NOVO_INTERESSE' %}♥{% elif notificacao.tipo == 'NOVA_PROPOSTA' %}R${% else %}✓{% endif %}</span>
+                    <span class="notification-item-copy">
+                      <strong>{{ notificacao.titulo }}</strong>
+                      <span>{{ notificacao.mensagem }}</span>
+                      <small>{{ notificacao.criada_em|timesince }} atrás</small>
+                    </span>
+                    {% if not notificacao.lida %}<span class="notification-unread-dot"></span>{% endif %}
+                  </button>
+                </form>
+              {% empty %}
+                <div class="notification-dropdown-empty">Nenhuma notificação por enquanto.</div>
+              {% endfor %}
+            </div>
+            <div class="notification-dropdown-footer">
+              <a href="{% url 'notificacoes:lista' %}">Ver todas</a>
+              {% if notificacoes_nao_lidas %}
+                <form method="post" action="{% url 'notificacoes:marcar_todas_lidas' %}" class="notification-mark-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                  <button type="submit">Marcar todas como lidas</button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </details>
+
+        <a href="{% url 'usuarios:perfil' %}" class="icon-btn nav-profile-button" title="Meu perfil" aria-label="Meu perfil">
+          {% if request.user.foto_perfil %}
+            <img src="{{ request.user.foto_perfil.url }}" alt="Foto de {{ request.user.get_full_name|default:request.user.email }}" class="nav-avatar-img">
+          {% else %}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8" r="3.6"/>
+              <path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>
+            </svg>
+          {% endif %}
         </a>
 
         <form method="post" action="{% url 'usuarios:logout' %}" class="nav-logout-form">

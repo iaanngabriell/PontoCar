@@ -4,6 +4,9 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, Us
 from .models import Usuario
 
 
+LIMITE_FOTO_PERFIL = 5 * 1024 * 1024
+
+
 class FormControlMixin:
     def aplicar_classes(self):
         for field in self.fields.values():
@@ -136,19 +139,40 @@ class UsuarioCadastroForm(FormControlMixin, UserCreationForm):
 
 
 class UsuarioPerfilForm(FormControlMixin, forms.ModelForm):
+    remover_foto = forms.BooleanField(
+        label="Remover foto atual",
+        required=False,
+    )
+
     class Meta:
         model = Usuario
-        fields = ("first_name", "last_name", "telefone", "email")
+        fields = ("foto_perfil", "first_name", "last_name", "telefone", "email")
         labels = {
+            "foto_perfil": "Foto de perfil",
             "first_name": "Nome",
             "last_name": "Sobrenome",
             "telefone": "Telefone / WhatsApp",
             "email": "E-mail",
         }
+        widgets = {
+            "foto_perfil": forms.FileInput(
+                attrs={
+                    "accept": "image/jpeg,image/png,image/webp",
+                    "data-image-input": "profile-photo-preview",
+                }
+            )
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.aplicar_classes()
+        self.fields["foto_perfil"].widget.attrs["class"] = "form-control profile-file-input"
+
+    def clean_foto_perfil(self):
+        foto = self.cleaned_data.get("foto_perfil")
+        if foto and getattr(foto, "size", 0) > LIMITE_FOTO_PERFIL:
+            raise forms.ValidationError("A foto deve ter no máximo 5 MB.")
+        return foto
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()

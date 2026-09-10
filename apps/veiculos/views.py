@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 
 from apps.empresas.models import Empresa, VerificacaoEmpresa
 from apps.favoritos.models import Favorito
+from apps.notificacoes.services import notificar_novo_interesse
 
 from . import services
 from .forms import LeadInteresseForm, VeiculoForm
@@ -181,6 +182,7 @@ def detalhes(request, veiculo_id):
         lead.veiculo = veiculo
         lead.comprador = request.user if request.user.is_authenticated else None
         lead.save()
+        notificar_novo_interesse(lead=lead)
         messages.success(request, "Seu interesse foi enviado ao anunciante.")
         return redirect("veiculos:detalhes", veiculo_id=veiculo.id)
 

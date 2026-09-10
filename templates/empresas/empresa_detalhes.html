@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load pontocar_tags %}
+{% block title %}{{ empresa.nome_fantasia }} · PontoCar{% endblock %}
+{% block meta_description %}Conheça {{ empresa.nome_fantasia }} e os serviços disponíveis no PontoCar.{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'core:index' %}">Início</a>
+      <span style="opacity:.4">/</span>
+      <a href="{% url 'empresas:lista' %}">Empresas</a>
+      <span style="opacity:.4">/</span>
+      <span>{{ empresa.nome_fantasia }}</span>
+    </div>
+    <div class="company-detail-heading">
+      <div class="company-detail-identity">
+        <div class="company-logo company-detail-logo company-logo-media">{% if empresa.logo %}<img src="{{ empresa.logo.url }}" alt="Logo de {{ empresa.nome_fantasia }}">{% else %}{{ empresa.nome_fantasia|slice:':2'|upper }}{% endif %}</div>
+        <div>
+          <span class="eyebrow">{{ empresa.get_tipo_empresa_display }}</span>
+          <h1>{{ empresa.nome_fantasia }}</h1>
+          <p>{% if empresa.localizacao %}{{ empresa.localizacao.cidade }}-{{ empresa.localizacao.estado }}{% else %}Palmas-TO{% endif %}</p>
+        </div>
+      </div>
+      {% if selo_ativo %}<span class="badge badge-green company-trust-badge">Selo de confiança</span>{% endif %}
+    </div>
+  </div>
+</div>
+
+<section class="section-tight company-detail-section">
+  <div class="container company-detail-layout">
+    <main>
+      <div class="section-title company-services-title">
+        <div>
+          <span class="eyebrow">Serviços</span>
+          <h2>Serviços oferecidos</h2>
+          <p class="small">Confira os serviços cadastrados pela empresa no PontoCar.</p>
+        </div>
+      </div>
+
+      {% if servicos %}
+        <div class="grid-2 company-services-grid">
+          {% for servico in servicos %}
+            <article class="card card-pad company-service-card">
+              <h3>{{ servico.nome }}</h3>
+              <p>{{ servico.descricao|default:"Serviço automotivo disponível na plataforma." }}</p>
+              <div class="company-service-meta">
+                <strong>{{ servico.preco|brl }}</strong>
+                <span class="small">Duração estimada: ~{{ servico.duracao_estimada }} min</span>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="card card-pad">
+          <h3>Nenhum serviço cadastrado</h3>
+          <p class="small" style="margin-bottom:0">Esta empresa ainda não publicou serviços no catálogo do PontoCar.</p>
+        </div>
+      {% endif %}
+    </main>
+
+    <aside class="company-detail-aside">
+      <div class="card card-pad company-info-card">
+        <span class="eyebrow">Informações</span>
+        <h3>Contato da empresa</h3>
+        <dl class="company-info-list">
+          <div><dt>Categoria</dt><dd>{{ empresa.get_tipo_empresa_display }}</dd></div>
+          <div><dt>E-mail</dt><dd>{{ empresa.email }}</dd></div>
+          {% if empresa.telefone %}<div><dt>Telefone</dt><dd>{{ empresa.telefone }}</dd></div>{% endif %}
+          {% if empresa.localizacao %}
+            <div>
+              <dt>Endereço</dt>
+              <dd>
+                {{ empresa.localizacao.logradouro }}, {{ empresa.localizacao.numero }}
+                {% if empresa.localizacao.complemento %} · {{ empresa.localizacao.complemento }}{% endif %}<br>
+                {{ empresa.localizacao.bairro }} · {{ empresa.localizacao.cidade }}-{{ empresa.localizacao.estado }}<br>
+                CEP {{ empresa.localizacao.cep }}
+              </dd>
+            </div>
+          {% endif %}
+        </dl>
+        <div class="company-contact-actions">
+          <a class="btn btn-primary btn-block" href="mailto:{{ empresa.email }}?subject=Contato%20via%20PontoCar">Enviar e-mail</a>
+          {% if empresa.telefone %}<a class="btn btn-outline-dark btn-block" href="tel:{{ empresa.telefone }}">Ligar para empresa</a>{% endif %}
+        </div>
+      </div>
+
+      <div class="alert alert-info company-detail-note">
+        Os serviços e valores são cadastrados pela própria empresa. Confirme condições, disponibilidade e detalhes diretamente com o prestador.
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

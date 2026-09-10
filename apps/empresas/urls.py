@@ -6,6 +6,7 @@ app_name = "empresas"
 
 urlpatterns = [
     path("empresas/", views.empresas, name="lista"),
+    path("empresas/<uuid:empresa_id>/", views.detalhes, name="detalhes"),
     path("empresa/cadastro/", views.cadastro_empresa, name="cadastro"),
     path("empresa/dashboard/", views.dashboard, name="dashboard"),
     path("empresa/verificacao/", views.verificacao, name="verificacao"),

@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from apps.leads.models import Lead
 from apps.usuarios.models import Usuario
@@ -27,6 +27,25 @@ def empresas(request):
     )
 
 
+def detalhes(request, empresa_id):
+    empresa = get_object_or_404(
+        Empresa.objects.filter(ativa=True)
+        .select_related("localizacao")
+        .prefetch_related("servicos", "verificacoes"),
+        id=empresa_id,
+    )
+    servicos = empresa.servicos.order_by("nome")
+    return render(
+        request,
+        "empresas/empresa_detalhes.html",
+        {
+            "empresa": empresa,
+            "servicos": servicos,
+            "selo_ativo": empresa.possui_selo_ativo(),
+        },
+    )
+
+
 @login_required
 def cadastro_empresa(request):
     empresa = Empresa.objects.filter(representante=request.user).order_by("data_cadastro").first()
@@ -34,7 +53,12 @@ def cadastro_empresa(request):
     if empresa:
         localizacao = Localizacao.objects.filter(empresa=empresa).first()
 
-    empresa_form = EmpresaForm(request.POST or None, instance=empresa, prefix="empresa")
+    empresa_form = EmpresaForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=empresa,
+        prefix="empresa",
+    )
     localizacao_form = LocalizacaoForm(
         request.POST or None,
         instance=localizacao,
@@ -43,15 +67,15 @@ def cadastro_empresa(request):
     )
 
     if request.method == "POST" and empresa_form.is_valid() and localizacao_form.is_valid():
-        salvar_empresa_com_localizacao(
+        empresa_salva = salvar_empresa_com_localizacao(
             usuario=request.user,
             empresa_form=empresa_form,
             localizacao_form=localizacao_form,
         )
+        if empresa_form.cleaned_data.get("remover_logo") and not request.FILES.get("empresa-logo"):
+            empresa_salva.logo = None
+            empresa_salva.save(update_fields=["logo"])
 
-        # A empresa usa as credenciais do representante. Ao concluir o cadastro
-        # empresarial, mantemos o perfil principal do usuário coerente com o
-        # fluxo de navegação, sem criar senha ou autenticação na entidade Empresa.
         if (
             not request.user.is_staff
             and not request.user.is_superuser

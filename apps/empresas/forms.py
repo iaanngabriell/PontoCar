@@ -5,6 +5,9 @@ from django import forms
 from .models import Empresa, Localizacao
 
 
+LIMITE_LOGO_EMPRESA = 5 * 1024 * 1024
+
+
 class EmpresaForm(forms.ModelForm):
     cnpj = forms.CharField(
         label="CNPJ",
@@ -18,10 +21,15 @@ class EmpresaForm(forms.ModelForm):
             }
         ),
     )
+    remover_logo = forms.BooleanField(
+        label="Remover logo atual",
+        required=False,
+    )
 
     class Meta:
         model = Empresa
         fields = (
+            "logo",
             "razao_social",
             "nome_fantasia",
             "cnpj",
@@ -30,6 +38,7 @@ class EmpresaForm(forms.ModelForm):
             "email",
         )
         labels = {
+            "logo": "Logo ou foto da empresa",
             "razao_social": "Razão social",
             "nome_fantasia": "Nome fantasia",
             "cnpj": "CNPJ",
@@ -38,6 +47,12 @@ class EmpresaForm(forms.ModelForm):
             "email": "E-mail comercial",
         }
         widgets = {
+            "logo": forms.FileInput(
+                attrs={
+                    "accept": "image/jpeg,image/png,image/webp",
+                    "data-image-input": "company-logo-preview",
+                }
+            ),
             "razao_social": forms.TextInput(attrs={"placeholder": "Razão social registrada"}),
             "nome_fantasia": forms.TextInput(attrs={"placeholder": "Nome exibido no PontoCar"}),
             "telefone": forms.TextInput(
@@ -55,6 +70,14 @@ class EmpresaForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"
+        self.fields["remover_logo"].widget.attrs["class"] = "form-checkbox"
+        self.fields["logo"].widget.attrs["class"] = "form-control profile-file-input"
+
+    def clean_logo(self):
+        logo = self.cleaned_data.get("logo")
+        if logo and getattr(logo, "size", 0) > LIMITE_LOGO_EMPRESA:
+            raise forms.ValidationError("A imagem deve ter no máximo 5 MB.")
+        return logo
 
     def clean_cnpj(self):
         cnpj = "".join(ch for ch in self.cleaned_data["cnpj"] if ch.isdigit())

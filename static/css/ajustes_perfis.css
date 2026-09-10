@@ -1,0 +1,42 @@
+/* PontoCar — fotos de perfil, logos e refinamento visual */
+.nav-profile-button{overflow:hidden;padding:0;border:1px solid rgba(255,255,255,.08)}
+.nav-avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.dash-avatar{overflow:hidden;flex:0 0 auto}
+.dash-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+.profile-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:start}
+.profile-photo-panel{position:sticky;top:96px}
+.profile-photo-body{display:flex;flex-direction:column;align-items:center;text-align:center}
+.profile-photo-preview{width:132px;height:132px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--navy-800),var(--navy-600));color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-size:38px;font-weight:700;border:5px solid #fff;box-shadow:0 8px 26px rgba(10,22,38,.14)}
+.profile-photo-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-photo-copy{margin-top:18px}
+.profile-photo-copy h3{margin:5px 0 2px}
+.profile-photo-copy p{margin:0}
+.profile-upload-field{width:100%;margin-top:22px;text-align:left}
+.profile-file-input{padding:9px!important;background:#fff}
+.profile-file-input::file-selector-button{border:0;background:var(--navy-800);color:#fff;padding:9px 12px;border-radius:7px;margin-right:10px;font-weight:600;cursor:pointer}
+.profile-remove-option{display:flex;align-items:center;gap:9px;width:100%;margin-top:12px;padding:11px 12px;border-radius:9px;background:var(--red-50);color:var(--red-500);font-size:13px;font-weight:600;text-align:left}
+.profile-remove-option input{margin:0}
+.profile-save-actions{margin-top:20px}
+.profile-security-row{gap:18px}
+
+.company-form-logo-preview{width:104px;height:104px;border-radius:22px;overflow:hidden;display:grid;place-items:center;background:var(--navy-800);color:#fff;font-family:var(--font-display);font-size:27px;font-weight:700;margin-bottom:18px;box-shadow:0 8px 22px rgba(10,22,38,.14)}
+.company-form-logo-preview img,.company-logo-media img{width:100%;height:100%;object-fit:cover;display:block}
+.company-logo-media{overflow:hidden;padding:0}
+.company-brand-upload-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end}
+.company-logo-field{margin-bottom:0}
+.company-detail-logo.company-logo-media{background:#fff;border:1px solid var(--gray-200)}
+.company-dashboard-brand{margin-bottom:20px}
+.company-dashboard-brand .panel-body{display:flex;align-items:center;justify-content:space-between;gap:22px}
+.company-dashboard-identity{display:flex;align-items:center;gap:16px}
+.company-dashboard-identity h2{margin:4px 0 2px}
+.company-dashboard-identity p{margin:0}
+.company-dashboard-logo{width:68px;height:68px;min-width:68px;border-radius:16px}
+.company-dashboard-brand-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+
+.service-company-brand{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.service-company-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;display:grid;place-items:center;background:var(--navy-800);color:#fff;font-size:11px;font-weight:700;flex:0 0 auto}
+.service-company-logo img{width:100%;height:100%;object-fit:cover}
+
+@media(max-width:980px){.profile-layout{grid-template-columns:1fr}.profile-photo-panel{position:static}.profile-photo-body{display:grid;grid-template-columns:auto 1fr;column-gap:20px;text-align:left;align-items:center}.profile-upload-field,.profile-remove-option{grid-column:1/-1}.profile-photo-copy{margin-top:0}.company-dashboard-brand .panel-body{align-items:flex-start;flex-direction:column}.company-dashboard-brand-actions{justify-content:flex-start}.company-brand-upload-row{grid-template-columns:1fr}}
+@media(max-width:620px){.profile-photo-body{display:flex;text-align:center}.profile-photo-copy{margin-top:16px}.profile-security-row{align-items:flex-start!important;flex-direction:column}.service-company-brand{justify-content:flex-start}.company-dashboard-identity{align-items:flex-start}.company-dashboard-logo{width:58px;height:58px;min-width:58px}}

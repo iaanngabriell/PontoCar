@@ -3,6 +3,7 @@ from django.db import transaction
 
 from apps.veiculos import services as veiculos_services
 from apps.veiculos.models import HistoricoVeiculo, Veiculo
+from apps.notificacoes.services import notificar_nova_proposta, notificar_status_proposta
 
 from .models import Venda
 
@@ -30,6 +31,7 @@ def criar_proposta(*, comprador, veiculo, valor_proposta):
     if veiculo.status == Veiculo.StatusVeiculo.DISPONIVEL:
         veiculos_services.reservar_veiculo(veiculo=veiculo)
 
+    notificar_nova_proposta(venda=venda)
     return venda
 
 
@@ -38,6 +40,7 @@ def iniciar_negociacao(*, venda):
     """Move a proposta para 'Em Negociação'. O veículo já está reservado."""
     venda.status = Venda.StatusVenda.EM_NEGOCIACAO
     venda.save(update_fields=["status"])
+    notificar_status_proposta(venda=venda)
     return venda
 
 
@@ -70,6 +73,7 @@ def concluir_venda(*, venda):
 
     venda.status = Venda.StatusVenda.CONCLUIDA
     venda.save(update_fields=["status"])
+    notificar_status_proposta(venda=venda)
 
     return venda
 
@@ -84,3 +88,4 @@ def cancelar_venda(*, venda):
 
     venda.status = Venda.StatusVenda.CANCELADA
     venda.save(update_fields=["status"])
+    notificar_status_proposta(venda=venda)

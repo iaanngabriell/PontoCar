@@ -28,3 +28,11 @@ def index(request):
 
 def sobre(request):
     return render(request, "core/sobre.html")
+
+
+def termos(request):
+    return render(request, "core/termos.html")
+
+
+def privacidade(request):
+    return render(request, "core/privacidade.html")

@@ -3,184 +3,105 @@
 {% block title %}{% if veiculo %}Editar anúncio{% else %}Novo anúncio{% endif %} · PontoCar{% endblock %}
 {% block extra_head %}<link rel="stylesheet" href="{% static 'css/ajustes_veiculos.css' %}">{% endblock %}
 {% block dashboard_title %}{% if veiculo %}Editar anúncio{% else %}Novo anúncio{% endif %}{% endblock %}
-{% block dashboard_subtitle %}{% if veiculo %}Atualize os dados do seu veículo{% else %}Preencha os dados do veículo que deseja anunciar{% endif %}{% endblock %}
+{% block dashboard_subtitle %}{% if veiculo %}Atualize as informações e fotos do anúncio{% else %}Cadastre seu veículo de forma rápida e organizada{% endif %}{% endblock %}
 {% block dashboard_content %}
-<form method="post" enctype="multipart/form-data" novalidate>
+<form method="post" enctype="multipart/form-data" novalidate class="vehicle-compact-form">
   {% csrf_token %}
   {% include "components/_form_errors.html" with form=form %}
 
-  <div class="vehicle-form-layout">
-    <div class="form-card vehicle-form-card">
-      <section class="vehicle-form-section">
-        <div class="vehicle-form-section-header">
-          <div>
-            <span class="eyebrow">1. Identificação</span>
-            <h3>Dados principais do veículo</h3>
-            <p>Informe os dados que identificam o carro no catálogo.</p>
-          </div>
-          <span class="vehicle-form-required-note">* Campos obrigatórios</span>
-        </div>
-
-        <div class="form-row cols-3">
-          <div class="form-group">
-            <label for="{{ form.marca.id_for_label }}">{{ form.marca.label }} *</label>
-            {{ form.marca }}
-            {% for error in form.marca.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-          <div class="form-group">
-            <label for="{{ form.modelo.id_for_label }}">{{ form.modelo.label }} *</label>
-            {{ form.modelo }}
-            {% for error in form.modelo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-          <div class="form-group">
-            <label for="{{ form.versao.id_for_label }}">{{ form.versao.label }}</label>
-            {{ form.versao }}
-            {% for error in form.versao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-        </div>
-      </section>
-
-      <section class="vehicle-form-section">
-        <div class="vehicle-form-section-header">
-          <div>
-            <span class="eyebrow">2. Ano e uso</span>
-            <h3>Histórico básico</h3>
-            <p>Ano e quilometragem ajudam o comprador a comparar anúncios.</p>
-          </div>
-        </div>
-
-        <div class="form-row cols-3">
-          <div class="form-group">
-            <label for="{{ form.ano_fabricacao.id_for_label }}">{{ form.ano_fabricacao.label }} *</label>
-            {{ form.ano_fabricacao }}
-            {% for error in form.ano_fabricacao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-          <div class="form-group">
-            <label for="{{ form.ano_modelo.id_for_label }}">{{ form.ano_modelo.label }} *</label>
-            {{ form.ano_modelo }}
-            {% for error in form.ano_modelo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-          <div class="form-group">
-            <label for="{{ form.quilometragem.id_for_label }}">{{ form.quilometragem.label }} *</label>
-            {{ form.quilometragem }}
-            {% for error in form.quilometragem.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-        </div>
-      </section>
-
-      <section class="vehicle-form-section">
-        <div class="vehicle-form-section-header">
-          <div>
-            <span class="eyebrow">3. Características</span>
-            <h3>Configuração do veículo</h3>
-            <p>Complete as características que serão exibidas na página do anúncio.</p>
-          </div>
-        </div>
-
-        <div class="form-row cols-3">
-          <div class="form-group">
-            <label for="{{ form.cambio.id_for_label }}">{{ form.cambio.label }}</label>
-            {{ form.cambio }}
-            {% for error in form.cambio.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-          <div class="form-group">
-            <label for="{{ form.combustivel.id_for_label }}">{{ form.combustivel.label }}</label>
-            {{ form.combustivel }}
-            {% for error in form.combustivel.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-          <div class="form-group">
-            <label for="{{ form.cor.id_for_label }}">{{ form.cor.label }} *</label>
-            {{ form.cor }}
-            {% for error in form.cor.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-        </div>
-      </section>
-
-      <section class="vehicle-form-section">
-        <div class="vehicle-form-section-header">
-          <div>
-            <span class="eyebrow">4. Anúncio</span>
-            <h3>Preço e identificação</h3>
-            <p>O preço usa formatação brasileira e a placa é normalizada automaticamente.</p>
-          </div>
-        </div>
-
-        <div class="form-row cols-2">
-          <div class="form-group">
-            <label for="{{ form.preco.id_for_label }}">{{ form.preco.label }} *</label>
-            {{ form.preco }}
-            {% if form.preco.help_text %}<div class="vehicle-field-help">{{ form.preco.help_text }}</div>{% endif %}
-            {% for error in form.preco.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-          </div>
-          <div class="form-group">
-            <label for="{{ form.placa.id_for_label }}">{{ form.placa.label }} *</label>
-            {{ form.placa }}
-            {% for error in form.placa.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-            <div class="vehicle-plate-note">As letras ficam em maiúsculas automaticamente. Pontos, espaços e hífens são removidos no salvamento.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="vehicle-form-section vehicle-description-block">
-        <div class="vehicle-form-section-header">
-          <div>
-            <span class="eyebrow">5. Descrição</span>
-            <h3>Apresente o veículo ao comprador</h3>
-            <p>Informe estado de conservação, revisões, opcionais e outros diferenciais relevantes.</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="{{ form.descricao.id_for_label }}">{{ form.descricao.label }}</label>
-          {{ form.descricao }}
-          {% if form.descricao.help_text %}<div class="vehicle-field-help">{{ form.descricao.help_text }}</div>{% endif %}
-          {% for error in form.descricao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
-        </div>
-      </section>
-    </div>
-
-    <div class="form-card vehicle-photos-card">
-      <div class="vehicle-form-section-header">
+  <div class="vehicle-form-layout vehicle-form-layout-compact">
+    <section class="form-card vehicle-compact-card">
+      <div class="vehicle-compact-heading">
+        <div class="vehicle-compact-step">1</div>
         <div>
-          <span class="eyebrow">6. Fotos</span>
-          <h3>Fotos do veículo</h3>
-          <p>Organize as imagens na ordem em que deverão aparecer no anúncio. A foto nº 1 é a capa.</p>
+          <span class="eyebrow">Dados do veículo</span>
+          <h3>Informações principais</h3>
+          <p>Identificação, ano e uso do veículo em um único bloco.</p>
+        </div>
+        <span class="vehicle-form-required-note">* obrigatórios</span>
+      </div>
+
+      <div class="vehicle-compact-fields cols-3">
+        <div class="form-group"><label for="{{ form.marca.id_for_label }}">{{ form.marca.label }} *</label>{{ form.marca }}{% for error in form.marca.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group"><label for="{{ form.modelo.id_for_label }}">{{ form.modelo.label }} *</label>{{ form.modelo }}{% for error in form.modelo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group"><label for="{{ form.versao.id_for_label }}">{{ form.versao.label }}</label>{{ form.versao }}{% for error in form.versao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group"><label for="{{ form.ano_fabricacao.id_for_label }}">{{ form.ano_fabricacao.label }} *</label>{{ form.ano_fabricacao }}{% for error in form.ano_fabricacao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group"><label for="{{ form.ano_modelo.id_for_label }}">{{ form.ano_modelo.label }} *</label>{{ form.ano_modelo }}{% for error in form.ano_modelo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group"><label for="{{ form.quilometragem.id_for_label }}">{{ form.quilometragem.label }} *</label>{{ form.quilometragem }}{% for error in form.quilometragem.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+      </div>
+    </section>
+
+    <section class="form-card vehicle-compact-card">
+      <div class="vehicle-compact-heading">
+        <div class="vehicle-compact-step">2</div>
+        <div>
+          <span class="eyebrow">Características e anúncio</span>
+          <h3>Configure a oferta</h3>
+          <p>Características, preço e placa aparecem diretamente para o comprador.</p>
+        </div>
+      </div>
+
+      <div class="vehicle-compact-fields cols-3">
+        <div class="form-group"><label for="{{ form.cambio.id_for_label }}">{{ form.cambio.label }}</label>{{ form.cambio }}{% for error in form.cambio.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group"><label for="{{ form.combustivel.id_for_label }}">{{ form.combustivel.label }}</label>{{ form.combustivel }}{% for error in form.combustivel.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group"><label for="{{ form.cor.id_for_label }}">{{ form.cor.label }} *</label>{{ form.cor }}{% for error in form.cor.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+      </div>
+
+      <div class="vehicle-compact-fields cols-2 vehicle-offer-row">
+        <div class="form-group">
+          <label for="{{ form.preco.id_for_label }}">{{ form.preco.label }} *</label>
+          <div class="vehicle-price-input-wrap"><span>R$</span>{{ form.preco }}</div>
+          {% if form.preco.help_text %}<div class="vehicle-field-help">{{ form.preco.help_text }}</div>{% endif %}
+          {% for error in form.preco.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.placa.id_for_label }}">{{ form.placa.label }} *</label>
+          {{ form.placa }}
+          {% for error in form.placa.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          <div class="vehicle-plate-note">Maiúsculas automáticas; pontos, espaços e hífens são removidos ao salvar.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-card vehicle-compact-card vehicle-description-block">
+      <div class="vehicle-compact-heading vehicle-compact-heading-simple">
+        <div class="vehicle-compact-step">3</div>
+        <div>
+          <span class="eyebrow">Descrição</span>
+          <h3>Conte os diferenciais</h3>
+          <p>Conservação, revisões, opcionais e observações importantes para o comprador.</p>
+        </div>
+      </div>
+      <div class="form-group vehicle-description-field">
+        <label for="{{ form.descricao.id_for_label }}">{{ form.descricao.label }}</label>
+        {{ form.descricao }}
+        {% if form.descricao.help_text %}<div class="vehicle-field-help">{{ form.descricao.help_text }}</div>{% endif %}
+        {% for error in form.descricao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+      </div>
+    </section>
+
+    <section class="form-card vehicle-photos-card vehicle-compact-photos-card">
+      <div class="vehicle-compact-heading vehicle-compact-heading-simple">
+        <div class="vehicle-compact-step">4</div>
+        <div>
+          <span class="eyebrow">Fotos</span>
+          <h3>Monte a galeria do anúncio</h3>
+          <p>A primeira foto é a capa. Arraste as imagens ou use as setas para mudar a ordem.</p>
         </div>
       </div>
 
       {% if veiculo and veiculo.fotos.all %}
         <div class="vehicle-existing-photos-block">
           <div class="vehicle-photo-block-title">
-            <div>
-              <strong>Fotos cadastradas</strong>
-              <span>Arraste para ordenar ou use as setas. A nova ordem é salva automaticamente.</span>
-            </div>
+            <div><strong>Fotos cadastradas</strong><span>Altere a ordem e ela será salva automaticamente.</span></div>
             <span id="existing-photo-order-status" class="vehicle-photo-save-status" aria-live="polite"></span>
           </div>
-
-          <div
-            id="existing-photo-grid"
-            class="vehicle-photo-grid"
-            data-reorder-url="{% url 'veiculos:vendedor_fotos_ordenar' veiculo.id %}"
-          >
+          <div id="existing-photo-grid" class="vehicle-photo-grid" data-reorder-url="{% url 'veiculos:vendedor_fotos_ordenar' veiculo.id %}">
             {% for foto in veiculo.fotos.all %}
-              <article
-                class="vehicle-photo-tile"
-                draggable="true"
-                data-existing-photo-id="{{ foto.id }}"
-              >
+              <article class="vehicle-photo-tile" draggable="true" data-existing-photo-id="{{ foto.id }}">
                 <img src="{{ foto.imagem.url }}" alt="{{ foto.texto_alternativo|default:veiculo.modelo }}">
-                <div class="vehicle-photo-topbar">
-                  <span class="vehicle-photo-cover-label">{% if forloop.first %}Capa{% else %}Foto{% endif %}</span>
-                  <span class="vehicle-photo-drag-label" title="Arraste para reordenar">⋮⋮</span>
-                </div>
-                <div class="vehicle-photo-bottombar">
-                  <span class="vehicle-photo-order-number">{{ forloop.counter }}</span>
-                  <div class="vehicle-photo-order-actions">
-                    <button type="button" class="vehicle-photo-move" data-direction="-1" aria-label="Mover foto para a esquerda">←</button>
-                    <button type="button" class="vehicle-photo-move" data-direction="1" aria-label="Mover foto para a direita">→</button>
-                  </div>
-                </div>
+                <div class="vehicle-photo-topbar"><span class="vehicle-photo-cover-label">{% if forloop.first %}Capa{% else %}Foto{% endif %}</span><span class="vehicle-photo-drag-label" title="Arraste para reordenar">⋮⋮</span></div>
+                <div class="vehicle-photo-bottombar"><span class="vehicle-photo-order-number">{{ forloop.counter }}</span><div class="vehicle-photo-order-actions"><button type="button" class="vehicle-photo-move" data-direction="-1" aria-label="Mover foto para a esquerda">←</button><button type="button" class="vehicle-photo-move" data-direction="1" aria-label="Mover foto para a direita">→</button></div></div>
               </article>
             {% endfor %}
           </div>
@@ -188,56 +109,34 @@
       {% endif %}
 
       <div class="vehicle-new-photos-block">
-        {% if veiculo %}
-          <div class="vehicle-photo-block-title">
-            <div>
-              <strong>Adicionar novas fotos</strong>
-              <span>As novas imagens entram depois das fotos já cadastradas.</span>
-            </div>
-          </div>
-        {% endif %}
-
-        <label class="vehicle-photo-upload" for="vehicle-foto-upload">
+        {% if veiculo %}<div class="vehicle-photo-block-title"><div><strong>Adicionar novas fotos</strong><span>As novas imagens entram depois das fotos já cadastradas.</span></div></div>{% endif %}
+        <label class="vehicle-photo-upload vehicle-photo-upload-compact" for="vehicle-foto-upload">
           <span class="vehicle-photo-upload-icon" aria-hidden="true">＋</span>
-          <strong>Clique para escolher fotos</strong>
-          <span>JPEG, PNG ou WebP · máximo de 8 MB por imagem</span>
+          <span class="vehicle-photo-upload-copy"><strong>Selecionar fotos</strong><span>JPEG, PNG ou WebP · até 8 MB por imagem · máximo de 8 fotos</span></span>
+          <span class="btn btn-outline-dark btn-sm vehicle-photo-upload-button">Escolher arquivos</span>
         </label>
         <input id="vehicle-foto-upload" name="fotos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
-
-        <div class="vehicle-photo-info">
-          <span>Máximo: 8 fotos por veículo.</span>
-          <span>Você pode arrastar as novas fotos antes de salvar.</span>
-        </div>
-
         <div id="vehicle-new-photo-feedback" class="vehicle-photo-feedback" aria-live="polite"></div>
         <div id="vehicle-new-photo-grid" class="vehicle-photo-grid"></div>
       </div>
-    </div>
+    </section>
 
-    <div class="form-card vehicle-form-actions-card">
+    <section class="form-card vehicle-form-actions-card vehicle-compact-actions-card">
       <div>
         <span class="eyebrow">Finalização</span>
-        {% if veiculo %}
-          <h3>Salvar alterações</h3>
-          <p class="small">A edição altera os dados do anúncio, mas mantém o status atual: <strong>{{ veiculo.get_status_display }}</strong>.</p>
-        {% else %}
-          <h3>Como deseja salvar?</h3>
-          <p class="small">Publicar cria o anúncio como <strong>Disponível</strong>. Você também pode salvar como rascunho.</p>
-        {% endif %}
+        {% if veiculo %}<h3>Pronto para salvar?</h3><p class="small">O anúncio permanece com status <strong>{{ veiculo.get_status_display }}</strong>.</p>{% else %}<h3>Pronto para anunciar?</h3><p class="small">Publique agora ou continue depois salvando como rascunho.</p>{% endif %}
       </div>
-
       <div class="form-actions">
         {% if veiculo %}
           <a class="btn btn-outline-dark" href="{% url 'veiculos:vendedor_lista' %}">Cancelar</a>
           <button class="btn btn-primary" type="submit">Salvar alterações</button>
         {% else %}
-          <button class="btn btn-outline-dark" type="submit" name="acao" value="rascunho">Salvar como rascunho</button>
+          <button class="btn btn-outline-dark" type="submit" name="acao" value="rascunho">Salvar rascunho</button>
           <button class="btn btn-primary" type="submit" name="acao" value="publicar">Publicar anúncio</button>
         {% endif %}
       </div>
-    </div>
+    </section>
   </div>
 </form>
 {% endblock %}
-
 {% block extra_js %}<script src="{% static 'js/ajustes_fotos.js' %}"></script>{% endblock %}

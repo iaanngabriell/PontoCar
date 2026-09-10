@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Termos de Uso · PontoCar{% endblock %}
+{% block meta_description %}Termos de uso da plataforma PontoCar.{% endblock %}
+{% block content %}
+<div class="page-header institutional-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'core:index' %}">Início</a> <span style="opacity:.4">/</span> <span>Termos de Uso</span></div>
+    <h1>Termos de Uso</h1>
+    <p>Regras gerais para utilização da plataforma PontoCar.</p>
+  </div>
+</div>
+<section class="section-tight institutional-page">
+  <div class="container institutional-layout">
+    <article class="card card-pad institutional-content">
+      <div class="institutional-notice">
+        <strong>Sobre este documento</strong>
+        <p>Este texto acompanha o MVP acadêmico do PontoCar e descreve o funcionamento atual da plataforma. Antes de uma operação comercial real, o conteúdo deve passar por revisão jurídica.</p>
+      </div>
+
+      <h2>1. Finalidade da plataforma</h2>
+      <p>O PontoCar conecta compradores, vendedores e empresas do setor automotivo de Palmas-TO e região. A plataforma permite divulgar veículos, demonstrar interesse em anúncios, cadastrar serviços automotivos e consultar planos de seguro cadastrados por empresas parceiras.</p>
+
+      <h2>2. Cadastro e conta</h2>
+      <p>O usuário é responsável por fornecer informações verdadeiras e manter suas credenciais em segurança. Contas podem representar compradores, vendedores ou representantes de empresas, conforme o perfil escolhido no cadastro.</p>
+
+      <h2>3. Anúncios de veículos</h2>
+      <p>O anunciante é responsável pelas informações, imagens, preço e condição do veículo publicado. O PontoCar pode aplicar fluxos de moderação e alterar a visibilidade do anúncio conforme os estados previstos no sistema.</p>
+
+      <h2>4. Interesses, propostas e negociações</h2>
+      <p>Ao demonstrar interesse, o usuário autoriza o envio dos dados preenchidos ao anunciante daquele veículo para continuidade do contato. Valores de propostas e registros de venda seguem os fluxos disponíveis no sistema.</p>
+
+      <h2>5. Empresas, serviços e seguros</h2>
+      <p>Empresas cadastradas são responsáveis pelos serviços, preços de referência e informações comerciais que publicam. Planos de seguro exibidos no PontoCar são informativos; condições finais devem ser confirmadas diretamente com a seguradora ou corretora responsável.</p>
+
+      <h2>6. Condutas do usuário</h2>
+      <p>Não é permitido utilizar a plataforma para fraude, falsidade de informações, violação de direitos de terceiros, envio de conteúdo ilícito ou qualquer tentativa de comprometer a segurança e o funcionamento do sistema.</p>
+
+      <h2>7. Disponibilidade do serviço</h2>
+      <p>Por se tratar de um MVP acadêmico, funcionalidades podem ser alteradas, interrompidas ou ajustadas durante a evolução do projeto.</p>
+
+      <h2>8. Privacidade</h2>
+      <p>O tratamento das informações utilizadas pelo sistema é descrito na <a href="{% url 'core:privacidade' %}">Política de Privacidade</a>.</p>
+
+      <h2>9. Atualizações</h2>
+      <p>Estes termos podem ser atualizados conforme novas funcionalidades forem incorporadas ao PontoCar.</p>
+    </article>
+  </div>
+</section>
+{% endblock %}

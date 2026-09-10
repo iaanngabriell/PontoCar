@@ -71,9 +71,16 @@ def cadastro(request):
 
 @login_required
 def perfil(request):
-    form = UsuarioPerfilForm(request.POST or None, instance=request.user)
+    form = UsuarioPerfilForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=request.user,
+    )
     if request.method == "POST" and form.is_valid():
-        form.save()
+        usuario = form.save(commit=False)
+        if form.cleaned_data.get("remover_foto") and not request.FILES.get("foto_perfil"):
+            usuario.foto_perfil = None
+        usuario.save()
         messages.success(request, "Perfil atualizado com sucesso.")
         return redirect("usuarios:perfil")
     return render(request, "usuarios/perfil.html", {"form": form})

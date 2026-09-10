@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Política de Privacidade · PontoCar{% endblock %}
+{% block meta_description %}Política de privacidade da plataforma PontoCar.{% endblock %}
+{% block content %}
+<div class="page-header institutional-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="{% url 'core:index' %}">Início</a> <span style="opacity:.4">/</span> <span>Política de Privacidade</span></div>
+    <h1>Política de Privacidade</h1>
+    <p>Como as informações são utilizadas no MVP do PontoCar.</p>
+  </div>
+</div>
+<section class="section-tight institutional-page">
+  <div class="container institutional-layout">
+    <article class="card card-pad institutional-content">
+      <div class="institutional-notice">
+        <strong>Escopo acadêmico</strong>
+        <p>Esta política descreve os dados efetivamente previstos no projeto atual. Ela não substitui uma política jurídica definitiva para uma operação comercial em produção.</p>
+      </div>
+
+      <h2>1. Informações cadastradas</h2>
+      <p>O PontoCar pode armazenar dados fornecidos na criação e manutenção da conta, como nome, e-mail, telefone, CPF quando informado, data de nascimento e tipo de usuário.</p>
+
+      <h2>2. Dados de empresas</h2>
+      <p>Representantes de empresas podem cadastrar razão social, nome fantasia, CNPJ, contatos, categoria da empresa, localização e documentos enviados para o processo de verificação.</p>
+
+      <h2>3. Dados de veículos e anúncios</h2>
+      <p>O sistema armazena os dados informados nos anúncios, incluindo marca, modelo, versão, anos, preço, quilometragem, placa, cor, características, descrição e fotografias.</p>
+
+      <h2>4. Interações na plataforma</h2>
+      <p>Também podem ser registrados interesses em veículos, favoritos, propostas, vendas, serviços cadastrados, apólices e demais informações necessárias aos fluxos disponíveis no sistema.</p>
+
+      <h2>5. Como os dados são utilizados</h2>
+      <p>As informações são utilizadas para autenticação, funcionamento dos perfis, publicação e gerenciamento de anúncios, exibição de empresas e serviços, comunicação entre interessados e anunciantes, moderação e registro dos fluxos da plataforma.</p>
+
+      <h2>6. Compartilhamento dentro do fluxo</h2>
+      <p>Quando um usuário envia um formulário de interesse em um veículo, os dados fornecidos nesse formulário são disponibilizados ao anunciante responsável pelo anúncio para viabilizar o contato. Informações públicas de empresas e serviços são exibidas no catálogo conforme o cadastro realizado pelo representante.</p>
+
+      <h2>7. Segurança e acesso</h2>
+      <p>O projeto utiliza autenticação do Django e regras de autorização para limitar o acesso a áreas privadas. Credenciais de banco de dados e outras configurações sensíveis não devem ser expostas em páginas públicas ou versionadas no repositório.</p>
+
+      <h2>8. Correção de informações</h2>
+      <p>Usuários autenticados podem atualizar as informações disponibilizadas pelas telas de perfil e pelos fluxos de gerenciamento correspondentes. Outras solicitações dependem das funcionalidades administrativas disponíveis no MVP.</p>
+
+      <h2>9. Evolução da política</h2>
+      <p>À medida que o PontoCar receber novas integrações ou funcionalidades, esta política deverá ser revisada para refletir os novos tratamentos de dados.</p>
+
+      <p class="institutional-cross-link">Consulte também os <a href="{% url 'core:termos' %}">Termos de Uso</a>.</p>
+    </article>
+  </div>
+</section>
+{% endblock %}

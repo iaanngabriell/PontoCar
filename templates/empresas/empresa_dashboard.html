@@ -3,11 +3,9 @@
 {% block title %}Painel da empresa · PontoCar{% endblock %}
 {% block dashboard_title %}Painel da {{ empresa.nome_fantasia }}{% endblock %}
 {% block dashboard_subtitle %}Visão geral da sua empresa na PontoCar{% endblock %}
-{% block dashboard_actions %}
-  <a href="{% url 'servicos:empresa_novo' %}" class="btn btn-outline-dark btn-sm">Novo serviço</a>
-  <a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-primary btn-sm">Novo veículo</a>
-{% endblock %}
+{% block dashboard_actions %}<a href="{% url 'servicos:empresa_novo' %}" class="btn btn-outline-dark btn-sm">Novo serviço</a><a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-primary btn-sm">Novo veículo</a>{% endblock %}
 {% block dashboard_content %}
+<div class="panel company-dashboard-brand"><div class="panel-body"><div class="company-dashboard-identity"><div class="company-logo company-dashboard-logo company-logo-media">{% if empresa.logo %}<img src="{{ empresa.logo.url }}" alt="Logo de {{ empresa.nome_fantasia }}">{% else %}{{ empresa.nome_fantasia|slice:':2'|upper }}{% endif %}</div><div><span class="eyebrow">{{ empresa.get_tipo_empresa_display }}</span><h2>{{ empresa.nome_fantasia }}</h2><p class="small">Sua identidade pública no PontoCar.</p></div></div><div class="company-dashboard-brand-actions"><a href="{% url 'empresas:cadastro' %}" class="btn btn-outline-dark btn-sm">Alterar logo e dados</a>{% if empresa.id %}<a href="{% url 'empresas:detalhes' empresa.id %}" class="btn btn-outline-dark btn-sm">Ver perfil público</a>{% endif %}</div></div></div>
 <div class="stat-cards">
   <div class="stat-card"><div class="value">{{ veiculos_ativos }}</div><div class="label">Veículos ativos</div></div>
   <a href="{% url 'servicos:empresa_lista' %}" class="stat-card stat-card-link"><div class="value">{{ servicos_total }}</div><div class="label">Serviços cadastrados</div><div class="small stat-card-action">Gerenciar serviços →</div></a>

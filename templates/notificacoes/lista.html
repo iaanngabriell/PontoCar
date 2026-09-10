@@ -1,0 +1,41 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Notificações · PontoCar{% endblock %}
+{% block dashboard_title %}Notificações{% endblock %}
+{% block dashboard_subtitle %}Acompanhe interesses, propostas e atualizações importantes{% endblock %}
+{% block dashboard_actions %}
+  {% if notificacoes_nao_lidas %}
+    <form method="post" action="{% url 'notificacoes:marcar_todas_lidas' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{% url 'notificacoes:lista' %}">
+      <button class="btn btn-outline-dark btn-sm" type="submit">Marcar todas como lidas</button>
+    </form>
+  {% endif %}
+{% endblock %}
+{% block dashboard_content %}
+<div class="panel notifications-page-panel">
+  <div class="panel-body notifications-page-list">
+    {% for notificacao in notificacoes %}
+      <form method="post" action="{% url 'notificacoes:abrir' notificacao.id %}" class="notification-page-item {% if not notificacao.lida %}is-unread{% endif %}">
+        {% csrf_token %}
+        <button type="submit" class="notification-page-button">
+          <span class="notification-type-icon" aria-hidden="true">
+            {% if notificacao.tipo == 'NOVO_INTERESSE' %}♥{% elif notificacao.tipo == 'NOVA_PROPOSTA' %}R${% else %}✓{% endif %}
+          </span>
+          <span class="notification-page-copy">
+            <strong>{{ notificacao.titulo }}</strong>
+            <span>{{ notificacao.mensagem }}</span>
+            <small>{{ notificacao.criada_em|date:"d/m/Y H:i" }}</small>
+          </span>
+          {% if not notificacao.lida %}<span class="notification-unread-dot" aria-label="Não lida"></span>{% endif %}
+        </button>
+      </form>
+    {% empty %}
+      <div class="notifications-empty">
+        <div class="notifications-empty-icon">✓</div>
+        <h3>Nenhuma notificação por enquanto</h3>
+        <p>Novos interesses e atualizações de propostas aparecerão aqui.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

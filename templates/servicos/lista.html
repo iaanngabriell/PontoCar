@@ -48,10 +48,16 @@
               <div class="small">~{{ servico.duracao_estimada }} min</div>
             </div>
             <div class="small service-company">
-              <strong>{{ servico.empresa.nome_fantasia }}</strong>
-              {% if servico.empresa.localizacao %}
-                <span>{{ servico.empresa.localizacao.cidade }}-{{ servico.empresa.localizacao.estado }}</span>
-              {% endif %}
+              <a href="{% url 'empresas:detalhes' servico.empresa.id %}" class="service-company-link">
+                <span class="service-company-brand">
+                  <span class="service-company-logo">{% if servico.empresa.logo %}<img src="{{ servico.empresa.logo.url }}" alt="">{% else %}{{ servico.empresa.nome_fantasia|slice:':1'|upper }}{% endif %}</span>
+                  <strong>{{ servico.empresa.nome_fantasia }}</strong>
+                </span>
+                {% if servico.empresa.localizacao %}
+                  <span>{{ servico.empresa.localizacao.cidade }}-{{ servico.empresa.localizacao.estado }}</span>
+                {% endif %}
+                <span class="service-company-action">Ver empresa →</span>
+              </a>
             </div>
           </div>
         </article>

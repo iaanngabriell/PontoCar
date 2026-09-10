@@ -48,7 +48,6 @@
 
     if (!text) return null;
 
-    // Quando há vírgula, tratamos ponto como milhar.
     if (text.indexOf(',') !== -1) {
       text = text.replace(/\./g, '').replace(',', '.');
     } else if (/^-?\d{1,3}(\.\d{3})+$/.test(text)) {
@@ -65,6 +64,50 @@
     return number.toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
+    });
+  }
+
+  function prepararEnvioUnico(form) {
+    var submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (!submitButton) return;
+
+    var textoOriginal = submitButton.tagName === 'INPUT'
+      ? submitButton.value
+      : submitButton.textContent;
+
+    form.addEventListener('submit', function (event) {
+      if (form.dataset.submitting === 'true') {
+        event.preventDefault();
+        return;
+      }
+
+      form.dataset.submitting = 'true';
+      submitButton.disabled = true;
+      submitButton.setAttribute('aria-disabled', 'true');
+
+      var textoProcessando = 'Processando…';
+      var path = window.location.pathname;
+      if (path.indexOf('/cadastro') !== -1) textoProcessando = 'Criando conta…';
+      if (path.indexOf('/entrar') !== -1 || path.indexOf('/login') !== -1) textoProcessando = 'Entrando…';
+
+      if (submitButton.tagName === 'INPUT') {
+        submitButton.value = textoProcessando;
+      } else {
+        submitButton.textContent = textoProcessando;
+      }
+    });
+
+    // Se a página voltar pelo cache do navegador, não deixe o botão travado.
+    window.addEventListener('pageshow', function () {
+      form.dataset.submitting = 'false';
+      submitButton.disabled = false;
+      submitButton.removeAttribute('aria-disabled');
+
+      if (submitButton.tagName === 'INPUT') {
+        submitButton.value = textoOriginal;
+      } else {
+        submitButton.textContent = textoOriginal;
+      }
     });
   }
 
@@ -125,5 +168,9 @@
       if (radio) radio.addEventListener('change', refreshRoleCards);
     });
     refreshRoleCards();
+
+    // Login e cadastro: impede dois POSTs do mesmo formulário enquanto
+    // o primeiro envio ainda está sendo processado.
+    document.querySelectorAll('.auth-form').forEach(prepararEnvioUnico);
   });
 })();
