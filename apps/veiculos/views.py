@@ -8,6 +8,11 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
+from apps.core.rate_limit import (
+    consumir_limite,
+    obter_ip_cliente,
+    resposta_limite_excedido,
+)
 from apps.empresas.models import Empresa, VerificacaoEmpresa
 from apps.favoritos.models import Favorito
 from apps.leads.services import registrar_interesse
@@ -21,6 +26,9 @@ PUBLIC_STATUSES = (
     Veiculo.StatusVeiculo.DISPONIVEL,
     Veiculo.StatusVeiculo.RESERVADO,
 )
+
+INTERESSE_LIMITE = 5
+INTERESSE_JANELA_SEGUNDOS = 10 * 60
 
 
 def _foto_exibicao(veiculo):
@@ -190,6 +198,25 @@ def detalhes(request, veiculo_id):
         if eh_proprietario:
             messages.error(request, "Você não pode enviar interesse para o seu próprio anúncio.")
             return redirect("veiculos:detalhes", veiculo_id=veiculo.id)
+
+        if request.user.is_authenticated:
+            identificador_interesse = f"user:{request.user.pk}"
+        else:
+            identificador_interesse = f"ip:{obter_ip_cliente(request)}"
+
+        resultado = consumir_limite(
+            chave=f"interesse:{identificador_interesse}",
+            limite=INTERESSE_LIMITE,
+            janela_segundos=INTERESSE_JANELA_SEGUNDOS,
+        )
+        if not resultado.permitido:
+            return resposta_limite_excedido(
+                request,
+                resultado,
+                "Muitos interesses enviados em pouco tempo. Aguarde e tente novamente.",
+                titulo="Envio de interesse temporariamente bloqueado",
+                voltar_url=request.path,
+            )
 
         if form is not None and form.is_valid():
             try:

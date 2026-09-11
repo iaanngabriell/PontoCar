@@ -6,9 +6,18 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from apps.core.rate_limit import (
+    consumir_limite,
+    resposta_limite_excedido,
+)
+
 from .forms import LeadMensagemForm, LeadRespostaForm
 from .models import Lead
 from .services import responder_como_interessado, responder_interesse
+
+
+MENSAGEM_LIMITE_USUARIO = 12
+MENSAGEM_JANELA_SEGUNDOS = 60
 
 
 @login_required
@@ -51,6 +60,21 @@ def responder_lead(request, lead_id):
         | Q(anunciante__isnull=True, veiculo__proprietario_atual=request.user),
         id=lead_id,
     )
+
+    resultado = consumir_limite(
+        chave=f"mensagem:user:{request.user.pk}",
+        limite=MENSAGEM_LIMITE_USUARIO,
+        janela_segundos=MENSAGEM_JANELA_SEGUNDOS,
+    )
+    if not resultado.permitido:
+        return resposta_limite_excedido(
+            request,
+            resultado,
+            "Você enviou muitas mensagens em pouco tempo. Aguarde e tente novamente.",
+            titulo="Envio de mensagens temporariamente bloqueado",
+            voltar_url=reverse("leads:vendedor_leads"),
+        )
+
     form = LeadRespostaForm(request.POST, lead=lead, auto_id=False)
 
     if not form.is_valid():
@@ -90,6 +114,21 @@ def responder_interessado(request, lead_id):
         id=lead_id,
         comprador=request.user,
     )
+
+    resultado = consumir_limite(
+        chave=f"mensagem:user:{request.user.pk}",
+        limite=MENSAGEM_LIMITE_USUARIO,
+        janela_segundos=MENSAGEM_JANELA_SEGUNDOS,
+    )
+    if not resultado.permitido:
+        return resposta_limite_excedido(
+            request,
+            resultado,
+            "Você enviou muitas mensagens em pouco tempo. Aguarde e tente novamente.",
+            titulo="Envio de mensagens temporariamente bloqueado",
+            voltar_url=reverse("favoritos:interesses"),
+        )
+
     form = LeadMensagemForm(request.POST)
     if not form.is_valid():
         messages.error(request, "Escreva uma mensagem válida de até 1.500 caracteres.")

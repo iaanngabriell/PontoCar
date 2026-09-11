@@ -6,8 +6,23 @@ from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
+from apps.core.rate_limit import (
+    consumir_limite,
+    limpar_limite,
+    obter_ip_cliente,
+    resposta_limite_excedido,
+)
+
 from .forms import AlterarSenhaForm, LoginForm, UsuarioCadastroForm, UsuarioPerfilForm
 from .models import Usuario
+
+
+LOGIN_LIMITE_IP = 10
+LOGIN_LIMITE_EMAIL = 5
+LOGIN_JANELA_SEGUNDOS = 15 * 60
+
+CADASTRO_LIMITE_IP = 5
+CADASTRO_JANELA_SEGUNDOS = 15 * 60
 
 
 def _eh_administrador(user):
@@ -22,9 +37,53 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect("core:index")
 
+    chaves_login = []
+
+    if request.method == "POST":
+        ip = obter_ip_cliente(request)
+        chave_ip = f"login:ip:{ip}"
+        chaves_login.append(chave_ip)
+
+        resultado_ip = consumir_limite(
+            chave=chave_ip,
+            limite=LOGIN_LIMITE_IP,
+            janela_segundos=LOGIN_JANELA_SEGUNDOS,
+        )
+        if not resultado_ip.permitido:
+            return resposta_limite_excedido(
+                request,
+                resultado_ip,
+                "Muitas tentativas de login. Aguarde e tente novamente.",
+                titulo="Login temporariamente bloqueado",
+                voltar_url=request.path,
+            )
+
+        email = request.POST.get("username", "").strip().lower()
+        if email:
+            chave_email = f"login:email:{email}"
+            chaves_login.append(chave_email)
+
+            resultado_email = consumir_limite(
+                chave=chave_email,
+                limite=LOGIN_LIMITE_EMAIL,
+                janela_segundos=LOGIN_JANELA_SEGUNDOS,
+            )
+            if not resultado_email.permitido:
+                return resposta_limite_excedido(
+                    request,
+                    resultado_email,
+                    "Muitas tentativas de login. Aguarde e tente novamente.",
+                    titulo="Login temporariamente bloqueado",
+                    voltar_url=request.path,
+                )
+
     form = LoginForm(request=request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         auth_login(request, form.get_user())
+
+        for chave in chaves_login:
+            limpar_limite(chave)
+
         if not form.cleaned_data.get("lembrar"):
             request.session.set_expiry(0)
         messages.success(request, "Login realizado com sucesso.")
@@ -51,6 +110,21 @@ def logout_view(request):
 def cadastro(request):
     if request.user.is_authenticated:
         return redirect("core:index")
+
+    if request.method == "POST":
+        resultado = consumir_limite(
+            chave=f"cadastro:ip:{obter_ip_cliente(request)}",
+            limite=CADASTRO_LIMITE_IP,
+            janela_segundos=CADASTRO_JANELA_SEGUNDOS,
+        )
+        if not resultado.permitido:
+            return resposta_limite_excedido(
+                request,
+                resultado,
+                "Muitas tentativas de cadastro. Aguarde e tente novamente.",
+                titulo="Cadastro temporariamente bloqueado",
+                voltar_url=request.path,
+            )
 
     form = UsuarioCadastroForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
