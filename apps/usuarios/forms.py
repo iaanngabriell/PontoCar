@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 
+from apps.core.upload_validation import validar_imagem_upload
+
 from .models import Usuario
 
 
@@ -169,8 +171,12 @@ class UsuarioPerfilForm(FormControlMixin, forms.ModelForm):
 
     def clean_foto_perfil(self):
         foto = self.cleaned_data.get("foto_perfil")
-        if foto and getattr(foto, "size", 0) > LIMITE_FOTO_PERFIL:
-            raise forms.ValidationError("A foto deve ter no máximo 5 MB.")
+        if foto:
+            validar_imagem_upload(
+                foto,
+                limite_bytes=LIMITE_FOTO_PERFIL,
+                descricao="foto de perfil",
+            )
         return foto
 
     def clean_email(self):

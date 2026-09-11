@@ -1,3 +1,6 @@
+import uuid
+from pathlib import Path
+
 from django.conf import settings
 from django.db import models
 
@@ -93,8 +96,9 @@ class HistoricoVeiculo(BaseModel):
 
 
 def foto_veiculo_upload_path(instance, filename):
-    """Salva em media/veiculos/<placa>/<filename>"""
-    return f"veiculos/{instance.veiculo.placa}/{filename}"
+    """Salva com nome aleatório em media/veiculos/<placa>/, sem expor o nome original."""
+    extensao = Path(filename).suffix.lower()
+    return f"veiculos/{instance.veiculo.placa}/{uuid.uuid4().hex}{extensao}"
 
 
 class FotoVeiculo(BaseModel):

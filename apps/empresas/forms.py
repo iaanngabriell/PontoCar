@@ -1,11 +1,12 @@
-from pathlib import Path
-
 from django import forms
+
+from apps.core.upload_validation import validar_documento_upload, validar_imagem_upload
 
 from .models import Empresa, Localizacao
 
 
 LIMITE_LOGO_EMPRESA = 5 * 1024 * 1024
+LIMITE_DOCUMENTO_EMPRESA = 8 * 1024 * 1024
 
 
 class EmpresaForm(forms.ModelForm):
@@ -75,8 +76,12 @@ class EmpresaForm(forms.ModelForm):
 
     def clean_logo(self):
         logo = self.cleaned_data.get("logo")
-        if logo and getattr(logo, "size", 0) > LIMITE_LOGO_EMPRESA:
-            raise forms.ValidationError("A imagem deve ter no máximo 5 MB.")
+        if logo:
+            validar_imagem_upload(
+                logo,
+                limite_bytes=LIMITE_LOGO_EMPRESA,
+                descricao="imagem da empresa",
+            )
         return logo
 
     def clean_cnpj(self):
@@ -157,9 +162,8 @@ class VerificacaoEmpresaUploadForm(forms.Form):
 
     def clean_arquivo(self):
         arquivo = self.cleaned_data["arquivo"]
-        if arquivo.size > 8 * 1024 * 1024:
-            raise forms.ValidationError("O arquivo deve ter no máximo 8 MB.")
-        extensao = Path(arquivo.name).suffix.lower()
-        if extensao not in {".pdf", ".jpg", ".jpeg", ".png"}:
-            raise forms.ValidationError("Envie um arquivo PDF, JPG ou PNG.")
+        validar_documento_upload(
+            arquivo,
+            limite_bytes=LIMITE_DOCUMENTO_EMPRESA,
+        )
         return arquivo
