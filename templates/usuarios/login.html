@@ -1,24 +1,29 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Entrar · PontoCar{% endblock %}
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/ajustes_visual_home_login.css' %}">
+{% endblock %}
 {% block body %}
-<div class="auth-shell">
-  <div class="auth-wrap">
-    <aside class="auth-visual">
+<div class="auth-shell auth-shell-enhanced auth-login-clean">
+  <div class="auth-wrap auth-wrap-enhanced">
+    <aside class="auth-visual auth-visual-enhanced">
       <div>{% include "components/_brand.html" %}</div>
       <div class="auth-copy">
         <span class="eyebrow">PontoCar</span>
         <h1>Bem-vindo de volta</h1>
-        <p>Entre para acompanhar seus anúncios, interesses, compras e negociações em um só lugar.</p>
+        <p>Uma única conta acompanha sua jornada para comprar, vender e negociar veículos.</p>
         <ul class="auth-benefits">
-          <li>Consulte seus veículos e propostas</li>
-          <li>Acompanhe interesses e negociações</li>
-          <li>Gerencie sua empresa e seus serviços</li>
+          <li>Consulte veículos, favoritos e interesses</li>
+          <li>Publique anúncios e responda interessados</li>
+          <li>Acompanhe notificações e negociações</li>
         </ul>
       </div>
       <a href="{% url 'core:index' %}" class="btn btn-outline-light btn-sm">Voltar ao início</a>
     </aside>
 
-    <main class="auth-form-side">
+    <main class="auth-form-side auth-form-side-enhanced">
       <div class="auth-form-header">
         <span class="eyebrow">Acesso</span>
         <h2>Entrar na sua conta</h2>
@@ -43,9 +48,9 @@
           {% for error in form.password.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
         </div>
 
-        <label class="checkbox-row auth-remember">{{ form.lembrar }} <span>Lembrar de mim neste computador</span></label>
+        <label class="checkbox-row auth-remember auth-check-row">{{ form.lembrar }} <span>Lembrar de mim neste computador</span></label>
 
-        <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+        <button class="btn btn-primary btn-block auth-main-submit" type="submit">Entrar</button>
       </form>
 
       <p class="small text-center auth-switch">Ainda não tem conta? <a href="{% url 'usuarios:cadastro' %}">Criar conta</a></p>

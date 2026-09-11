@@ -17,10 +17,8 @@
           <a href="{% url 'usuarios:admin_usuarios' %}" class="nav-link-plain">Painel</a>
         {% elif request.user.tipo_usuario == "EMPRESA" %}
           <a href="{% url 'empresas:dashboard' %}" class="nav-link-plain">Painel</a>
-        {% elif request.user.tipo_usuario == "VENDEDOR" %}
-          <a href="{% url 'veiculos:vendedor_lista' %}" class="nav-link-plain">Painel</a>
         {% else %}
-          <a href="{% url 'vendas:comprador_compras' %}" class="nav-link-plain">Painel</a>
+          <a href="{% url 'usuarios:painel' %}" class="nav-link-plain">Painel</a>
         {% endif %}
 
         <details class="notification-menu">

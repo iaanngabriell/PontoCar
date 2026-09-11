@@ -22,8 +22,8 @@ def criar_notificacao(*, usuario, tipo, titulo, mensagem, chave, url=""):
 
 
 def notificar_novo_interesse(*, lead):
-    """Avisa o proprietário atual quando um novo Lead é criado."""
-    destinatario = lead.veiculo.proprietario_atual
+    """Avisa o anunciante responsável quando um novo Lead é criado."""
+    destinatario = lead.anunciante or lead.veiculo.proprietario_atual
     if destinatario is None:
         return None
 
@@ -38,12 +38,68 @@ def notificar_novo_interesse(*, lead):
         titulo=f"Novo interesse em {veiculo}",
         mensagem=f"{nome} demonstrou interesse no seu anúncio.",
         chave=f"lead:{lead.id}:novo",
-        url=reverse("leads:vendedor_leads"),
+        url=f"{reverse('leads:vendedor_leads')}#lead-{lead.id}",
     )
 
 
+def notificar_mensagem_interesse(*, mensagem):
+    """Notifica a outra ponta da conversa de um Lead."""
+    lead = mensagem.lead
+    veiculo = f"{lead.veiculo.marca} {lead.veiculo.modelo}".strip()
+
+    if mensagem.tipo_autor == "ANUNCIANTE":
+        destinatario = lead.comprador
+        if destinatario is None:
+            return None
+        titulo = f"Nova mensagem sobre {veiculo}"
+        url = f"{reverse('favoritos:interesses')}#lead-{lead.id}"
+    else:
+        destinatario = lead.anunciante or lead.veiculo.proprietario_atual
+        if destinatario is None or destinatario.id == mensagem.autor_id:
+            return None
+        nome = lead.nome.strip() or "Interessado"
+        titulo = f"Nova mensagem de {nome}"
+        url = f"{reverse('leads:vendedor_leads')}#lead-{lead.id}"
+
+    resumo = mensagem.texto.strip()
+    if len(resumo) > 190:
+        resumo = resumo[:187].rstrip() + "..."
+
+    return criar_notificacao(
+        usuario=destinatario,
+        tipo=Notificacao.Tipo.RESPOSTA_INTERESSE,
+        titulo=titulo,
+        mensagem=resumo,
+        chave=f"leadmsg:{mensagem.id}",
+        url=url,
+    )
+
+
+def notificar_resposta_interesse(*, lead):
+    """Compatibilidade: notifica usando a resposta mais recente do anunciante."""
+    if not lead.comprador_id:
+        return None
+
+    veiculo = f"{lead.veiculo.marca} {lead.veiculo.modelo}".strip()
+    resposta = (lead.resposta_anunciante or "").strip()
+    resumo = resposta if len(resposta) <= 190 else resposta[:187].rstrip() + "..."
+
+    notificacao, _ = Notificacao.objects.update_or_create(
+        chave=f"lead:{lead.id}:resposta",
+        defaults={
+            "usuario": lead.comprador,
+            "tipo": Notificacao.Tipo.RESPOSTA_INTERESSE,
+            "titulo": f"Resposta sobre {veiculo}",
+            "mensagem": resumo or "O anunciante respondeu ao seu interesse.",
+            "url": f"{reverse('favoritos:interesses')}#lead-{lead.id}",
+            "lida": False,
+            "lida_em": None,
+        },
+    )
+    return notificacao
+
+
 def notificar_nova_proposta(*, venda):
-    """Avisa o proprietário do veículo quando uma Venda PENDENTE é criada."""
     destinatario = venda.veiculo.proprietario_atual
     if destinatario is None or destinatario.id == venda.comprador_id:
         return None
@@ -60,7 +116,6 @@ def notificar_nova_proposta(*, venda):
 
 
 def notificar_status_proposta(*, venda):
-    """Avisa o comprador quando o status da proposta formal muda."""
     rotulos = {
         "EM_NEGOCIACAO": (
             "Sua proposta entrou em negociação",
@@ -82,7 +137,7 @@ def notificar_status_proposta(*, venda):
     titulo, mensagem = dados
     veiculo = f"{venda.veiculo.marca} {venda.veiculo.modelo}".strip()
     if venda.status == "CONCLUIDA":
-        url = reverse("vendas:comprador_compras")
+        url = reverse("vendas:compras")
     else:
         url = reverse("notificacoes:lista")
 

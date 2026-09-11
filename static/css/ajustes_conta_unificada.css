@@ -1,0 +1,308 @@
+/* PontoCar — unificação de conta pessoal (comprar + vender) */
+
+/* Cadastro: agora há somente Conta pessoal e Conta empresarial. */
+.role-choice-account {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.role-card-account {
+  min-height: 78px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 14px 16px;
+}
+
+.role-card-account input {
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.role-card-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.role-card-copy strong {
+  color: var(--navy-900);
+  font-size: 13.5px;
+}
+
+.role-card-copy small {
+  color: var(--gray-500);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.role-card-account.is-selected .role-card-copy small {
+  color: var(--gray-600);
+}
+
+.auth-note-secondary {
+  margin-top: 10px;
+}
+
+/* Painel único da conta pessoal. */
+.unified-account-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 26px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(28, 60, 93, .16);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(120deg, rgba(62, 189, 82, .08), transparent 48%),
+    #eef3f8;
+}
+
+.unified-account-intro h2 {
+  margin: 6px 0 6px;
+  font-size: 22px;
+}
+
+.unified-account-intro p {
+  max-width: 720px;
+  margin: 0;
+  font-size: 13.5px;
+}
+
+.unified-account-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 190px;
+  padding: 12px 14px;
+  border: 1px solid rgba(62, 189, 82, .25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .72);
+}
+
+.unified-account-badge > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--green-500);
+  color: #06210c;
+  font-weight: 800;
+}
+
+.unified-account-badge strong,
+.unified-account-badge small {
+  display: block;
+}
+
+.unified-account-badge strong {
+  color: var(--navy-900);
+  font-size: 12.5px;
+}
+
+.unified-account-badge small {
+  margin-top: 2px;
+  color: var(--gray-500);
+  font-size: 11px;
+}
+
+.unified-account-stats {
+  margin-bottom: 22px;
+}
+
+.unified-account-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+
+.unified-action-panel {
+  overflow: hidden;
+}
+
+.unified-action-panel .panel-header {
+  background: #edf2f7;
+}
+
+.unified-action-panel .panel-header .eyebrow {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.unified-action-panel .panel-header h3 {
+  font-size: 17px;
+}
+
+.unified-action-panel .panel-body {
+  padding: 10px 16px 16px;
+}
+
+.unified-action-list {
+  display: grid;
+  gap: 8px;
+}
+
+.unified-action-item {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: inherit;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.unified-action-item:hover {
+  border-color: rgba(28, 60, 93, .16);
+  background: #f4f7fa;
+  transform: translateY(-1px);
+}
+
+.unified-action-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--navy-900);
+  color: #fff;
+  font-weight: 700;
+}
+
+.unified-action-item strong,
+.unified-action-item small {
+  display: block;
+}
+
+.unified-action-item strong {
+  color: var(--navy-900);
+  font-size: 13px;
+}
+
+.unified-action-item small {
+  margin-top: 2px;
+  color: var(--gray-500);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.unified-action-item > span:last-child {
+  color: var(--green-600);
+  font-weight: 800;
+}
+
+.unified-account-recent {
+  margin-top: 22px;
+}
+
+.unified-compact-list {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+}
+
+.unified-compact-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--gray-100);
+  color: inherit;
+}
+
+.unified-compact-item:last-child {
+  border-bottom: 0;
+}
+
+.unified-compact-item strong,
+.unified-compact-item small {
+  display: block;
+}
+
+.unified-compact-item strong {
+  color: var(--navy-900);
+  font-size: 12.5px;
+}
+
+.unified-compact-item small {
+  margin-top: 2px;
+  color: var(--gray-500);
+  font-size: 11px;
+}
+
+.unified-compact-item > span:last-child {
+  color: var(--green-600);
+  font-weight: 800;
+}
+
+.unified-compact-photo {
+  width: 48px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--gray-100);
+}
+
+.unified-compact-photo img,
+.unified-compact-photo svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unified-compact-status {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 10px;
+  background: #e7edf4;
+  color: var(--navy-900);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* O menu lateral agora possui mais grupos. Mantém boa leitura em telas altas. */
+.dash-sidebar {
+  scrollbar-width: thin;
+}
+
+.dash-nav-group {
+  margin-bottom: 17px;
+}
+
+@media (max-width: 1080px) {
+  .unified-account-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .role-choice-account {
+    grid-template-columns: 1fr;
+  }
+
+  .unified-account-intro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .unified-account-badge {
+    width: 100%;
+  }
+
+  .unified-action-item {
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    padding: 10px 8px;
+  }
+
+  .unified-action-icon {
+    width: 36px;
+    height: 36px;
+  }
+}

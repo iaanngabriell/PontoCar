@@ -1,0 +1,168 @@
+{% extends "base_dashboard.html" %}
+{% load static pontocar_tags %}
+
+{% block title %}Minha conta · PontoCar{% endblock %}
+{% block dashboard_title %}Minha conta{% endblock %}
+{% block dashboard_subtitle %}Compre e venda veículos usando a mesma conta{% endblock %}
+{% block dashboard_actions %}
+  <a href="{% url 'veiculos:catalogo' %}" class="btn btn-outline-dark btn-sm">Explorar veículos</a>
+  <a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-primary btn-sm">Novo anúncio</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<section class="unified-account-intro">
+  <div>
+    <span class="eyebrow">Conta pessoal</span>
+    <h2>Comprar e vender, sem trocar de perfil</h2>
+    <p>Seus interesses, favoritos, compras, anúncios e contatos recebidos ficam reunidos na mesma conta PontoCar.</p>
+  </div>
+  <div class="unified-account-badge">
+    <span>✓</span>
+    <div>
+      <strong>Conta unificada</strong>
+      <small>Comprador + vendedor</small>
+    </div>
+  </div>
+</section>
+
+<div class="stat-cards unified-account-stats">
+  <a href="{% url 'favoritos:interesses' %}?aba=favoritos" class="stat-card stat-card-link">
+    <div class="value">{{ favoritos_total }}</div>
+    <div class="label">Favoritos</div>
+    <div class="small stat-card-action">Ver veículos salvos →</div>
+  </a>
+  <a href="{% url 'favoritos:interesses' %}" class="stat-card stat-card-link">
+    <div class="value">{{ interesses_total }}</div>
+    <div class="label">Interesses enviados</div>
+    <div class="small stat-card-action">Acompanhar interesses →</div>
+  </a>
+  <a href="{% url 'veiculos:vendedor_lista' %}" class="stat-card stat-card-link">
+    <div class="value">{{ veiculos_total }}</div>
+    <div class="label">Meus anúncios</div>
+    <div class="small stat-card-action">Gerenciar veículos →</div>
+  </a>
+  <a href="{% url 'leads:vendedor_leads' %}" class="stat-card stat-card-link">
+    <div class="value">{{ leads_recebidos_total }}</div>
+    <div class="label">Interesses recebidos</div>
+    <div class="small stat-card-action">Ver contatos →</div>
+  </a>
+</div>
+
+<div class="unified-account-columns">
+  <section class="panel unified-action-panel">
+    <div class="panel-header">
+      <div>
+        <span class="eyebrow">Comprar</span>
+        <h3>Minha jornada de compra</h3>
+      </div>
+    </div>
+    <div class="panel-body unified-action-list">
+      <a href="{% url 'veiculos:catalogo' %}" class="unified-action-item">
+        <span class="unified-action-icon">⌕</span>
+        <div><strong>Explorar catálogo</strong><small>Encontre veículos disponíveis na região.</small></div>
+        <span>→</span>
+      </a>
+      <a href="{% url 'favoritos:interesses' %}" class="unified-action-item">
+        <span class="unified-action-icon">♥</span>
+        <div><strong>Favoritos e interesses</strong><small>Revise veículos salvos e contatos que você enviou.</small></div>
+        <span>→</span>
+      </a>
+      <a href="{% url 'vendas:compras' %}" class="unified-action-item">
+        <span class="unified-action-icon">✓</span>
+        <div><strong>Minhas compras</strong><small>{{ compras_total }} compra{{ compras_total|pluralize }} concluída{{ compras_total|pluralize }}.</small></div>
+        <span>→</span>
+      </a>
+      <a href="{% url 'seguros:minhas_cotacoes' %}" class="unified-action-item">
+        <span class="unified-action-icon">◇</span>
+        <div><strong>Meus seguros</strong><small>Acompanhe apólices vinculadas aos seus veículos.</small></div>
+        <span>→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="panel unified-action-panel">
+    <div class="panel-header">
+      <div>
+        <span class="eyebrow">Vender</span>
+        <h3>Minha jornada de venda</h3>
+      </div>
+    </div>
+    <div class="panel-body unified-action-list">
+      <a href="{% url 'veiculos:vendedor_novo' %}" class="unified-action-item">
+        <span class="unified-action-icon">＋</span>
+        <div><strong>Criar anúncio</strong><small>Cadastre um veículo e publique quando estiver pronto.</small></div>
+        <span>→</span>
+      </a>
+      <a href="{% url 'veiculos:vendedor_lista' %}" class="unified-action-item">
+        <span class="unified-action-icon">▣</span>
+        <div><strong>Meus veículos</strong><small>Gerencie status, fotos e dados dos seus anúncios.</small></div>
+        <span>→</span>
+      </a>
+      <a href="{% url 'leads:vendedor_leads' %}" class="unified-action-item">
+        <span class="unified-action-icon">●</span>
+        <div><strong>Interesses recebidos</strong><small>Veja quem demonstrou interesse nos seus veículos.</small></div>
+        <span>→</span>
+      </a>
+      <a href="{% url 'notificacoes:lista' %}" class="unified-action-item">
+        <span class="unified-action-icon">♢</span>
+        <div><strong>Notificações</strong><small>Acompanhe novos interesses e atualizações de negociação.</small></div>
+        <span>→</span>
+      </a>
+    </div>
+  </section>
+</div>
+
+{% if veiculos_recentes or interesses_recentes %}
+<div class="unified-account-columns unified-account-recent">
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Anúncios recentes</h3>
+      <a href="{% url 'veiculos:vendedor_lista' %}" class="small">Ver todos</a>
+    </div>
+    <div class="panel-body unified-compact-list">
+      {% for veiculo in veiculos_recentes %}
+        <a href="{% url 'veiculos:vendedor_editar' veiculo.id %}" class="unified-compact-item">
+          <div class="unified-compact-photo">
+            {% with foto=veiculo.fotos.all|first %}
+              {% if foto %}
+                <img src="{{ foto.imagem.url }}" alt="{{ veiculo.marca }} {{ veiculo.modelo }}">
+              {% else %}
+                {% include "components/_vehicle_placeholder.html" %}
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div>
+            <strong>{{ veiculo.marca }} {{ veiculo.modelo }}</strong>
+            <small>{{ veiculo.preco|brl }} · {{ veiculo.get_status_display }}</small>
+          </div>
+          <span>→</span>
+        </a>
+      {% empty %}
+        <p class="small">Você ainda não possui anúncios.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Interesses recentes</h3>
+      <a href="{% url 'favoritos:interesses' %}" class="small">Ver todos</a>
+    </div>
+    <div class="panel-body unified-compact-list">
+      {% for lead in interesses_recentes %}
+        <a href="{% url 'favoritos:interesses' %}" class="unified-compact-item">
+          <div class="unified-compact-status">{{ forloop.counter|stringformat:"02d" }}</div>
+          <div>
+            <strong>{{ lead.veiculo.marca }} {{ lead.veiculo.modelo }}</strong>
+            <small>{{ lead.get_status_display }} · {{ lead.data_criacao|date:"d/m/Y" }}</small>
+          </div>
+          <span>→</span>
+        </a>
+      {% empty %}
+        <p class="small">Você ainda não enviou interesses.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endif %}
+{% endblock %}

@@ -18,7 +18,7 @@
         <div class="profile-photo-copy">
           <span class="eyebrow">Foto de perfil</span>
           <h3>{{ request.user.get_full_name|default:request.user.email }}</h3>
-          <p>{{ request.user.get_tipo_usuario_display }}</p>
+          <p>{{ request.user.get_tipo_usuario_display }}{% if request.user.tipo_usuario == "USUARIO" %} · compra e venda{% endif %}</p>
         </div>
         <div class="form-group profile-upload-field">
           <label for="{{ form.foto_perfil.id_for_label }}">Escolher nova foto</label>

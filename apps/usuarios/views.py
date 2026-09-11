@@ -28,6 +28,7 @@ def login_view(request):
         if not form.cleaned_data.get("lembrar"):
             request.session.set_expiry(0)
         messages.success(request, "Login realizado com sucesso.")
+
         proxima_url = request.GET.get("next")
         if proxima_url and url_has_allowed_host_and_scheme(
             proxima_url,
@@ -63,10 +64,61 @@ def cadastro(request):
             )
             return redirect("empresas:cadastro")
 
-        messages.success(request, "Conta criada com sucesso. Bem-vindo à PontoCar!")
-        return redirect("core:index")
+        messages.success(
+            request,
+            "Conta criada com sucesso. Você já pode comprar e vender na PontoCar.",
+        )
+        return redirect("usuarios:painel")
 
     return render(request, "usuarios/cadastro.html", {"form": form})
+
+
+@login_required
+def painel(request):
+    """
+    Painel único para conta pessoal.
+
+    Comprar e vender são capacidades da mesma conta. Contas empresariais e
+    administrativas continuam com seus painéis especializados.
+    """
+    if _eh_administrador(request.user):
+        return redirect("usuarios:admin_usuarios")
+
+    if request.user.tipo_usuario == Usuario.TipoUsuario.EMPRESA:
+        return redirect("empresas:dashboard")
+
+    # Imports locais evitam acoplamento dos módulos no carregamento do app
+    # usuarios e deixam explícito que o painel apenas agrega informações.
+    from apps.favoritos.models import Favorito
+    from apps.leads.models import Lead
+    from apps.veiculos.models import Veiculo
+    from apps.vendas.models import Venda
+
+    veiculos = (
+        Veiculo.objects.filter(proprietario_atual=request.user)
+        .prefetch_related("fotos")
+        .order_by("-data_cadastro")
+    )
+    interesses = (
+        Lead.objects.filter(comprador=request.user)
+        .select_related("veiculo")
+        .order_by("-data_criacao")
+    )
+    leads_recebidos = Lead.objects.filter(veiculo__proprietario_atual=request.user)
+
+    contexto = {
+        "favoritos_total": Favorito.objects.filter(usuario=request.user).count(),
+        "interesses_total": interesses.count(),
+        "veiculos_total": veiculos.count(),
+        "leads_recebidos_total": leads_recebidos.count(),
+        "compras_total": Venda.objects.filter(
+            comprador=request.user,
+            status=Venda.StatusVenda.CONCLUIDA,
+        ).count(),
+        "veiculos_recentes": veiculos[:3],
+        "interesses_recentes": interesses[:3],
+    }
+    return render(request, "usuarios/painel.html", contexto)
 
 
 @login_required

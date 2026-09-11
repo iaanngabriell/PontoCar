@@ -1,0 +1,404 @@
+/* =========================================================
+   PontoCar — Hero fotográfico da Home + Login simplificado
+   ========================================================= */
+
+/* ------------------------- HOME ------------------------- */
+.home-refresh .home-hero.home-hero-cinematic {
+  position: relative;
+  isolation: isolate;
+  min-height: 610px;
+  padding: 88px 0 128px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 18, 33, .97) 0%,
+      rgba(5, 18, 33, .91) 28%,
+      rgba(5, 18, 33, .72) 45%,
+      rgba(5, 18, 33, .28) 67%,
+      rgba(5, 18, 33, .14) 100%
+    ),
+    url("../img/home-hero-suv.webp") center center / cover no-repeat;
+}
+
+.home-refresh .home-hero.home-hero-cinematic::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -1;
+  height: 38%;
+  background: linear-gradient(to top, rgba(4, 15, 28, .54), transparent);
+  pointer-events: none;
+}
+
+.home-hero-cinematic .container {
+  position: relative;
+  z-index: 2;
+}
+
+.home-hero-cinematic .home-hero-grid {
+  display: block;
+}
+
+.home-hero-cinematic .home-hero-copy {
+  width: min(100%, 610px);
+  max-width: 610px;
+}
+
+.home-hero-cinematic .home-hero-copy .eyebrow {
+  color: #4bd460;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .24);
+}
+
+.home-hero-cinematic .home-hero-copy h1 {
+  max-width: 580px;
+  margin: 8px 0 18px;
+  color: #fff;
+  font-size: clamp(42px, 5vw, 64px);
+  line-height: .98;
+  letter-spacing: -.045em;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, .26);
+}
+
+.home-hero-cinematic .home-hero-copy h1 .accent {
+  display: block;
+  margin-top: 5px;
+  color: #3ec653;
+}
+
+.home-hero-cinematic .home-hero-copy .lead {
+  width: min(100%, 525px);
+  color: rgba(255, 255, 255, .86);
+  font-size: 16px;
+  line-height: 1.7;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, .28);
+}
+
+.home-hero-cinematic .hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 27px 0 30px;
+}
+
+.home-hero-cinematic .hero-cta .btn {
+  min-height: 46px;
+  padding-inline: 20px;
+  border-radius: 9px;
+  font-weight: 700;
+}
+
+.home-hero-cinematic .hero-cta .btn-primary {
+  box-shadow: 0 14px 30px -18px rgba(62, 198, 83, .95);
+}
+
+.home-hero-cinematic .hero-cta .btn-outline-light {
+  background: rgba(5, 18, 33, .32);
+  border-color: rgba(255, 255, 255, .66);
+  backdrop-filter: blur(5px);
+}
+
+.home-hero-cinematic .hero-cta .btn-outline-light:hover {
+  background: rgba(255, 255, 255, .12);
+}
+
+.home-hero-cinematic .home-hero-trust {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 590px);
+  gap: 10px;
+  color: rgba(255,255,255,.72);
+}
+
+.home-hero-cinematic .home-hero-trust span {
+  position: relative;
+  min-height: 50px;
+  padding: 9px 10px 9px 34px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 10px;
+  background: rgba(5, 18, 33, .24);
+  backdrop-filter: blur(5px);
+}
+
+.home-hero-cinematic .home-hero-trust span::before {
+  content: "✓";
+  position: absolute;
+  top: 11px;
+  left: 11px;
+  display: grid;
+  width: 16px;
+  height: 16px;
+  place-items: center;
+  border-radius: 50%;
+  background: #3ec653;
+  color: #05210d;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.home-hero-cinematic .home-hero-trust strong {
+  color: #fff;
+  font-size: 12px;
+}
+
+.home-hero-cinematic + .home-search-wrap {
+  margin-top: -62px;
+}
+
+.home-hero-cinematic + .home-search-wrap .home-search-card {
+  border-color: #cbd6e2;
+  box-shadow: 0 22px 52px -25px rgba(5, 18, 33, .42);
+}
+
+.home-hero-cinematic .home-hero-visual {
+  display: none !important;
+}
+
+/* ------------------------- LOGIN ------------------------- */
+.auth-login-clean .auth-form-side {
+  justify-content: center;
+}
+
+.auth-login-clean .auth-form-header {
+  margin-bottom: 30px;
+}
+
+.auth-login-clean .auth-form-header h2 {
+  margin-bottom: 8px;
+}
+
+.auth-login-clean .auth-form {
+  gap: 20px;
+}
+
+.auth-login-clean .auth-remember {
+  margin-top: -2px;
+}
+
+.auth-login-clean .auth-main-submit {
+  margin-top: 2px;
+}
+
+.auth-login-clean .auth-access-note {
+  display: none !important;
+}
+
+/* ---------------------- RESPONSIVO ----------------------- */
+@media (max-width: 1050px) {
+  .home-refresh .home-hero.home-hero-cinematic {
+    min-height: 570px;
+    background-position: 58% center;
+  }
+
+  .home-hero-cinematic .home-hero-copy {
+    max-width: 555px;
+  }
+
+  .home-hero-cinematic .home-hero-copy h1 {
+    font-size: clamp(40px, 5.6vw, 56px);
+  }
+}
+
+@media (max-width: 820px) {
+  .home-refresh .home-hero.home-hero-cinematic {
+    min-height: 600px;
+    padding: 64px 0 112px;
+    background-position: 68% center;
+  }
+
+  .home-refresh .home-hero.home-hero-cinematic::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(4, 16, 29, .30);
+  }
+
+  .home-hero-cinematic .home-hero-copy {
+    max-width: 520px;
+  }
+
+  .home-hero-cinematic .home-hero-trust {
+    grid-template-columns: 1fr;
+    width: min(100%, 330px);
+  }
+
+  .home-hero-cinematic .home-hero-trust span {
+    min-height: 0;
+  }
+
+  .home-hero-cinematic + .home-search-wrap {
+    margin-top: -46px;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-refresh .home-hero.home-hero-cinematic {
+    min-height: 640px;
+    padding: 54px 0 100px;
+    background-position: 72% center;
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(5, 18, 33, .98) 0%,
+        rgba(5, 18, 33, .91) 55%,
+        rgba(5, 18, 33, .55) 100%
+      ),
+      url("../img/home-hero-suv.webp");
+  }
+
+  .home-hero-cinematic .home-hero-copy h1 {
+    font-size: 39px;
+  }
+
+  .home-hero-cinematic .home-hero-copy .lead {
+    font-size: 14px;
+  }
+
+  .home-hero-cinematic .hero-cta {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-hero-cinematic .hero-cta .btn {
+    width: 100%;
+  }
+
+  .home-hero-cinematic .home-hero-trust {
+    display: none;
+  }
+}
+/* =========================================================
+   CTA FINAL DA HOME — contraste dos dois botões + respiro
+   ========================================================= */
+.home-refresh .home-cta-band {
+  padding: 56px 0 78px;
+  margin: 0;
+  background: #e9f0f7;
+}
+
+.home-refresh .home-cta-band .container {
+  align-items: center;
+}
+
+.home-refresh .home-cta-band .cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.home-refresh .home-cta-band .cta-actions .btn {
+  min-height: 48px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px -18px rgba(5, 18, 33, .45);
+}
+
+/* Ação principal */
+.home-refresh .home-cta-band .cta-actions .btn-primary {
+  background: #39c653;
+  border-color: #39c653;
+  color: #061c0d;
+}
+
+.home-refresh .home-cta-band .cta-actions .btn-primary:hover {
+  background: #31b94a;
+  border-color: #31b94a;
+  color: #041408;
+  transform: translateY(-1px);
+}
+
+/* Ação secundária: antes era transparente sobre fundo claro */
+.home-refresh .home-cta-band .cta-actions .btn-outline-light {
+  background: #0b1c31;
+  border-color: #0b1c31;
+  color: #fff;
+}
+
+.home-refresh .home-cta-band .cta-actions .btn-outline-light:hover {
+  background: #16304f;
+  border-color: #16304f;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.home-refresh .home-cta-band .cta-actions .btn:focus-visible {
+  outline: 3px solid rgba(57, 198, 83, .34);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .home-refresh .home-cta-band {
+    padding: 42px 0 58px;
+  }
+
+  .home-refresh .home-cta-band .cta-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-refresh .home-cta-band .cta-actions .btn {
+    width: 100%;
+  }
+}
+/* =========================================================
+   BENEFÍCIOS DA HOME — números centralizados e mais evidentes
+   ========================================================= */
+.home-refresh .home-benefit-grid {
+  gap: 18px;
+}
+
+.home-refresh .home-benefit-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px 24px 22px;
+  border: 1px solid #c4d0de;
+  box-shadow: 0 12px 28px -22px rgba(11, 28, 49, .34);
+}
+
+.home-refresh .home-benefit-card:hover {
+  border-color: #b1c2d5;
+  box-shadow: 0 18px 34px -24px rgba(11, 28, 49, .42);
+}
+
+.home-refresh .home-benefit-icon {
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(57, 198, 83, .22);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f1fbf3 0%, #e6f7ea 100%);
+  color: #1da93a;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75), 0 8px 18px -16px rgba(57, 198, 83, .65);
+}
+
+.home-refresh .home-benefit-card h3 {
+  margin: 2px 0 6px;
+}
+
+.home-refresh .home-benefit-card p {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .home-refresh .home-benefit-card {
+    padding: 20px 18px;
+  }
+
+  .home-refresh .home-benefit-icon {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+}

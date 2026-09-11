@@ -1,35 +1,31 @@
 {% extends "base.html" %}
-{% load pontocar_tags %}
+{% load static pontocar_tags %}
 {% block title %}Compre e venda veículos em Palmas-TO · PontoCar{% endblock %}
 {% block meta_description %}Compre e venda veículos, encontre empresas e serviços automotivos em Palmas-TO.{% endblock %}
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="preload" as="image" href="{% static 'img/home-hero-suv.webp' %}">
+  <link rel="stylesheet" href="{% static 'css/ajustes_visual_home_login.css' %}">
+{% endblock %}
 {% block content %}
 <div class="home-refresh">
-  <section class="hero home-hero">
+  <section class="hero home-hero home-hero-cinematic">
     <div class="container">
       <div class="home-hero-grid">
         <div class="home-hero-copy">
           <span class="eyebrow">Palmas · Tocantins</span>
           <h1>Seu próximo carro <span class="accent">está aqui.</span></h1>
           <p class="lead">Encontre veículos da região, anuncie com facilidade e conte com empresas e serviços automotivos em um só lugar.</p>
-          <div class="hero-cta">
-            <a href="{% url 'veiculos:catalogo' %}" class="btn btn-primary">Explorar veículos</a>
-            <a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-outline-light">Anunciar meu carro</a>
-          </div>
-          <div class="home-hero-trust" aria-label="Diferenciais da PontoCar">
-            <span><strong>Local</strong> Palmas e região</span>
-            <span><strong>Direto</strong> comprador e vendedor</span>
-            <span><strong>Completo</strong> veículos e serviços</span>
-          </div>
-        </div>
 
-        <div class="home-hero-visual" aria-hidden="true">
-          <div class="home-hero-visual-card">
-            <div class="home-hero-visual-badge">Marketplace automotivo local</div>
-            <div class="home-hero-car">{% include "components/_vehicle_placeholder.html" %}</div>
-            <div class="home-hero-visual-footer">
-              <div><strong>Compra e venda</strong><span>Negocie na sua região</span></div>
-              <div><strong>Serviços</strong><span>Encontre empresas parceiras</span></div>
-            </div>
+          <div class="hero-cta">
+            <a href="{% url 'veiculos:catalogo' %}" class="btn btn-primary">Buscar veículos</a>
+            <a href="{% url 'veiculos:vendedor_novo' %}" class="btn btn-outline-light">Quero vender meu carro</a>
+          </div>
+
+          <div class="home-hero-trust" aria-label="Diferenciais da PontoCar">
+            <span><strong>Negócios locais</strong>Palmas e região</span>
+            <span><strong>Mais confiança</strong>perfis e empresas verificáveis</span>
+            <span><strong>Ecossistema completo</strong>veículos e serviços</span>
           </div>
         </div>
       </div>

@@ -1,27 +1,36 @@
 {% extends "base.html" %}
 {% block title %}Criar conta · PontoCar{% endblock %}
 {% block body %}
-<div class="auth-shell">
-  <div class="auth-wrap auth-wrap-wide">
-    <aside class="auth-visual">
+<div class="auth-shell auth-shell-enhanced">
+  <div class="auth-wrap auth-wrap-wide auth-wrap-enhanced">
+    <aside class="auth-visual auth-visual-enhanced">
       <div>{% include "components/_brand.html" %}</div>
       <div class="auth-copy">
         <span class="eyebrow">Comece agora</span>
-        <h1>Crie sua conta PontoCar</h1>
-        <p>Escolha como deseja usar a plataforma. Se você selecionar <strong>Sou empresa</strong>, depois da criação da conta será direcionado para preencher os dados da empresa.</p>
+        <h1>Uma conta para comprar e vender</h1>
+        <p>Na PontoCar, uma conta pessoal acompanha toda a sua jornada: você pode pesquisar, favoritar, demonstrar interesse, comprar e também anunciar seus próprios veículos.</p>
         <div class="auth-note">
-          <strong>Importante</strong>
-          <span>A senha pertence à sua conta de usuário/representante. A empresa não possui uma senha separada.</span>
+          <strong>Conta pessoal</strong>
+          <span>Você não precisa trocar de perfil para começar a vender depois. Comprar e vender são recursos da mesma conta.</span>
+        </div>
+        <div class="auth-note auth-note-secondary">
+          <strong>Sou empresa</strong>
+          <span>Escolha conta empresarial para cadastrar CNPJ, serviços, selo de confiança e recursos comerciais.</span>
         </div>
       </div>
       <a href="{% url 'core:index' %}" class="btn btn-outline-light btn-sm">Voltar ao início</a>
     </aside>
 
-    <main class="auth-form-side">
+    <main class="auth-form-side auth-form-side-enhanced">
       <div class="auth-form-header">
         <span class="eyebrow">Cadastro</span>
         <h2>Criar conta grátis</h2>
-        <p>Preencha seus dados de acesso e perfil.</p>
+        <p>Escolha o tipo da conta e preencha seus dados de acesso.</p>
+      </div>
+
+      <div class="auth-access-note">
+        <span class="auth-access-icon">✓</span>
+        <div><strong>Uma conta, duas jornadas</strong><span>A Conta pessoal pode comprar e vender sem trocar de perfil.</span></div>
       </div>
 
       {% include "components/_messages.html" %}
@@ -32,11 +41,19 @@
 
         <div class="form-group">
           <label>{{ form.tipo_usuario.label }}</label>
-          <div class="role-choice">
+          <div class="role-choice role-choice-account">
             {% for radio in form.tipo_usuario %}
-              <label class="role-card">
+              <label class="role-card role-card-account">
                 {{ radio.tag }}
-                <span>{{ radio.choice_label }}</span>
+                <span class="role-card-copy">
+                  {% if forloop.first %}
+                    <strong>Conta pessoal</strong>
+                    <small>Comprar, vender e negociar veículos com a mesma conta.</small>
+                  {% else %}
+                    <strong>Sou empresa</strong>
+                    <small>CNPJ, serviços, veículos e recursos empresariais.</small>
+                  {% endif %}
+                </span>
               </label>
             {% endfor %}
           </div>
@@ -89,10 +106,10 @@
           </div>
         </div>
 
-        <label class="checkbox-row auth-terms">{{ form.termos }} <span>{{ form.termos.label }}</span></label>
+        <label class="checkbox-row auth-terms auth-check-row">{{ form.termos }} <span>{{ form.termos.label }}</span></label>
         {% for error in form.termos.errors %}<span class="field-error auth-terms-error">{{ error }}</span>{% endfor %}
 
-        <button class="btn btn-primary btn-block" type="submit">Criar minha conta</button>
+        <button class="btn btn-primary btn-block auth-main-submit" type="submit">Criar minha conta</button>
       </form>
 
       <p class="small text-center auth-switch">Já possui conta? <a href="{% url 'usuarios:login' %}">Entrar</a></p>

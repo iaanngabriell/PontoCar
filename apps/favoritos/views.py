@@ -8,6 +8,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
 from apps.empresas.models import Empresa
+from apps.leads.forms import LeadMensagemForm
 from apps.leads.models import Lead
 from apps.veiculos.models import Veiculo
 
@@ -38,8 +39,8 @@ def comprador_interesses(request):
     aba = request.GET.get("aba", "interesses")
     interesses = list(
         Lead.objects.filter(comprador=request.user)
-        .select_related("veiculo", "veiculo__proprietario_atual")
-        .prefetch_related("veiculo__fotos")
+        .select_related("veiculo", "veiculo__proprietario_atual", "anunciante")
+        .prefetch_related("veiculo__fotos", "mensagens", "mensagens__autor")
         .order_by("-data_criacao")
     )
     favoritos = list(
@@ -52,6 +53,7 @@ def comprador_interesses(request):
     for lead in interesses:
         lead.veiculo.foto_exibicao = _foto_exibicao(lead.veiculo)
         lead.veiculo.anunciante_nome = _anunciante(lead.veiculo)
+        lead.form_mensagem = LeadMensagemForm(auto_id=False)
     for favorito in favoritos:
         favorito.veiculo.foto_exibicao = _foto_exibicao(favorito.veiculo)
         favorito.veiculo.anunciante_nome = _anunciante(favorito.veiculo)

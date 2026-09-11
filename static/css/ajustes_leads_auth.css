@@ -1,0 +1,656 @@
+/* PontoCar — resposta de interesses + refinamento de autenticação */
+
+/* ---------- Login / cadastro ---------- */
+.auth-shell-enhanced,
+.auth-shell {
+  background:
+    radial-gradient(circle at 8% 10%, rgba(62, 189, 82, .10), transparent 28%),
+    linear-gradient(135deg, #eef4f8 0%, #f8fafc 52%, #e9f0f6 100%);
+}
+
+.auth-wrap-enhanced,
+.auth-wrap {
+  border: 1px solid #c9d5e2;
+  box-shadow: 0 28px 70px -34px rgba(8, 24, 43, .45);
+}
+
+.auth-visual-enhanced,
+.auth-visual {
+  background:
+    linear-gradient(160deg, rgba(16, 47, 82, .98), rgba(8, 23, 40, 1));
+}
+
+.auth-form-side-enhanced,
+.auth-form-side {
+  background: #fbfcfe;
+}
+
+.auth-form-side .form-group label {
+  color: #10243b;
+  font-weight: 700;
+}
+
+.auth-form-side .form-control {
+  min-height: 48px;
+  border: 1.5px solid #9fb1c5;
+  background: #edf3fa;
+  color: #07192d;
+  font-weight: 500;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7);
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.auth-form-side .form-control::placeholder {
+  color: #65768a;
+  opacity: 1;
+}
+
+.auth-form-side .form-control:hover {
+  border-color: #6e849c;
+  background: #f4f7fb;
+}
+
+.auth-form-side .form-control:focus {
+  border-color: var(--green-500);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(62, 189, 82, .12);
+}
+
+.auth-access-note {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: -8px 0 22px;
+  padding: 12px 14px;
+  border: 1px solid #c7d5e4;
+  border-radius: 11px;
+  background: #edf3f8;
+}
+
+.auth-access-icon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  flex: 0 0 30px;
+  border-radius: 50%;
+  background: var(--green-500);
+  color: #05220c;
+  font-weight: 900;
+}
+
+.auth-access-note strong,
+.auth-access-note span {
+  display: block;
+}
+
+.auth-access-note strong {
+  color: var(--navy-900);
+  font-size: 12.5px;
+}
+
+.auth-access-note div > span {
+  margin-top: 2px;
+  color: #53667a;
+  font-size: 11.5px;
+}
+
+.role-card-account {
+  border-color: #aebed0;
+  background: #edf3f8;
+}
+
+.role-card-account:hover {
+  border-color: #65809b;
+  background: #f7f9fc;
+}
+
+.role-card-account.is-selected {
+  border-color: #2eae45;
+  background: #e0f4e4;
+  box-shadow: 0 0 0 3px rgba(62, 189, 82, .10);
+}
+
+.role-card-account input,
+.auth-check-row input,
+.auth-terms input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--green-600);
+}
+
+.auth-check-row,
+.auth-terms {
+  padding: 11px 12px;
+  border: 1px solid #d2dde8;
+  border-radius: 10px;
+  background: #f3f6f9;
+  color: #405367;
+}
+
+.auth-main-submit {
+  min-height: 48px;
+  font-weight: 800;
+  box-shadow: 0 10px 22px -14px rgba(31, 142, 50, .7);
+}
+
+/* ---------- Caixa do próprio anúncio ---------- */
+.vehicle-owner-notice {
+  padding: 22px;
+  border: 1px solid #b8c9da;
+  border-radius: 14px;
+  background: #eaf0f6;
+}
+
+.vehicle-owner-notice .owner-notice-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  margin-bottom: 13px;
+  border-radius: 11px;
+  background: var(--navy-900);
+  color: #fff;
+  font-weight: 800;
+}
+
+.vehicle-owner-notice h2 {
+  margin: 0 0 7px;
+  font-size: 18px;
+}
+
+.vehicle-owner-notice p {
+  margin: 0 0 16px;
+  color: #526579;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.vehicle-owner-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ---------- Caixa de entrada de Leads ---------- */
+.lead-tabs {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.lead-inbox {
+  display: grid;
+  gap: 14px;
+}
+
+.lead-inbox-card {
+  overflow: visible;
+  border: 1px solid #b7c7d8;
+  border-radius: 14px;
+  background: #eef3f8;
+  box-shadow: 0 10px 28px -24px rgba(9, 29, 50, .55);
+}
+
+.lead-inbox-top {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.35fr) minmax(180px, .75fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid #cbd7e3;
+}
+
+.lead-person {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.lead-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  flex: 0 0 42px;
+  border-radius: 50%;
+  background: var(--navy-900);
+  color: #fff;
+  font-weight: 800;
+}
+
+.lead-kicker,
+.lead-vehicle-summary > span,
+.lead-message-block > span,
+.lead-reply-block > span {
+  display: block;
+  color: #587086;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+.lead-person h3 {
+  margin: 2px 0 2px;
+  font-size: 14.5px;
+}
+
+.lead-person p,
+.lead-vehicle-summary small,
+.lead-status-summary small {
+  margin: 0;
+  color: #5c6e80;
+  font-size: 11.5px;
+}
+
+.lead-vehicle-summary strong {
+  display: block;
+  margin: 3px 0 2px;
+  color: var(--navy-900);
+  font-size: 13px;
+}
+
+.lead-status-summary {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+
+.lead-message-block,
+.lead-reply-block {
+  margin: 14px 20px 0;
+  padding: 14px 16px;
+  border-radius: 11px;
+  border: 1px solid #ced9e4;
+  background: #fff;
+}
+
+.lead-message-block p,
+.lead-reply-block p {
+  margin: 5px 0 0;
+  color: #24384d;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.lead-reply-block {
+  border-color: #b5dfbd;
+  background: #eaf8ed;
+}
+
+.lead-inbox-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 14px 20px 18px;
+}
+
+.lead-reply-details {
+  position: relative;
+  min-width: 160px;
+}
+
+.lead-reply-details > summary {
+  list-style: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.lead-reply-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lead-reply-details[open] {
+  width: min(620px, 100%);
+}
+
+.lead-reply-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 10px;
+  padding: 16px;
+  border: 1px solid #9eb2c6;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 18px 42px -28px rgba(5, 25, 47, .55);
+}
+
+.lead-reply-form textarea.form-control {
+  min-height: 105px;
+}
+
+.lead-reply-footer {
+  display: grid;
+  grid-template-columns: minmax(170px, .75fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.lead-reply-footer .form-group {
+  margin: 0;
+}
+
+.lead-anonymous-warning {
+  padding: 10px 12px;
+  border: 1px solid #e3cf8d;
+  border-radius: 9px;
+  background: #fff7db;
+  color: #735b12;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.lead-empty-state {
+  border: 1px solid #c2cfdd;
+  border-radius: 14px;
+  background: #eef3f8;
+}
+
+/* ---------- Resposta vista pelo interessado ---------- */
+.interest-original-message,
+.interest-seller-reply {
+  margin: 12px 0;
+  padding: 11px 12px;
+  border-radius: 9px;
+  background: #edf2f7;
+}
+
+.interest-original-message strong,
+.interest-seller-reply strong {
+  display: block;
+  color: var(--navy-900);
+  font-size: 11.5px;
+}
+
+.interest-original-message p,
+.interest-seller-reply p {
+  margin: 4px 0 0;
+  color: #4c6074;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.interest-seller-reply {
+  border: 1px solid #afe0b8;
+  background: #e9f8ec;
+}
+
+.interest-seller-reply small {
+  display: block;
+  margin-top: 6px;
+  color: #4d6a52;
+  font-size: 10.5px;
+}
+
+@media (max-width: 900px) {
+  .lead-inbox-top {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lead-status-summary {
+    grid-column: 1 / -1;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    justify-items: start;
+  }
+}
+
+@media (max-width: 700px) {
+  .lead-inbox-top {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .lead-status-summary {
+    grid-column: auto;
+    grid-auto-flow: row;
+    justify-content: start;
+    justify-items: start;
+  }
+
+  .lead-inbox-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .lead-inbox-actions > .btn,
+  .lead-reply-details,
+  .lead-reply-details > summary {
+    width: 100%;
+  }
+
+  .lead-reply-footer,
+  .vehicle-owner-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   Conversa bidirecional de interesses
+   ========================================================= */
+.lead-conversation {
+  margin: 14px 20px 0;
+  padding: 16px;
+  border: 1px solid #c3d0de;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.lead-conversation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.lead-conversation-heading strong {
+  color: var(--navy-900);
+  font-size: 13px;
+}
+
+.lead-conversation-heading span {
+  color: #66788b;
+  font-size: 10.5px;
+}
+
+.lead-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 2px 3px 4px;
+  scrollbar-width: thin;
+}
+
+.lead-bubble {
+  width: fit-content;
+  max-width: min(78%, 680px);
+  padding: 10px 12px;
+  border: 1px solid #cad5e1;
+  border-radius: 12px 12px 12px 4px;
+  background: #fff;
+}
+
+.lead-bubble.is-mine {
+  align-self: flex-end;
+  border-color: #a9dcb2;
+  border-radius: 12px 12px 4px 12px;
+  background: #e8f7eb;
+}
+
+.lead-bubble.is-other {
+  align-self: flex-start;
+}
+
+.lead-bubble-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.lead-bubble-meta strong {
+  color: #17314b;
+  font-size: 10.5px;
+}
+
+.lead-bubble-meta span {
+  color: #718195;
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.lead-bubble p {
+  margin: 0;
+  color: #2b4055;
+  font-size: 12px;
+  line-height: 1.48;
+}
+
+.buyer-interest-list {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.buyer-conversation-card {
+  display: grid;
+  grid-template-columns: 285px minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid #b8c8d9;
+  border-radius: 15px;
+  background: #eef3f8;
+  box-shadow: 0 12px 30px -25px rgba(7, 29, 52, .55);
+}
+
+.buyer-conversation-vehicle {
+  padding: 16px;
+  border-right: 1px solid #c6d3df;
+  background: #e6edf4;
+}
+
+.buyer-conversation-photo {
+  height: 150px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #dfe7ef;
+}
+
+.buyer-conversation-photo img,
+.buyer-conversation-photo > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.buyer-conversation-summary {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+  padding-top: 12px;
+}
+
+.buyer-conversation-summary h3 {
+  margin: 0;
+  color: var(--navy-900);
+  font-size: 15px;
+}
+
+.buyer-conversation-summary .price {
+  font-size: 16px;
+}
+
+.buyer-conversation-summary p {
+  margin: 0;
+  color: #64768a;
+  font-size: 11px;
+}
+
+.buyer-conversation-main {
+  min-width: 0;
+  padding: 18px;
+  background: #f7f9fc;
+}
+
+.buyer-thread {
+  min-height: 80px;
+  max-height: 330px;
+  padding: 4px 2px 12px;
+}
+
+.buyer-reply-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #d3dde7;
+}
+
+.buyer-reply-form label {
+  color: #16304a;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.buyer-reply-form textarea.form-control {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.buyer-reply-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.buyer-reply-actions small {
+  color: #677a8d;
+  font-size: 10.5px;
+}
+
+@media (max-width: 900px) {
+  .buyer-conversation-card {
+    grid-template-columns: 1fr;
+  }
+  .buyer-conversation-vehicle {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 14px;
+    border-right: 0;
+    border-bottom: 1px solid #c6d3df;
+  }
+  .buyer-conversation-summary {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .lead-conversation {
+    margin-left: 12px;
+    margin-right: 12px;
+    padding: 12px;
+  }
+  .lead-conversation-heading,
+  .buyer-reply-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .lead-bubble {
+    max-width: 92%;
+  }
+  .buyer-conversation-vehicle {
+    grid-template-columns: 1fr;
+  }
+  .buyer-conversation-photo {
+    height: 190px;
+  }
+  .buyer-reply-actions .btn {
+    width: 100%;
+  }
+}

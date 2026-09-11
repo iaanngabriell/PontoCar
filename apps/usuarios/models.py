@@ -5,8 +5,13 @@ from django.db import models
 
 
 class Usuario(AbstractUser):
+    """
+    Usuário autenticável do PontoCar.
 
-    # PK trocada de BigAutoField (padrão do AbstractUser) para UUID.
+    `tipo_usuario` agora representa o tipo da conta, não o papel de compra/venda.
+    Uma conta pessoal pode comprar e vender com a mesma identidade.
+    """
+
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -14,9 +19,8 @@ class Usuario(AbstractUser):
     )
 
     class TipoUsuario(models.TextChoices):
-        COMPRADOR = "COMPRADOR", "Comprador"
-        VENDEDOR = "VENDEDOR", "Vendedor"
-        EMPRESA = "EMPRESA", "Representante de empresa"
+        USUARIO = "USUARIO", "Conta pessoal"
+        EMPRESA = "EMPRESA", "Conta empresarial"
         ADMINISTRADOR = "ADMINISTRADOR", "Administrador"
 
     email = models.EmailField(unique=True)
@@ -47,11 +51,19 @@ class Usuario(AbstractUser):
     tipo_usuario = models.CharField(
         max_length=20,
         choices=TipoUsuario.choices,
-        default=TipoUsuario.COMPRADOR,
+        default=TipoUsuario.USUARIO,
     )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
+
+    @property
+    def eh_conta_pessoal(self):
+        return self.tipo_usuario == self.TipoUsuario.USUARIO
+
+    @property
+    def eh_conta_empresarial(self):
+        return self.tipo_usuario == self.TipoUsuario.EMPRESA
 
     @staticmethod
     def gerar_username(email):

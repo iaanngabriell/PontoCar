@@ -1,8 +1,91 @@
 {% extends "base_dashboard.html" %}
-{% block title %}Leads recebidos · PontoCar{% endblock %}
-{% block dashboard_title %}Leads recebidos{% endblock %}
-{% block dashboard_subtitle %}Acompanhe pessoas interessadas nos seus veículos{% endblock %}
+{% block title %}Interesses recebidos · PontoCar{% endblock %}
+{% block dashboard_title %}Interesses recebidos{% endblock %}
+{% block dashboard_subtitle %}Converse com as pessoas interessadas nos seus veículos{% endblock %}
 {% block dashboard_content %}
-<div class="tabs" style="margin-bottom:20px"><a href="{% url 'leads:vendedor_leads' %}" class="{% if not status_atual %}active{% endif %}">Todos</a>{% for valor, rotulo in status_choices %}<a href="?status={{ valor }}" class="{% if status_atual == valor %}active{% endif %}">{{ rotulo }}</a>{% endfor %}</div>
-<div class="panel"><div class="panel-body"><table class="data-table"><thead><tr><th>Interessado</th><th>Veículo</th><th>Contato</th><th>Status</th><th>Recebido</th></tr></thead><tbody>{% for lead in leads %}<tr><td><div class="cell-title">{{ lead.nome }}</div><div class="cell-sub">{{ lead.mensagem|truncatechars:70 }}</div></td><td>{{ lead.veiculo.marca }} {{ lead.veiculo.modelo }}<div class="cell-sub">{{ lead.veiculo.placa }}</div></td><td>{{ lead.email }}<div class="cell-sub">{{ lead.telefone }}</div></td><td><span class="badge {% if lead.status == 'NOVO' %}badge-blue{% elif lead.status == 'CONVERTIDO' %}badge-green{% elif lead.status == 'PERDIDO' %}badge-red{% else %}badge-amber{% endif %}">{{ lead.get_status_display }}</span></td><td>{{ lead.data_criacao|date:'d/m/Y H:i' }}</td></tr>{% empty %}<tr><td colspan="5">Nenhum lead recebido.</td></tr>{% endfor %}</tbody></table></div></div>
+<div class="tabs lead-tabs">
+  <a href="{% url 'leads:vendedor_leads' %}" class="{% if not status_atual %}active{% endif %}">Todos</a>
+  {% for valor, rotulo in status_choices %}
+    <a href="?status={{ valor }}" class="{% if status_atual == valor %}active{% endif %}">{{ rotulo }}</a>
+  {% endfor %}
+</div>
+
+<div class="lead-inbox">
+  {% for lead in leads %}
+    <article class="lead-inbox-card" id="lead-{{ lead.id }}">
+      <div class="lead-inbox-top">
+        <div class="lead-person">
+          <div class="lead-avatar">{{ lead.nome|first|upper }}</div>
+          <div>
+            <span class="lead-kicker">Interessado</span>
+            <h3>{{ lead.nome }}</h3>
+            <p>{{ lead.email }} · {{ lead.telefone }}</p>
+          </div>
+        </div>
+        <div class="lead-vehicle-summary">
+          <span>Veículo</span>
+          <strong>{{ lead.veiculo.marca }} {{ lead.veiculo.modelo }}</strong>
+          <small>{{ lead.veiculo.placa }}</small>
+        </div>
+        <div class="lead-status-summary">
+          <span class="badge {% if lead.status == 'NOVO' %}badge-blue{% elif lead.status == 'CONVERTIDO' %}badge-green{% elif lead.status == 'PERDIDO' %}badge-red{% else %}badge-amber{% endif %}">{{ lead.get_status_display }}</span>
+          <small>{{ lead.data_criacao|date:'d/m/Y H:i' }}</small>
+        </div>
+      </div>
+
+      <div class="lead-conversation">
+        <div class="lead-conversation-heading">
+          <strong>Conversa</strong>
+          <span>{% if lead.comprador_id %}Mensagens pela plataforma{% else %}Interesse enviado sem conta{% endif %}</span>
+        </div>
+        <div class="lead-thread">
+          {% for msg in lead.mensagens.all %}
+            <div class="lead-bubble {% if msg.tipo_autor == 'ANUNCIANTE' %}is-mine{% else %}is-other{% endif %}">
+              <div class="lead-bubble-meta">
+                <strong>{% if msg.tipo_autor == 'ANUNCIANTE' %}Você{% else %}{{ lead.nome }}{% endif %}</strong>
+                <span>{{ msg.criada_em|date:'d/m/Y H:i' }}</span>
+              </div>
+              <p>{{ msg.texto|linebreaksbr }}</p>
+            </div>
+          {% empty %}
+            <div class="lead-bubble is-other">
+              <div class="lead-bubble-meta"><strong>{{ lead.nome }}</strong><span>{{ lead.data_criacao|date:'d/m/Y H:i' }}</span></div>
+              <p>{{ lead.mensagem|default:"O interessado não escreveu uma mensagem adicional." }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="lead-inbox-actions">
+        <a href="{% url 'veiculos:detalhes' lead.veiculo.id %}" class="btn btn-outline-dark btn-sm">Ver anúncio</a>
+        <details class="lead-reply-details">
+          <summary class="btn btn-primary btn-sm">Responder</summary>
+          <form method="post" action="{% url 'leads:responder' lead.id %}" class="lead-reply-form">
+            {% csrf_token %}
+            {% if not lead.comprador_id %}
+              <div class="lead-anonymous-warning">Este interesse foi enviado sem conta. A mensagem ficará registrada, mas o visitante não receberá notificação interna. Use também o e-mail ou telefone informado.</div>
+            {% endif %}
+            <div class="form-group">
+              <label>{{ lead.form_resposta.resposta.label }}</label>
+              {{ lead.form_resposta.resposta }}
+            </div>
+            <div class="lead-reply-footer">
+              <div class="form-group">
+                <label>{{ lead.form_resposta.status.label }}</label>
+                {{ lead.form_resposta.status }}
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar mensagem</button>
+            </div>
+          </form>
+        </details>
+      </div>
+    </article>
+  {% empty %}
+    <div class="empty-state lead-empty-state">
+      <h3>Nenhum interesse recebido</h3>
+      <p>Quando alguém demonstrar interesse em um veículo seu, a conversa aparecerá aqui.</p>
+      <a href="{% url 'veiculos:vendedor_lista' %}" class="btn btn-outline-dark">Ver meus veículos</a>
+    </div>
+  {% endfor %}
+</div>
 {% endblock %}

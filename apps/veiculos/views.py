@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 
 from apps.empresas.models import Empresa, VerificacaoEmpresa
 from apps.favoritos.models import Favorito
-from apps.notificacoes.services import notificar_novo_interesse
+from apps.leads.services import registrar_interesse
 
 from . import services
 from .forms import LeadInteresseForm, VeiculoForm
@@ -41,11 +41,13 @@ def _empresa_do_anunciante(veiculo):
 
 
 def _usuario_pode_vender(usuario):
-    return usuario.is_authenticated and (
-        usuario.is_staff
-        or usuario.is_superuser
-        or usuario.tipo_usuario in {"VENDEDOR", "EMPRESA", "ADMINISTRADOR"}
-    )
+    """
+    Comprar e vender são capacidades da mesma conta.
+
+    Qualquer usuário autenticado pode anunciar. A propriedade do veículo
+    continua sendo validada individualmente nas views de edição/ação.
+    """
+    return usuario.is_authenticated
 
 
 def _usuario_admin(usuario):
@@ -165,6 +167,11 @@ def detalhes(request, veiculo_id):
     fotos = list(veiculo.fotos.all())
     foto_principal = next((foto for foto in fotos if foto.principal), fotos[0] if fotos else None)
 
+    eh_proprietario = bool(
+        request.user.is_authenticated
+        and veiculo.proprietario_atual_id == request.user.id
+    )
+
     initial = {
         "mensagem": f"Olá! Tenho interesse neste {veiculo.marca} {veiculo.modelo} e gostaria de mais informações."
     }
@@ -176,15 +183,26 @@ def detalhes(request, veiculo_id):
                 "telefone": request.user.telefone,
             }
         )
-    form = LeadInteresseForm(request.POST or None, initial=initial)
-    if request.method == "POST" and form.is_valid():
-        lead = form.save(commit=False)
-        lead.veiculo = veiculo
-        lead.comprador = request.user if request.user.is_authenticated else None
-        lead.save()
-        notificar_novo_interesse(lead=lead)
-        messages.success(request, "Seu interesse foi enviado ao anunciante.")
-        return redirect("veiculos:detalhes", veiculo_id=veiculo.id)
+
+    form = None if eh_proprietario else LeadInteresseForm(request.POST or None, initial=initial)
+
+    if request.method == "POST":
+        if eh_proprietario:
+            messages.error(request, "Você não pode enviar interesse para o seu próprio anúncio.")
+            return redirect("veiculos:detalhes", veiculo_id=veiculo.id)
+
+        if form is not None and form.is_valid():
+            try:
+                registrar_interesse(
+                    veiculo=veiculo,
+                    comprador=request.user if request.user.is_authenticated else None,
+                    dados=form.cleaned_data,
+                )
+            except ValidationError as exc:
+                form.add_error(None, exc.messages[0] if exc.messages else "Não foi possível enviar o interesse.")
+            else:
+                messages.success(request, "Seu interesse foi enviado ao anunciante.")
+                return redirect("veiculos:detalhes", veiculo_id=veiculo.id)
 
     semelhantes = list(
         Veiculo.objects.filter(
@@ -199,7 +217,7 @@ def detalhes(request, veiculo_id):
         item.foto_exibicao = _foto_exibicao(item)
 
     favorito = False
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not eh_proprietario:
         favorito = Favorito.objects.filter(usuario=request.user, veiculo=veiculo).exists()
 
     return render(
@@ -214,6 +232,7 @@ def detalhes(request, veiculo_id):
             "form": form,
             "semelhantes": semelhantes,
             "favorito": favorito,
+            "eh_proprietario": eh_proprietario,
         },
     )
 

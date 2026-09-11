@@ -7,6 +7,7 @@ from apps.core.models import BaseModel
 class Notificacao(BaseModel):
     class Tipo(models.TextChoices):
         NOVO_INTERESSE = "NOVO_INTERESSE", "Novo interesse"
+        RESPOSTA_INTERESSE = "RESPOSTA_INTERESSE", "Resposta ao interesse"
         NOVA_PROPOSTA = "NOVA_PROPOSTA", "Nova proposta"
         PROPOSTA_ATUALIZADA = "PROPOSTA_ATUALIZADA", "Proposta atualizada"
 

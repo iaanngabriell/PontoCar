@@ -2,13 +2,70 @@
 {% load pontocar_tags %}
 {% block title %}Meus interesses · PontoCar{% endblock %}
 {% block dashboard_title %}Meus interesses{% endblock %}
-{% block dashboard_subtitle %}Acompanhe os veículos em que você demonstrou interesse e os seus favoritos{% endblock %}
+{% block dashboard_subtitle %}Acompanhe seus interesses, converse com anunciantes e consulte favoritos{% endblock %}
 {% block dashboard_content %}
 <div class="tabs"><a href="?aba=interesses" class="{% if aba != 'favoritos' %}active{% endif %}">Interesses enviados ({{ interesses_total }})</a><a href="?aba=favoritos" class="{% if aba == 'favoritos' %}active{% endif %}">Favoritos ({{ favoritos_total }})</a></div>
 
 {% if aba == 'favoritos' %}
-  {% if favoritos %}<div class="vehicle-grid">{% for favorito in favoritos %}{% with veiculo=favorito.veiculo %}<article class="vehicle-card"><div class="vehicle-photo">{% if veiculo.foto_exibicao %}<img src="{{ veiculo.foto_exibicao.imagem.url }}" alt="{{ veiculo.modelo }}">{% else %}{% include "components/_vehicle_placeholder.html" %}{% endif %}</div><div class="vehicle-body"><div class="price">{{ veiculo.preco|brl }}</div><h4>{{ veiculo.marca }} {{ veiculo.modelo }} {{ veiculo.versao|default:"" }}</h4><div class="vehicle-meta"><span>{{ veiculo.ano_modelo }}</span><span>{{ veiculo.quilometragem|numero_br }} km</span></div><div class="vehicle-footer"><span>{{ veiculo.anunciante_nome }}</span><div class="row-actions"><a href="{% url 'veiculos:detalhes' veiculo.id %}" class="btn btn-outline-dark btn-sm">Ver anúncio</a><form method="post" action="{% url 'favoritos:alternar' veiculo.id %}" class="inline-form">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn btn-ghost-danger btn-sm" type="submit">Remover</button></form></div></div></div></article>{% endwith %}{% endfor %}</div>{% else %}<div class="empty-state"><h3>Nenhum favorito ainda</h3><p>Salve veículos no catálogo para encontrá-los aqui.</p><a href="{% url 'veiculos:catalogo' %}" class="btn btn-primary">Explorar catálogo</a></div>{% endif %}
+  {% if favoritos %}
+    <div class="vehicle-grid">
+      {% for favorito in favoritos %}{% with veiculo=favorito.veiculo %}
+        <article class="vehicle-card">
+          <div class="vehicle-photo">{% if veiculo.foto_exibicao %}<img src="{{ veiculo.foto_exibicao.imagem.url }}" alt="{{ veiculo.modelo }}">{% else %}{% include "components/_vehicle_placeholder.html" %}{% endif %}</div>
+          <div class="vehicle-body">
+            <div class="price">{{ veiculo.preco|brl }}</div>
+            <h4>{{ veiculo.marca }} {{ veiculo.modelo }} {{ veiculo.versao|default:"" }}</h4>
+            <div class="vehicle-meta"><span>{{ veiculo.ano_modelo }}</span><span>{{ veiculo.quilometragem|numero_br }} km</span></div>
+            <div class="vehicle-footer"><span>{{ veiculo.anunciante_nome }}</span><div class="row-actions"><a href="{% url 'veiculos:detalhes' veiculo.id %}" class="btn btn-outline-dark btn-sm">Ver anúncio</a><form method="post" action="{% url 'favoritos:alternar' veiculo.id %}" class="inline-form">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn btn-ghost-danger btn-sm" type="submit">Remover</button></form></div></div>
+          </div>
+        </article>
+      {% endwith %}{% endfor %}
+    </div>
+  {% else %}<div class="empty-state"><h3>Nenhum favorito ainda</h3><p>Salve veículos no catálogo para encontrá-los aqui.</p><a href="{% url 'veiculos:catalogo' %}" class="btn btn-primary">Explorar catálogo</a></div>{% endif %}
 {% else %}
-  {% if interesses %}<div class="vehicle-grid">{% for lead in interesses %}{% with veiculo=lead.veiculo %}<article class="vehicle-card"><div class="vehicle-photo">{% if veiculo.foto_exibicao %}<img src="{{ veiculo.foto_exibicao.imagem.url }}" alt="{{ veiculo.modelo }}">{% else %}{% include "components/_vehicle_placeholder.html" %}{% endif %}<span class="badge {% if lead.status == 'CONVERTIDO' %}badge-green{% elif lead.status == 'PERDIDO' %}badge-red{% else %}badge-amber{% endif %}">{{ lead.get_status_display }}</span></div><div class="vehicle-body"><div class="price">{{ veiculo.preco|brl }}</div><h4>{{ veiculo.marca }} {{ veiculo.modelo }} {{ veiculo.versao|default:"" }}</h4><div class="vehicle-meta"><span>{{ veiculo.anunciante_nome }}</span><span>Enviado em {{ lead.data_criacao|date:"d/m/Y" }}</span></div><div class="vehicle-footer"><span>{{ lead.mensagem|truncatechars:55 }}</span>{% if veiculo.status == 'DISPONIVEL' or veiculo.status == 'RESERVADO' %}<a href="{% url 'veiculos:detalhes' veiculo.id %}" class="btn btn-outline-dark btn-sm">Ver anúncio</a>{% endif %}</div></div></article>{% endwith %}{% endfor %}</div>{% else %}<div class="empty-state"><h3>Nenhum interesse enviado</h3><p>Ao enviar o formulário em um anúncio, ele aparecerá aqui.</p><a href="{% url 'veiculos:catalogo' %}" class="btn btn-primary">Explorar catálogo</a></div>{% endif %}
+  {% if interesses %}
+    <div class="buyer-interest-list">
+      {% for lead in interesses %}{% with veiculo=lead.veiculo %}
+        <article class="buyer-conversation-card" id="lead-{{ lead.id }}">
+          <div class="buyer-conversation-vehicle">
+            <div class="buyer-conversation-photo">{% if veiculo.foto_exibicao %}<img src="{{ veiculo.foto_exibicao.imagem.url }}" alt="{{ veiculo.modelo }}">{% else %}{% include "components/_vehicle_placeholder.html" %}{% endif %}</div>
+            <div class="buyer-conversation-summary">
+              <span class="eyebrow">Seu interesse</span>
+              <h3>{{ veiculo.marca }} {{ veiculo.modelo }} {{ veiculo.versao|default:"" }}</h3>
+              <div class="price">{{ veiculo.preco|brl }}</div>
+              <p>{{ veiculo.anunciante_nome }}</p>
+              <span class="badge {% if lead.status == 'CONVERTIDO' %}badge-green{% elif lead.status == 'PERDIDO' %}badge-red{% elif lead.status == 'NOVO' %}badge-blue{% else %}badge-amber{% endif %}">{{ lead.get_status_display }}</span>
+              {% if veiculo.status == 'DISPONIVEL' or veiculo.status == 'RESERVADO' %}<a href="{% url 'veiculos:detalhes' veiculo.id %}" class="btn btn-outline-dark btn-sm">Ver anúncio</a>{% endif %}
+            </div>
+          </div>
+
+          <div class="buyer-conversation-main">
+            <div class="lead-conversation-heading"><strong>Conversa com o anunciante</strong><span>Enviado em {{ lead.data_criacao|date:'d/m/Y H:i' }}</span></div>
+            <div class="lead-thread buyer-thread">
+              {% for msg in lead.mensagens.all %}
+                <div class="lead-bubble {% if msg.tipo_autor == 'INTERESSADO' %}is-mine{% else %}is-other{% endif %}">
+                  <div class="lead-bubble-meta">
+                    <strong>{% if msg.tipo_autor == 'INTERESSADO' %}Você{% else %}Anunciante{% endif %}</strong>
+                    <span>{{ msg.criada_em|date:'d/m/Y H:i' }}</span>
+                  </div>
+                  <p>{{ msg.texto|linebreaksbr }}</p>
+                </div>
+              {% empty %}
+                <div class="lead-bubble is-mine"><div class="lead-bubble-meta"><strong>Você</strong><span>{{ lead.data_criacao|date:'d/m/Y H:i' }}</span></div><p>{{ lead.mensagem|default:"Sem mensagem adicional." }}</p></div>
+                {% if lead.resposta_anunciante %}<div class="lead-bubble is-other"><div class="lead-bubble-meta"><strong>Anunciante</strong><span>{{ lead.data_resposta|date:'d/m/Y H:i' }}</span></div><p>{{ lead.resposta_anunciante|linebreaksbr }}</p></div>{% endif %}
+              {% endfor %}
+            </div>
+
+            <form method="post" action="{% url 'leads:responder_interessado' lead.id %}" class="buyer-reply-form">
+              {% csrf_token %}
+              <label>{{ lead.form_mensagem.mensagem.label }}</label>
+              {{ lead.form_mensagem.mensagem }}
+              <div class="buyer-reply-actions"><small>O anunciante receberá uma notificação.</small><button type="submit" class="btn btn-primary">Enviar mensagem</button></div>
+            </form>
+          </div>
+        </article>
+      {% endwith %}{% endfor %}
+    </div>
+  {% else %}<div class="empty-state"><h3>Nenhum interesse enviado</h3><p>Ao enviar o formulário em um anúncio, ele aparecerá aqui.</p><a href="{% url 'veiculos:catalogo' %}" class="btn btn-primary">Explorar catálogo</a></div>{% endif %}
 {% endif %}
 {% endblock %}

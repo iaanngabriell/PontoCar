@@ -12,7 +12,9 @@
       <p>Anúncio publicado em {{ veiculo.data_cadastro|date:"d/m/Y" }}</p>
     </div>
 
-    {% if request.user.is_authenticated %}
+    {% if eh_proprietario %}
+      <a href="{% url 'veiculos:vendedor_editar' veiculo.id %}" class="btn btn-outline-light btn-sm">Editar meu anúncio</a>
+    {% elif request.user.is_authenticated %}
       <form method="post" action="{% url 'favoritos:alternar' veiculo.id %}" class="vehicle-detail-favorite-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -128,27 +130,40 @@
           </section>
         {% endif %}
 
-        <section class="vehicle-interest-card">
-          <div class="vehicle-interest-heading">
-            <span class="eyebrow">Fale com o anunciante</span>
-            <h2>Tenho interesse</h2>
-            <p>Envie seus dados e sua mensagem. O anunciante recebe seu interesse pela plataforma.</p>
-          </div>
+        {% if eh_proprietario %}
+          <section class="vehicle-owner-notice">
+            <div class="owner-notice-icon">✓</div>
+            <span class="eyebrow">Seu anúncio</span>
+            <h2>Este veículo é seu</h2>
+            <p>Para manter os interesses confiáveis, você não pode enviar uma manifestação de interesse para o próprio anúncio. Gerencie o veículo ou responda pessoas interessadas pelos atalhos abaixo.</p>
+            <div class="vehicle-owner-actions">
+              <a href="{% url 'veiculos:vendedor_editar' veiculo.id %}" class="btn btn-outline-dark btn-sm">Editar anúncio</a>
+              <a href="{% url 'leads:vendedor_leads' %}" class="btn btn-primary btn-sm">Ver interesses recebidos</a>
+            </div>
+          </section>
+        {% else %}
+          <section class="vehicle-interest-card">
+            <div class="vehicle-interest-heading">
+              <span class="eyebrow">Fale com o anunciante</span>
+              <h2>Tenho interesse</h2>
+              <p>Envie seus dados e sua mensagem. O anunciante recebe seu interesse pela plataforma.</p>
+            </div>
 
-          <form method="post" class="vehicle-interest-form">
-            {% csrf_token %}
-            {% include "components/_form_errors.html" with form=form %}
-            {% for field in form %}
-              <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
-              </div>
-            {% endfor %}
-            <button class="btn btn-primary btn-block" type="submit">Enviar interesse</button>
-          </form>
-          <p class="vehicle-interest-note">Seu contato não é exibido publicamente no anúncio.</p>
-        </section>
+            <form method="post" class="vehicle-interest-form">
+              {% csrf_token %}
+              {% include "components/_form_errors.html" with form=form %}
+              {% for field in form %}
+                <div class="form-group">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+                </div>
+              {% endfor %}
+              <button class="btn btn-primary btn-block" type="submit">Enviar interesse</button>
+            </form>
+            <p class="vehicle-interest-note">Seu contato não é exibido publicamente no anúncio.</p>
+          </section>
+        {% endif %}
       </aside>
     </div>
 

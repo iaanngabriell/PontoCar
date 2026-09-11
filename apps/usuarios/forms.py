@@ -45,10 +45,9 @@ class LoginForm(FormControlMixin, AuthenticationForm):
 
 class UsuarioCadastroForm(FormControlMixin, UserCreationForm):
     tipo_usuario = forms.ChoiceField(
-        label="Quero usar a PontoCar para",
+        label="Tipo de conta",
         choices=(
-            (Usuario.TipoUsuario.COMPRADOR, "Comprar"),
-            (Usuario.TipoUsuario.VENDEDOR, "Vender"),
+            (Usuario.TipoUsuario.USUARIO, "Conta pessoal"),
             (Usuario.TipoUsuario.EMPRESA, "Sou empresa"),
         ),
         widget=forms.RadioSelect,

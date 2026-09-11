@@ -1,40 +1,80 @@
 <aside class="dash-sidebar">
   {% include "components/_brand.html" %}
 
-  <div class="dash-nav-group">
-    <div class="dash-nav-label">Menu</div>
-    <div class="dash-nav">
-      {% if request.user.is_staff or request.user.is_superuser or request.user.tipo_usuario == "ADMINISTRADOR" %}
-        <a href="/gestao/usuarios/"><span>Painel</span></a>
-        <a href="/gestao/moderacao/"><span>Moderação de anúncios</span></a>
-        <a href="/gestao/usuarios/"><span>Usuários</span></a>
-        <a href="/gestao/vendas/"><span>Vendas</span></a>
-      {% elif request.user.tipo_usuario == "EMPRESA" %}
-        <a href="{% url 'empresas:dashboard' %}"><span>Painel</span></a>
-        <a href="{% url 'empresas:cadastro' %}"><span>Dados da empresa</span></a>
-        <a href="/vendedor/veiculos/"><span>Veículos</span></a>
-        <a href="{% url 'servicos:empresa_lista' %}"><span>Meus serviços</span></a>
-        <a href="/vendedor/leads/"><span>Leads recebidos</span></a>
-        <a href="{% url 'empresas:verificacao' %}"><span>Verificação / Selo</span></a>
-      {% elif request.user.tipo_usuario == "VENDEDOR" %}
-        <a href="/vendedor/veiculos/"><span>Painel</span></a>
-        <a href="/vendedor/veiculos/"><span>Meus veículos</span></a>
-        <a href="/vendedor/veiculos/novo/"><span>Novo anúncio</span></a>
-        <a href="/vendedor/leads/"><span>Leads recebidos</span></a>
-        <a href="{% url 'usuarios:perfil' %}"><span>Meu perfil</span></a>
-      {% else %}
-        <a href="/comprador/interesses/"><span>Painel</span></a>
-        <a href="/comprador/interesses/"><span>Meus interesses</span></a>
-        <a href="/comprador/cotacoes/"><span>Minhas cotações</span></a>
-        <a href="/comprador/compras/"><span>Minhas compras</span></a>
-        <a href="{% url 'usuarios:perfil' %}"><span>Meu perfil</span></a>
-      {% endif %}
+  {% if request.user.is_staff or request.user.is_superuser or request.user.tipo_usuario == "ADMINISTRADOR" %}
+    <div class="dash-nav-group">
+      <div class="dash-nav-label">Administração</div>
+      <div class="dash-nav">
+        <a href="{% url 'usuarios:admin_usuarios' %}"><span>Painel</span></a>
+        <a href="{% url 'veiculos:admin_moderacao' %}"><span>Moderação de anúncios</span></a>
+        <a href="{% url 'usuarios:admin_usuarios' %}"><span>Usuários</span></a>
+        <a href="{% url 'vendas:admin_vendas' %}"><span>Vendas</span></a>
+      </div>
     </div>
-  </div>
+
+  {% elif request.user.tipo_usuario == "EMPRESA" %}
+    <div class="dash-nav-group">
+      <div class="dash-nav-label">Empresa</div>
+      <div class="dash-nav">
+        <a href="{% url 'empresas:dashboard' %}"><span>Painel da empresa</span></a>
+        <a href="{% url 'empresas:cadastro' %}"><span>Dados da empresa</span></a>
+        <a href="{% url 'servicos:empresa_lista' %}"><span>Meus serviços</span></a>
+        <a href="{% url 'empresas:verificacao' %}"><span>Verificação / Selo</span></a>
+      </div>
+    </div>
+
+    <div class="dash-nav-group">
+      <div class="dash-nav-label">Comprar</div>
+      <div class="dash-nav">
+        <a href="{% url 'veiculos:catalogo' %}"><span>Explorar veículos</span></a>
+        <a href="{% url 'favoritos:interesses' %}"><span>Favoritos e interesses</span></a>
+        <a href="{% url 'vendas:compras' %}"><span>Minhas compras</span></a>
+        <a href="{% url 'seguros:minhas_cotacoes' %}"><span>Meus seguros</span></a>
+      </div>
+    </div>
+
+    <div class="dash-nav-group">
+      <div class="dash-nav-label">Vender</div>
+      <div class="dash-nav">
+        <a href="{% url 'veiculos:vendedor_lista' %}"><span>Meus veículos</span></a>
+        <a href="{% url 'veiculos:vendedor_novo' %}"><span>Novo anúncio</span></a>
+        <a href="{% url 'leads:vendedor_leads' %}"><span>Interesses recebidos</span></a>
+      </div>
+    </div>
+
+  {% else %}
+    <div class="dash-nav-group">
+      <div class="dash-nav-label">Minha conta</div>
+      <div class="dash-nav">
+        <a href="{% url 'usuarios:painel' %}"><span>Visão geral</span></a>
+      </div>
+    </div>
+
+    <div class="dash-nav-group">
+      <div class="dash-nav-label">Comprar</div>
+      <div class="dash-nav">
+        <a href="{% url 'veiculos:catalogo' %}"><span>Explorar veículos</span></a>
+        <a href="{% url 'favoritos:interesses' %}"><span>Favoritos e interesses</span></a>
+        <a href="{% url 'vendas:compras' %}"><span>Minhas compras</span></a>
+        <a href="{% url 'seguros:minhas_cotacoes' %}"><span>Meus seguros</span></a>
+      </div>
+    </div>
+
+    <div class="dash-nav-group">
+      <div class="dash-nav-label">Vender</div>
+      <div class="dash-nav">
+        <a href="{% url 'veiculos:vendedor_lista' %}"><span>Meus veículos</span></a>
+        <a href="{% url 'veiculos:vendedor_novo' %}"><span>Novo anúncio</span></a>
+        <a href="{% url 'leads:vendedor_leads' %}"><span>Interesses recebidos</span></a>
+      </div>
+    </div>
+  {% endif %}
 
   <div class="dash-nav-group">
     <div class="dash-nav-label">Conta</div>
     <div class="dash-nav">
+      <a href="{% url 'notificacoes:lista' %}"><span>Notificações</span></a>
+      <a href="{% url 'usuarios:perfil' %}"><span>Meu perfil</span></a>
       <a href="{% url 'core:index' %}"><span>Ver site público</span></a>
       <form method="post" action="{% url 'usuarios:logout' %}" class="dash-logout-form">
         {% csrf_token %}
