@@ -2,6 +2,7 @@ from urllib.parse import urlparse
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -13,7 +14,7 @@ from apps.leads.models import Lead
 from apps.veiculos.models import Veiculo
 
 from .models import Favorito
-from .services import alternar_favorito
+from .services import STATUS_FAVORITAVEIS, alternar_favorito
 
 
 def _foto_exibicao(veiculo):
@@ -44,7 +45,10 @@ def comprador_interesses(request):
         .order_by("-data_criacao")
     )
     favoritos = list(
-        Favorito.objects.filter(usuario=request.user)
+        Favorito.objects.filter(
+            usuario=request.user,
+            veiculo__status__in=STATUS_FAVORITAVEIS,
+        )
         .select_related("veiculo", "veiculo__proprietario_atual")
         .prefetch_related("veiculo__fotos")
         .order_by("-data_criacao")
@@ -74,8 +78,19 @@ def comprador_interesses(request):
 @login_required
 @require_POST
 def alternar(request, veiculo_id):
-    veiculo = get_object_or_404(Veiculo, id=veiculo_id)
-    ativo = alternar_favorito(usuario=request.user, veiculo=veiculo)
+    veiculo = get_object_or_404(
+        Veiculo,
+        id=veiculo_id,
+        status__in=STATUS_FAVORITAVEIS,
+    )
+
+    try:
+        ativo = alternar_favorito(usuario=request.user, veiculo=veiculo)
+    except ValidationError as exc:
+        mensagem = exc.messages[0] if exc.messages else "Não foi possível alterar este favorito."
+        messages.error(request, mensagem)
+        return redirect(reverse("veiculos:detalhes", kwargs={"veiculo_id": veiculo.id}))
+
     messages.success(request, "Veículo adicionado aos favoritos." if ativo else "Veículo removido dos favoritos.")
 
     proximo = request.POST.get("next", "")
