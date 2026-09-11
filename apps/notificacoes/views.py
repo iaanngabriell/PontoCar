@@ -1,9 +1,21 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
 from .models import Notificacao
+
+
+def _redirecionar_seguro(request, destino, fallback="notificacoes:lista"):
+    """Aceita apenas destinos locais/permitidos e evita open redirect."""
+    if destino and url_has_allowed_host_and_scheme(
+        url=destino,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return redirect(destino)
+    return redirect(fallback)
 
 
 @login_required
@@ -29,7 +41,7 @@ def abrir(request, notificacao_id):
         notificacao.lida_em = timezone.now()
         notificacao.save(update_fields=("lida", "lida_em"))
 
-    return redirect(notificacao.url or "notificacoes:lista")
+    return _redirecionar_seguro(request, notificacao.url)
 
 
 @login_required
@@ -39,4 +51,4 @@ def marcar_todas_lidas(request):
         lida=True,
         lida_em=timezone.now(),
     )
-    return redirect(request.POST.get("next") or "notificacoes:lista")
+    return _redirecionar_seguro(request, request.POST.get("next", ""))
