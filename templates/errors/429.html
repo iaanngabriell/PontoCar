@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Muitas tentativas | PontoCar{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="error-page" aria-labelledby="error-title">
+  <section class="error-card">
+    <div class="error-code" aria-hidden="true">429</div>
+    <p class="error-kicker">Proteção temporária</p>
+    <h1 id="error-title">{{ titulo|default:"Muitas tentativas detectadas" }}</h1>
+    <p class="error-message">
+      {{ mensagem|default:"Você realizou muitas tentativas em pouco tempo." }}
+    </p>
+
+    {% if retry_after_humano %}
+      <div class="error-wait" role="status">
+        Tente novamente em aproximadamente <strong>{{ retry_after_humano }}</strong>.
+      </div>
+    {% endif %}
+
+    <p class="error-help">
+      Esse bloqueio é temporário e ajuda a proteger sua conta e a PontoCar contra tentativas automatizadas.
+    </p>
+
+    <div class="error-actions">
+      {% if voltar_url %}
+        <a class="btn-primary" href="{{ voltar_url }}">Voltar</a>
+      {% endif %}
+      <a class="btn-secondary" href="{% url 'core:index' %}">Ir para a página inicial</a>
+    </div>
+  </section>
+</main>
+{% endblock %}
