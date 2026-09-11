@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
+from apps.core.upload_validation import validar_imagem_upload
+
 from .models import FotoVeiculo, Veiculo
 
 LIMITE_FOTOS = 8
@@ -12,11 +14,14 @@ def _validar_fotos(arquivos, *, existentes=0):
     if existentes + len(arquivos) > LIMITE_FOTOS:
         raise ValidationError(f"Um veículo pode ter no máximo {LIMITE_FOTOS} fotos.")
     for arquivo in arquivos:
-        if getattr(arquivo, "size", 0) > LIMITE_BYTES_POR_FOTO:
-            raise ValidationError(f"A foto '{arquivo.name}' excede o limite de 8 MB.")
-        content_type = getattr(arquivo, "content_type", "") or ""
-        if content_type and not content_type.startswith("image/"):
-            raise ValidationError(f"O arquivo '{arquivo.name}' não é uma imagem válida.")
+        try:
+            validar_imagem_upload(
+                arquivo,
+                limite_bytes=LIMITE_BYTES_POR_FOTO,
+                descricao=f"foto '{arquivo.name}'",
+            )
+        except ValidationError as exc:
+            raise ValidationError(exc.messages[0]) from exc
     return arquivos
 
 
