@@ -40,6 +40,28 @@ def env_list(nome, padrao=""):
     ]
 
 
+def adicionar_host_e_origem_https(host):
+    host = (host or "").strip()
+    if not host:
+        return
+
+    host = (
+        host.removeprefix("https://")
+        .removeprefix("http://")
+        .rstrip("/")
+    )
+
+    if not host:
+        return
+
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
+
+    origem = f"https://{host}"
+    if origem not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(origem)
+
+
 # ---------------------------------------------------------------------
 # Segurança / ambiente
 # ---------------------------------------------------------------------
@@ -69,24 +91,13 @@ CSRF_TRUSTED_ORIGINS = env_list(
     "CSRF_TRUSTED_ORIGINS"
 )
 
-# A Vercel fornece VERCEL_URL automaticamente para cada deployment.
-vercel_url = os.getenv("VERCEL_URL", "").strip()
-
-if vercel_url:
-    vercel_url = (
-        vercel_url
-        .removeprefix("https://")
-        .removeprefix("http://")
-        .rstrip("/")
-    )
-
-    if vercel_url not in ALLOWED_HOSTS:
-        ALLOWED_HOSTS.append(vercel_url)
-
-    vercel_origin = f"https://{vercel_url}"
-
-    if vercel_origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(vercel_origin)
+# A Vercel fornece estes hosts automaticamente conforme o deployment.
+for nome_variavel in (
+    "VERCEL_URL",
+    "VERCEL_BRANCH_URL",
+    "VERCEL_PROJECT_PRODUCTION_URL",
+):
+    adicionar_host_e_origem_https(os.getenv(nome_variavel, ""))
 
 
 # ---------------------------------------------------------------------
@@ -171,6 +182,16 @@ DATABASES = {
     }
 }
 
+DB_SSLMODE = os.getenv(
+    "DB_SSLMODE",
+    "require" if IS_PRODUCTION else "",
+).strip()
+
+if DB_SSLMODE:
+    DATABASES["default"]["OPTIONS"] = {
+        "sslmode": DB_SSLMODE,
+    }
+
 
 # ---------------------------------------------------------------------
 # Autenticação
@@ -251,7 +272,8 @@ USE_TZ = True
 # Arquivos estáticos e uploads
 # ---------------------------------------------------------------------
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
