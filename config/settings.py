@@ -281,6 +281,96 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+SUPABASE_S3_ENDPOINT = os.getenv("SUPABASE_S3_ENDPOINT", "").strip()
+SUPABASE_S3_REGION = os.getenv("SUPABASE_S3_REGION", "").strip()
+SUPABASE_S3_ACCESS_KEY_ID = os.getenv(
+    "SUPABASE_S3_ACCESS_KEY_ID",
+    "",
+).strip()
+SUPABASE_S3_SECRET_ACCESS_KEY = os.getenv(
+    "SUPABASE_S3_SECRET_ACCESS_KEY",
+    "",
+).strip()
+
+SUPABASE_PUBLIC_BUCKET = os.getenv(
+    "SUPABASE_PUBLIC_BUCKET",
+    "pontocar-public",
+).strip()
+
+SUPABASE_PRIVATE_BUCKET = os.getenv(
+    "SUPABASE_PRIVATE_BUCKET",
+    "pontocar-private",
+).strip()
+
+USAR_SUPABASE_STORAGE = all(
+    (
+        SUPABASE_S3_ENDPOINT,
+        SUPABASE_S3_REGION,
+        SUPABASE_S3_ACCESS_KEY_ID,
+        SUPABASE_S3_SECRET_ACCESS_KEY,
+    )
+)
+
+if USAR_SUPABASE_STORAGE:
+    _supabase_s3_options = {
+        "access_key": SUPABASE_S3_ACCESS_KEY_ID,
+        "secret_key": SUPABASE_S3_SECRET_ACCESS_KEY,
+        "endpoint_url": SUPABASE_S3_ENDPOINT,
+        "region_name": SUPABASE_S3_REGION,
+        "addressing_style": "path",
+        "signature_version": "s3v4",
+        "default_acl": None,
+        "file_overwrite": False,
+    }
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                **_supabase_s3_options,
+                "bucket_name": SUPABASE_PUBLIC_BUCKET,
+                "querystring_auth": False,
+                "custom_domain": (
+                    "qnjtqkbfokfeqnnuuwtt.supabase.co/"
+                    "storage/v1/object/public/"
+                    f"{SUPABASE_PUBLIC_BUCKET}"
+                ),
+            },
+        },
+        "private": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                **_supabase_s3_options,
+                "bucket_name": SUPABASE_PRIVATE_BUCKET,
+                "querystring_auth": True,
+                "querystring_expire": 3600,
+            },
+        },
+        "staticfiles": {
+            "BACKEND": (
+                "django.contrib.staticfiles.storage.StaticFilesStorage"
+            ),
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "private": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+            "OPTIONS": {
+                "location": BASE_DIR / "media_private",
+                "base_url": None,
+            },
+        },
+        "staticfiles": {
+            "BACKEND": (
+                "django.contrib.staticfiles.storage.StaticFilesStorage"
+            ),
+        },
+    }
+
 
 # ---------------------------------------------------------------------
 # Hardening

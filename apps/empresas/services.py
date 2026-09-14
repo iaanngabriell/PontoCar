@@ -1,7 +1,7 @@
 import uuid
 from pathlib import Path
 
-from django.core.files.storage import default_storage
+from django.core.files.storage import storages
 from django.db import transaction
 from django.utils.text import get_valid_filename
 
@@ -27,7 +27,7 @@ def enviar_documento_verificacao(*, empresa, nome_documento, arquivo, observacao
     """Persiste o arquivo e cria um registro de verificação PENDENTE."""
     nome_original = get_valid_filename(Path(arquivo.name).name)
     caminho = f"empresas/documentos/{empresa.id}/{uuid.uuid4().hex}_{nome_original}"
-    caminho_salvo = default_storage.save(caminho, arquivo)
+    caminho_salvo = storages["private"].save(caminho, arquivo)
     return VerificacaoEmpresa.objects.create(
         empresa=empresa,
         nome_documento=nome_documento,
