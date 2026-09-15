@@ -3,9 +3,28 @@ from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
 
 from . import services
-from .models import FotoVeiculo, HistoricoVeiculo, Veiculo
+from .models import FotoVeiculo, HistoricoVeiculo, MarcaVeiculo, ModeloVeiculo, Veiculo
 
 LIMITE_FOTOS = 8
+
+
+@admin.register(MarcaVeiculo)
+class MarcaVeiculoAdmin(admin.ModelAdmin):
+    list_display = ("nome", "codigo_externo", "ativa", "sincronizado_em")
+    list_filter = ("ativa",)
+    search_fields = ("nome", "nome_origem", "codigo_externo")
+    ordering = ("nome",)
+    readonly_fields = ("sincronizado_em",)
+
+
+@admin.register(ModeloVeiculo)
+class ModeloVeiculoAdmin(admin.ModelAdmin):
+    list_display = ("nome", "marca", "codigo_externo", "ativo", "sincronizado_em")
+    list_filter = ("ativo", "marca")
+    search_fields = ("nome", "codigo_externo", "marca__nome")
+    autocomplete_fields = ("marca",)
+    ordering = ("marca__nome", "nome")
+    readonly_fields = ("sincronizado_em",)
 
 
 class FotoVeiculoFormSet(BaseInlineFormSet):
@@ -38,8 +57,9 @@ class VeiculoAdmin(admin.ModelAdmin):
         "placa", "marca", "modelo", "preco", "status",
         "proprietario_atual", "quantidade_proprietarios",
     )
-    list_filter = ("status", "marca", "combustivel", "cambio")
-    search_fields = ("marca", "modelo", "placa")
+    list_filter = ("status", "marca_catalogo", "combustivel", "cambio")
+    search_fields = ("marca", "modelo", "placa", "marca_catalogo__nome", "modelo_catalogo__nome")
+    autocomplete_fields = ("marca_catalogo", "modelo_catalogo")
 
     # Status só muda por ação (mesmo padrão do VendaAdmin) — as transições
     # têm regras próprias (RN09) que vivem em services.py.
