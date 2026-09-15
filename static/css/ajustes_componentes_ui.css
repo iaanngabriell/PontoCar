@@ -1,0 +1,491 @@
+/* =========================================================
+   PontoCar — acabamento de componentes de formulário e cards
+   ========================================================= */
+
+/* ---------- Tom Select / selects ---------- */
+.ts-wrapper {
+  width: 100%;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.ts-wrapper.single .ts-control,
+.ts-wrapper.multi .ts-control {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 42px 10px 14px;
+  border: 1.5px solid #aebdcc;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--navy-900);
+  box-shadow: 0 6px 16px -15px rgba(10, 22, 38, .48);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.ts-wrapper:not(.disabled) .ts-control:hover {
+  border-color: #7f93a7;
+  background: #fbfdff;
+}
+
+.ts-wrapper.focus .ts-control,
+.ts-wrapper.dropdown-active .ts-control {
+  border-color: var(--green-500);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(62, 189, 82, .13);
+}
+
+.ts-wrapper.single .ts-control::after {
+  right: 16px;
+  margin-top: -4px;
+  border-width: 5px 5px 0;
+  border-color: #45596e transparent transparent;
+}
+
+.ts-wrapper.single.dropdown-active .ts-control::after {
+  margin-top: -5px;
+  border-width: 0 5px 5px;
+  border-color: transparent transparent #2f9f45;
+}
+
+.ts-control > input {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--navy-900) !important;
+  font: inherit !important;
+}
+
+.ts-control .item {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--navy-900);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ts-wrapper.disabled .ts-control {
+  background: #dce4ec;
+  border-color: #b7c3d0;
+  color: #536273;
+  opacity: 1;
+}
+
+.ts-dropdown {
+  z-index: 2000;
+  margin-top: 7px;
+  overflow: hidden;
+  padding: 7px;
+  border: 1px solid #b8c6d4;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 20px 48px -24px rgba(6, 21, 38, .48);
+  font-family: inherit;
+  font-size: 13.5px;
+}
+
+.ts-dropdown .ts-dropdown-content {
+  max-height: 280px;
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #afbdca transparent;
+}
+
+.ts-dropdown .option,
+.ts-dropdown .create,
+.ts-dropdown .no-results {
+  margin: 2px 0;
+  padding: 10px 11px;
+  border-radius: 9px;
+  color: #20354a;
+  line-height: 1.35;
+}
+
+.ts-dropdown .option {
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, transform .12s ease;
+}
+
+.ts-dropdown .option:hover,
+.ts-dropdown .active {
+  background: #eaf7ed;
+  color: #145f25;
+}
+
+.ts-dropdown .option.selected {
+  position: relative;
+  padding-right: 34px;
+  background: #dff2e3;
+  color: #0f5420;
+  font-weight: 700;
+}
+
+.ts-dropdown .option.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: var(--green-600);
+  font-weight: 900;
+}
+
+.ts-dropdown .no-results {
+  color: #6c7b8b;
+  text-align: center;
+}
+
+.ts-wrapper.multi .ts-control > div {
+  margin: 0;
+  padding: 5px 9px;
+  border: 1px solid #b7dfbf;
+  border-radius: 999px;
+  background: #e8f7eb;
+  color: #1c6e2c;
+}
+
+.ts-wrapper.multi .ts-control > div .remove {
+  border-left-color: #b7dfbf;
+  color: #1c6e2c;
+}
+
+/* Fallback visual caso o JS/CDN não carregue. */
+select.form-control {
+  border-radius: 12px;
+  background-color: #fff;
+}
+select.form-control option {
+  background: #fff;
+  color: var(--navy-900);
+}
+
+/* ---------- Upload de arquivo ---------- */
+.pc-file-picker {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  padding: 8px 10px;
+  border: 1.5px solid #b9c6d3;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8), 0 5px 14px -15px rgba(10, 22, 38, .5);
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.pc-file-picker:hover,
+.pc-file-picker:focus-within {
+  border-color: #7e92a6;
+  background: #fcfdff;
+}
+
+.pc-file-picker:focus-within {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 4px rgba(62, 189, 82, .12);
+}
+
+.pc-file-picker.has-file {
+  border-color: #9acfa4;
+  background: #f7fcf8;
+}
+
+.pc-file-picker-input {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.pc-file-picker-trigger {
+  min-height: 40px;
+  padding: 9px 15px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--navy-900);
+  color: #fff;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 750;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px -14px rgba(10, 22, 38, .72);
+  transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+
+.pc-file-picker-trigger:hover {
+  background: #183551;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px -14px rgba(10, 22, 38, .82);
+}
+
+.pc-file-picker-trigger:focus-visible {
+  outline: 3px solid rgba(62, 189, 82, .32);
+  outline-offset: 2px;
+}
+
+.pc-file-picker-trigger:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pc-file-picker-name {
+  min-width: 0;
+  overflow: hidden;
+  color: #647386;
+  font-size: 12.5px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pc-file-picker.has-file .pc-file-picker-name {
+  color: #31513a;
+  font-weight: 650;
+}
+
+@media (max-width: 520px) {
+  .pc-file-picker {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .pc-file-picker-trigger { width: 100%; }
+  .pc-file-picker-name { padding: 1px 4px 3px; }
+}
+
+/* ---------- Cards de empresas ---------- */
+.companies-list-section .grid-2 {
+  gap: 20px;
+}
+
+.companies-list-section .company-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 17px;
+  align-items: center;
+  min-height: 154px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid #bdcad8;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbfd 100%);
+  box-shadow: 0 12px 30px -24px rgba(8, 28, 48, .48);
+}
+
+.companies-list-section .company-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green-500), transparent 75%);
+  opacity: .72;
+}
+
+.companies-list-section .company-card:hover {
+  border-color: #8fb2a0;
+  background: #fff;
+}
+
+.companies-list-section .company-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 17px;
+  border: 1px solid #d1dbe5;
+  background: linear-gradient(145deg, #102b47, #091a2c);
+  color: #fff;
+  font-size: 18px;
+  box-shadow: 0 10px 22px -18px rgba(6, 22, 39, .75);
+}
+
+.companies-list-section .company-logo img {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.company-card-content {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+
+.company-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.company-card-title-row h4 {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--navy-900);
+  font-size: 16px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-card-title-row .badge {
+  flex: 0 0 auto;
+}
+
+.companies-list-section .company-card .cat {
+  margin: 0;
+  color: #637487;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.companies-list-section .company-card .small {
+  overflow: hidden;
+  color: #718094;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.companies-list-section .company-card-action {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: #e8f7eb;
+  color: #208139;
+  font-size: 11.5px;
+  font-weight: 800;
+  transition: background .15s ease, color .15s ease, transform .15s ease;
+}
+
+.companies-list-section .company-card:hover .company-card-action {
+  background: #d9f0de;
+  color: #176c29;
+  transform: translateX(2px);
+}
+
+@media (max-width: 520px) {
+  .companies-list-section .company-card {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 13px;
+    min-height: 132px;
+    padding: 16px;
+  }
+  .companies-list-section .company-logo {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    font-size: 15px;
+  }
+  .company-card-title-row { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .company-card-title-row h4 { width: 100%; white-space: normal; }
+}
+
+/* ---------- Empresa dentro dos cards de serviços ---------- */
+.service-card-footer {
+  align-items: center;
+}
+
+.service-company {
+  width: min(100%, 220px);
+  max-width: 55%;
+  text-align: left;
+}
+
+.service-company-link {
+  width: 100%;
+  align-items: stretch;
+  gap: 4px;
+  padding: 10px 11px;
+  border: 1px solid #ccd7e2;
+  border-radius: 12px;
+  background: #f8fbfd;
+  text-align: left;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.service-company-link:hover {
+  border-color: #a8c6b0;
+  background: #fff;
+  box-shadow: 0 10px 22px -20px rgba(8, 28, 48, .52);
+  transform: translateY(-1px);
+}
+
+.service-company-brand {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  justify-content: stretch;
+}
+
+.service-company-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.08);
+  font-size: 12px;
+}
+
+.service-company-brand strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--navy-900);
+  font-size: 12px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.service-company-location {
+  padding-left: 47px;
+  color: #708094;
+  font-size: 10.5px;
+}
+
+.service-company-action {
+  margin: 3px 0 0 47px;
+  color: #25843b;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.service-company-link:hover strong,
+.service-company-link:hover .service-company-action {
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .service-card-footer { align-items: stretch; }
+  .service-company { width: 100%; max-width: none; }
+  .service-company-link { margin-top: 0; }
+}
+
+@media (max-width: 420px) {
+  .service-company-location,
+  .service-company-action { padding-left: 0; margin-left: 0; }
+  .service-company-action { margin-top: 5px; }
+}
