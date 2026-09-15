@@ -50,13 +50,13 @@
             <div class="small service-company">
               <a href="{% url 'empresas:detalhes' servico.empresa.id %}" class="service-company-link">
                 <span class="service-company-brand">
-                  <span class="service-company-logo">{% if servico.empresa.logo %}<img src="{{ servico.empresa.logo.url }}" alt="">{% else %}{{ servico.empresa.nome_fantasia|slice:':1'|upper }}{% endif %}</span>
+                  <span class="service-company-logo">{% if servico.empresa.logo %}<img src="{{ servico.empresa.logo.url }}" alt="Logo de {{ servico.empresa.nome_fantasia }}">{% else %}{{ servico.empresa.nome_fantasia|slice:':1'|upper }}{% endif %}</span>
                   <strong>{{ servico.empresa.nome_fantasia }}</strong>
                 </span>
                 {% if servico.empresa.localizacao %}
-                  <span>{{ servico.empresa.localizacao.cidade }}-{{ servico.empresa.localizacao.estado }}</span>
+                  <span class="service-company-location">{{ servico.empresa.localizacao.cidade }}-{{ servico.empresa.localizacao.estado }}</span>
                 {% endif %}
-                <span class="service-company-action">Ver empresa →</span>
+                <span class="service-company-action">Ver empresa <span aria-hidden="true">→</span></span>
               </a>
             </div>
           </div>
