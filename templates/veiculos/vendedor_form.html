@@ -5,7 +5,7 @@
 {% block dashboard_title %}{% if veiculo %}Editar anúncio{% else %}Novo anúncio{% endif %}{% endblock %}
 {% block dashboard_subtitle %}{% if veiculo %}Atualize as informações e fotos do anúncio{% else %}Cadastre seu veículo de forma rápida e organizada{% endif %}{% endblock %}
 {% block dashboard_content %}
-<form method="post" enctype="multipart/form-data" novalidate class="vehicle-compact-form">
+<form method="post" enctype="multipart/form-data" novalidate class="vehicle-compact-form" data-vehicle-catalog-form data-models-url="{% url 'veiculos:catalogo_modelos_api' %}">
   {% csrf_token %}
   {% include "components/_form_errors.html" with form=form %}
 
@@ -16,14 +16,24 @@
         <div>
           <span class="eyebrow">Dados do veículo</span>
           <h3>Informações principais</h3>
-          <p>Identificação, ano e uso do veículo em um único bloco.</p>
+          <p>Marca e modelo vêm do catálogo FIPE para manter os anúncios padronizados.</p>
         </div>
         <span class="vehicle-form-required-note">* obrigatórios</span>
       </div>
 
       <div class="vehicle-compact-fields cols-3">
-        <div class="form-group"><label for="{{ form.marca.id_for_label }}">{{ form.marca.label }} *</label>{{ form.marca }}{% for error in form.marca.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
-        <div class="form-group"><label for="{{ form.modelo.id_for_label }}">{{ form.modelo.label }} *</label>{{ form.modelo }}{% for error in form.modelo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
+        <div class="form-group">
+          <label for="{{ form.marca_catalogo.id_for_label }}">{{ form.marca_catalogo.label }} *</label>
+          {{ form.marca_catalogo }}
+          {% if form.marca_catalogo.help_text %}<div class="vehicle-field-help">{{ form.marca_catalogo.help_text }}</div>{% endif %}
+          {% for error in form.marca_catalogo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.modelo_catalogo.id_for_label }}">{{ form.modelo_catalogo.label }} *</label>
+          {{ form.modelo_catalogo }}
+          {% if form.modelo_catalogo.help_text %}<div class="vehicle-field-help">{{ form.modelo_catalogo.help_text }}</div>{% endif %}
+          {% for error in form.modelo_catalogo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+        </div>
         <div class="form-group"><label for="{{ form.versao.id_for_label }}">{{ form.versao.label }}</label>{{ form.versao }}{% for error in form.versao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
         <div class="form-group"><label for="{{ form.ano_fabricacao.id_for_label }}">{{ form.ano_fabricacao.label }} *</label>{{ form.ano_fabricacao }}{% for error in form.ano_fabricacao.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
         <div class="form-group"><label for="{{ form.ano_modelo.id_for_label }}">{{ form.ano_modelo.label }} *</label>{{ form.ano_modelo }}{% for error in form.ano_modelo.errors %}<span class="field-error">{{ error }}</span>{% endfor %}</div>
