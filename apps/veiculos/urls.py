@@ -6,6 +6,7 @@ app_name = "veiculos"
 
 urlpatterns = [
     path("catalogo/", views.catalogo, name="catalogo"),
+    path("api/catalogo/modelos/", views.catalogo_modelos_api, name="catalogo_modelos_api"),
     path("veiculos/<uuid:veiculo_id>/", views.detalhes, name="detalhes"),
     path("vendedor/veiculos/", views.vendedor_veiculos, name="vendedor_lista"),
     path("vendedor/veiculos/novo/", views.vendedor_veiculo_novo, name="vendedor_novo"),
