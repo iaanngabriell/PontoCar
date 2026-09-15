@@ -18,10 +18,13 @@
       <a href="{% url 'empresas:detalhes' empresa.id %}" class="card company-card company-card-link">
         <div class="company-logo company-logo-media">{% if empresa.logo %}<img src="{{ empresa.logo.url }}" alt="Logo de {{ empresa.nome_fantasia }}">{% else %}{{ empresa.nome_fantasia|slice:':2'|upper }}{% endif %}</div>
         <div class="company-card-content">
-          <h4>{{ empresa.nome_fantasia }}{% if empresa.possui_selo_ativo %}<span class="badge badge-green" style="margin-left:8px">Selo</span>{% endif %}</h4>
+          <div class="company-card-title-row">
+            <h4>{{ empresa.nome_fantasia }}</h4>
+            {% if empresa.possui_selo_ativo %}<span class="badge badge-green">Selo</span>{% endif %}
+          </div>
           <div class="cat">{{ empresa.get_tipo_empresa_display }} · {% if empresa.localizacao %}{{ empresa.localizacao.cidade }}-{{ empresa.localizacao.estado }}{% else %}Palmas-TO{% endif %}</div>
           <div class="small">{{ empresa.telefone|default:empresa.email }}</div>
-          <span class="company-card-action">Ver detalhes e serviços →</span>
+          <span class="company-card-action">Ver detalhes e serviços <span aria-hidden="true">→</span></span>
         </div>
       </a>
     {% empty %}
