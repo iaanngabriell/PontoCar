@@ -5,11 +5,30 @@ document.addEventListener('DOMContentLoaded', function () {
   var burger = document.querySelector('.nav-burger');
   var links = document.querySelector('.nav-links');
   if (burger && links) {
+    var accountLink = document.querySelector('.nav-actions > a.nav-link-plain');
+
+    function syncMobileAccountLink() {
+      var existing = links.querySelector('.nav-mobile-account-link');
+      if (window.innerWidth <= 980 && accountLink) {
+        if (!existing) {
+          var clone = accountLink.cloneNode(true);
+          clone.classList.remove('nav-link-plain');
+          clone.classList.add('nav-mobile-account-link');
+          clone.addEventListener('click', function () { setMenu(false); });
+          links.appendChild(clone);
+        }
+      } else if (existing) {
+        existing.remove();
+      }
+    }
+
     function setMenu(open) {
       links.classList.toggle('is-open', open);
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
       burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
     }
+
+    syncMobileAccountLink();
 
     burger.addEventListener('click', function () {
       setMenu(!links.classList.contains('is-open'));
@@ -30,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     window.addEventListener('resize', function () {
+      syncMobileAccountLink();
       if (window.innerWidth > 980) setMenu(false);
     });
   }
