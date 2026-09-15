@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 from apps.core.rate_limit import (
     consumir_limite,
@@ -19,7 +20,7 @@ from apps.leads.services import registrar_interesse
 
 from . import services
 from .forms import LeadInteresseForm, VeiculoForm
-from .models import Veiculo
+from .models import MarcaVeiculo, ModeloVeiculo, Veiculo
 
 
 PUBLIC_STATUSES = (
@@ -67,10 +68,31 @@ def _usuario_admin(usuario):
     )
 
 
+@require_GET
+def catalogo_modelos_api(request):
+    """Retorna somente modelos do catálogo local pertencentes à marca informada."""
+    marca_id = request.GET.get("marca", "").strip()
+    if not marca_id:
+        return JsonResponse({"modelos": []})
+
+    marca = get_object_or_404(MarcaVeiculo, pk=marca_id, ativa=True)
+    modelos = list(
+        ModeloVeiculo.objects.filter(marca=marca, ativo=True)
+        .order_by("nome")
+        .values("id", "nome")
+    )
+    return JsonResponse(
+        {
+            "marca": {"id": str(marca.id), "nome": marca.nome},
+            "modelos": [{"id": str(item["id"]), "nome": item["nome"]} for item in modelos],
+        }
+    )
+
+
 def catalogo(request):
     veiculos = (
         Veiculo.objects.filter(status__in=PUBLIC_STATUSES)
-        .select_related("proprietario_atual")
+        .select_related("proprietario_atual", "marca_catalogo", "modelo_catalogo")
         .prefetch_related("fotos", "proprietario_atual__empresas__verificacoes")
     )
 
@@ -167,7 +189,9 @@ def catalogo(request):
 
 def detalhes(request, veiculo_id):
     veiculo = get_object_or_404(
-        Veiculo.objects.select_related("proprietario_atual").prefetch_related("fotos"),
+        Veiculo.objects.select_related(
+            "proprietario_atual", "marca_catalogo", "modelo_catalogo"
+        ).prefetch_related("fotos"),
         id=veiculo_id,
         status__in=PUBLIC_STATUSES,
     )
@@ -231,12 +255,14 @@ def detalhes(request, veiculo_id):
                 messages.success(request, "Seu interesse foi enviado ao anunciante.")
                 return redirect("veiculos:detalhes", veiculo_id=veiculo.id)
 
+    semelhantes_qs = Veiculo.objects.filter(status__in=PUBLIC_STATUSES)
+    if veiculo.marca_catalogo_id:
+        semelhantes_qs = semelhantes_qs.filter(marca_catalogo_id=veiculo.marca_catalogo_id)
+    else:
+        semelhantes_qs = semelhantes_qs.filter(marca__iexact=veiculo.marca)
+
     semelhantes = list(
-        Veiculo.objects.filter(
-            status__in=PUBLIC_STATUSES,
-            marca__iexact=veiculo.marca,
-        )
-        .exclude(pk=veiculo.pk)
+        semelhantes_qs.exclude(pk=veiculo.pk)
         .prefetch_related("fotos")
         .order_by("preco")[:3]
     )
