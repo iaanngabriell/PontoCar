@@ -73,14 +73,122 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       };
 
-      // Listas curtas continuam simples; listas maiores ganham busca por digitação.
-      if (!select.multiple && select.options.length <= 7) {
+      // Listas curtas continuam simples. Marca/modelo de veículo mantêm busca,
+      // pois o modelo começa vazio e recebe muitas opções após escolher a marca.
+      if (
+        !select.multiple &&
+        select.options.length <= 7 &&
+        !select.matches('[data-vehicle-brand], [data-vehicle-model]')
+      ) {
         config.controlInput = null;
       }
 
       new window.TomSelect(select, config);
     });
   }
+
+  // Catálogo FIPE local: Marca -> Modelo. A chamada é ao próprio Django;
+  // nenhuma chave ou dependência da API externa é exposta no navegador.
+  document.querySelectorAll('[data-vehicle-catalog-form]').forEach(function (form) {
+    var brandSelect = form.querySelector('[data-vehicle-brand]');
+    var modelSelect = form.querySelector('[data-vehicle-model]');
+    var modelsUrl = form.dataset.modelsUrl;
+    if (!brandSelect || !modelSelect || !modelsUrl) return;
+
+    var brandControl = brandSelect.tomselect || null;
+    var modelControl = modelSelect.tomselect || null;
+    var requestSerial = 0;
+
+    function setModelMessage(message) {
+      modelSelect.setAttribute('aria-label', message || 'Modelo do veículo');
+      if (modelControl) {
+        modelControl.settings.placeholder = message || 'Selecione o modelo';
+        modelControl.inputState();
+      }
+    }
+
+    function clearModels() {
+      if (modelControl) {
+        modelControl.clear(true);
+        modelControl.clearOptions();
+      } else {
+        modelSelect.innerHTML = '<option value="">Selecione primeiro a marca</option>';
+        modelSelect.value = '';
+      }
+    }
+
+    function setDisabled(disabled) {
+      modelSelect.disabled = disabled;
+      if (modelControl) {
+        if (disabled) modelControl.disable();
+        else modelControl.enable();
+      }
+    }
+
+    async function loadModels(brandId) {
+      var serial = ++requestSerial;
+      clearModels();
+
+      if (!brandId) {
+        setModelMessage('Selecione primeiro a marca');
+        setDisabled(true);
+        return;
+      }
+
+      setModelMessage('Carregando modelos...');
+      setDisabled(true);
+
+      try {
+        var response = await fetch(modelsUrl + '?marca=' + encodeURIComponent(brandId), {
+          headers: { 'Accept': 'application/json' },
+          credentials: 'same-origin'
+        });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        var payload = await response.json();
+        if (serial !== requestSerial) return;
+
+        var modelos = Array.isArray(payload.modelos) ? payload.modelos : [];
+        if (modelControl) {
+          modelos.forEach(function (item) {
+            modelControl.addOption({ value: item.id, text: item.nome });
+          });
+          modelControl.refreshOptions(false);
+        } else {
+          var empty = document.createElement('option');
+          empty.value = '';
+          empty.textContent = 'Selecione o modelo';
+          modelSelect.appendChild(empty);
+          modelos.forEach(function (item) {
+            var option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.nome;
+            modelSelect.appendChild(option);
+          });
+        }
+
+        setModelMessage(modelos.length ? 'Selecione o modelo' : 'Nenhum modelo disponível');
+        setDisabled(modelos.length === 0);
+        if (modelControl && modelos.length) modelControl.focus();
+      } catch (error) {
+        if (serial !== requestSerial) return;
+        setModelMessage('Não foi possível carregar os modelos');
+        setDisabled(true);
+        console.error('PontoCar: falha ao carregar modelos do catálogo.', error);
+      }
+    }
+
+    brandSelect.addEventListener('change', function () {
+      loadModels(brandSelect.value);
+    });
+
+    // Novo anúncio começa sem marca. Em edição/POST inválido o Django já
+    // renderiza os modelos da marca atual, então não fazemos nova requisição.
+    if (!brandSelect.value) {
+      setDisabled(true);
+    } else if (modelSelect.options.length <= 1) {
+      loadModels(brandSelect.value);
+    }
+  });
 
   // Inputs de arquivo com botão e nome do arquivo separados.
   document.querySelectorAll('input[type="file"]:not([hidden])').forEach(function (input, index) {
