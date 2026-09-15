@@ -54,6 +54,80 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Selects modernos. Mantém o <select> real no formulário e apenas melhora a interface.
+  if (typeof window.TomSelect !== 'undefined') {
+    document.querySelectorAll('select:not([data-native-select])').forEach(function (select) {
+      if (select.tomselect) return;
+
+      var config = {
+        create: false,
+        allowEmptyOption: true,
+        closeAfterSelect: !select.multiple,
+        maxOptions: null,
+        hideSelected: false,
+        plugins: select.multiple ? ['remove_button'] : [],
+        render: {
+          no_results: function () {
+            return '<div class="no-results">Nenhuma opção encontrada</div>';
+          }
+        }
+      };
+
+      // Listas curtas continuam simples; listas maiores ganham busca por digitação.
+      if (!select.multiple && select.options.length <= 7) {
+        config.controlInput = null;
+      }
+
+      new window.TomSelect(select, config);
+    });
+  }
+
+  // Inputs de arquivo com botão e nome do arquivo separados.
+  document.querySelectorAll('input[type="file"]:not([hidden])').forEach(function (input, index) {
+    if (input.dataset.pcFileEnhanced === 'true') return;
+    input.dataset.pcFileEnhanced = 'true';
+
+    if (!input.id) input.id = 'pc-file-input-' + index;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'pc-file-picker';
+
+    input.parentNode.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+    input.classList.add('pc-file-picker-input');
+
+    var trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'pc-file-picker-trigger';
+    trigger.textContent = input.multiple ? 'Escolher arquivos' : 'Escolher arquivo';
+    trigger.setAttribute('aria-controls', input.id);
+    trigger.disabled = input.disabled;
+
+    var filename = document.createElement('span');
+    filename.className = 'pc-file-picker-name';
+    filename.textContent = 'Nenhum arquivo selecionado';
+    filename.setAttribute('aria-live', 'polite');
+
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(filename);
+
+    trigger.addEventListener('click', function () {
+      input.click();
+    });
+
+    input.addEventListener('change', function () {
+      var files = Array.from(input.files || []);
+      if (!files.length) {
+        filename.textContent = 'Nenhum arquivo selecionado';
+      } else if (files.length === 1) {
+        filename.textContent = files[0].name;
+      } else {
+        filename.textContent = files.length + ' arquivos selecionados';
+      }
+      wrapper.classList.toggle('has-file', files.length > 0);
+    });
+  });
+
   // Galeria de fotos (página de detalhes do veículo)
   var mainPhoto = document.querySelector('.gallery-main img');
   document.querySelectorAll('.gallery-thumbs img').forEach(function (thumb) {
