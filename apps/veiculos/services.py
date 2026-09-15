@@ -9,6 +9,28 @@ LIMITE_FOTOS = 8
 LIMITE_BYTES_POR_FOTO = 8 * 1024 * 1024
 
 
+def _normalizar_dados_catalogo(dados):
+    """Mantém os campos textuais legados alinhados às FKs do catálogo."""
+    dados = dict(dados)
+    marca = dados.get("marca_catalogo")
+    modelo = dados.get("modelo_catalogo")
+
+    # Compatibilidade com chamadas internas/legadas que ainda enviem marca/modelo
+    # diretamente. O formulário público novo sempre envia as duas FKs.
+    if marca is None and modelo is None:
+        return dados
+    if marca is None or modelo is None:
+        raise ValidationError("Selecione uma marca e um modelo válidos do catálogo.")
+    if not marca.ativa or not modelo.ativo:
+        raise ValidationError("A marca ou o modelo selecionado não está mais ativo no catálogo.")
+    if modelo.marca_id != marca.id:
+        raise ValidationError("O modelo selecionado não pertence à marca informada.")
+
+    dados["marca"] = marca.nome
+    dados["modelo"] = modelo.nome
+    return dados
+
+
 def _validar_fotos(arquivos, *, existentes=0):
     arquivos = list(arquivos)
     if existentes + len(arquivos) > LIMITE_FOTOS:
@@ -29,6 +51,7 @@ def _validar_fotos(arquivos, *, existentes=0):
 def criar_veiculo_com_fotos(*, usuario, dados, arquivos=(), salvar_como_rascunho=False):
     """Cria o anúncio e suas fotos em uma única transação."""
     arquivos = _validar_fotos(arquivos)
+    dados = _normalizar_dados_catalogo(dados)
     veiculo = Veiculo.objects.create(
         proprietario_atual=usuario,
         status=(
@@ -64,6 +87,7 @@ def adicionar_fotos(*, veiculo, arquivos):
 def atualizar_veiculo_com_fotos(*, veiculo, dados, arquivos=()):
     """Atualiza apenas dados editáveis do anúncio e opcionalmente acrescenta fotos."""
     arquivos = _validar_fotos(arquivos, existentes=veiculo.fotos.count())
+    dados = _normalizar_dados_catalogo(dados)
     campos = []
     for campo, valor in dados.items():
         setattr(veiculo, campo, valor)
