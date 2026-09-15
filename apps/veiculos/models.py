@@ -6,6 +6,53 @@ from django.db import models
 
 from apps.core.models import BaseModel
 
+
+class MarcaVeiculo(BaseModel):
+    """Marca padronizada importada do catálogo FIPE/Parallelum."""
+
+    codigo_externo = models.CharField(max_length=20, unique=True, db_index=True)
+    nome = models.CharField(max_length=80, db_index=True)
+    nome_origem = models.CharField(max_length=100, blank=True)
+    ativa = models.BooleanField(default=True, db_index=True)
+    sincronizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["nome"]
+        verbose_name = "marca de veículo"
+        verbose_name_plural = "marcas de veículos"
+
+    def __str__(self):
+        return self.nome
+
+
+class ModeloVeiculo(BaseModel):
+    """Modelo/versão FIPE associado a uma marca padronizada."""
+
+    marca = models.ForeignKey(
+        MarcaVeiculo,
+        on_delete=models.CASCADE,
+        related_name="modelos",
+    )
+    codigo_externo = models.CharField(max_length=20)
+    nome = models.CharField(max_length=180, db_index=True)
+    ativo = models.BooleanField(default=True, db_index=True)
+    sincronizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["nome"]
+        verbose_name = "modelo de veículo"
+        verbose_name_plural = "modelos de veículos"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["marca", "codigo_externo"],
+                name="uq_modelo_codigo_por_marca",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.marca.nome} · {self.nome}"
+
+
 class Veiculo(BaseModel):
     class StatusVeiculo(models.TextChoices):
         RASCUNHO = "RASCUNHO", "Rascunho"
@@ -25,8 +72,25 @@ class Veiculo(BaseModel):
         related_name="veiculos_na_garagem"
     )
 
-    marca = models.CharField(max_length=50)
-    modelo = models.CharField(max_length=100)
+    # Os campos textuais permanecem por compatibilidade com anúncios antigos e
+    # para manter consultas/templates simples. Novos anúncios também apontam
+    # para o catálogo normalizado e os services sincronizam os textos abaixo.
+    marca = models.CharField(max_length=80)
+    modelo = models.CharField(max_length=180)
+    marca_catalogo = models.ForeignKey(
+        MarcaVeiculo,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="veiculos_catalogo",
+    )
+    modelo_catalogo = models.ForeignKey(
+        ModeloVeiculo,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="veiculos_catalogo",
+    )
     versao = models.CharField(max_length=120, blank=True, null=True)
     ano_fabricacao = models.IntegerField()
     ano_modelo = models.IntegerField()
@@ -73,6 +137,7 @@ class Veiculo(BaseModel):
 
     def __str__(self):
         return f"{self.placa} - {self.marca} {self.modelo}"
+
 
 class HistoricoVeiculo(BaseModel):
     class MotivoEvento(models.TextChoices):
